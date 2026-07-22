@@ -1,16 +1,13 @@
-*! version 6.4 11JAN2022 DIME Analytics dimeanalytics@worldbank.org
+*! version 7.5 20260331 - DIME Analytics - dimeanalytics@worldbank.org
 
-cap program drop 	iefolder
-	program define	iefolder
+cap program drop   iefolder
+    program define iefolder
 
 qui {
 
-	syntax anything, PROJectfolder(string) [ABBreviation(string) SUBfolder(string)]
+    version 12.0
 
-	version 11
-
-	***Todo
-	*give error message if divisor is changed
+  syntax anything, PROJectfolder(string) [ABBreviation(string) SUBfolder(string)]
 
 	*Create an empty line before error message or output
 	noi di ""
