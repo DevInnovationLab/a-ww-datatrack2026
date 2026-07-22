@@ -26,7 +26,7 @@
 **# 1 Identify columns with PII
 **------------------------------------------------------------------------------
 
-	local pii_vars 																
+	local pii_vars devicephonenum gps child_name_1 child_name_2 child_name_3	
 
 **------------------------------------------------------------------------------
 **# 2 Save crosswalk
