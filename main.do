@@ -1,46 +1,77 @@
 /*******************************************************************************
-	
-						  Development Innovation Lab
-						    Template main do-file
-						  
-FOR THIS TEMPLATE TO WORK CORRECTLY, EDIT THE FILE PATHS IN SECTION 2 TO MATCH YOUR COMPUTER
-						  
---------------------------------------------------------------------------------
-	1 Select parts of the code to run
-------------------------------------------------------------------------------*/
-	
-	local import		0
-	local deidentify	0
-	local clean			0
-	local tidy			0
-	local construct		0
-	local analyze		0
-	
-/*------------------------------------------------------------------------------
-	2 Set file paths
-------------------------------------------------------------------------------*/
+         Data Ingestion, Cleaning & Tidying - DIL Welcome Week Session
+                               MASTER.do
+********************************************************************************
 
-	* Enter the file path to the project folder in Box for every new machine you use
+  Authors:   DIL Data Team
+             David Torres Leon (dtorresleon@uchicago.edu)
+			 Luiza Andrade (luizaandrade@uchicago.edu)
+
+  Updated:   July 2026
+  Version:   Stata 15
+
+  Summary:   MOCK, TEACHING version of an ingestion/tidying/cleaning pipeline.
+             It starts from a deliberately messy raw export of the Chlorine
+             Testing survey (the same instrument from the measurement session)
+             and ends with tidy, labeled, de-identified datasets that are
+             ready for tomorrow's High-Frequency Checks session.
+
+             THE ONE RULE: these do-files change the SHAPE and FORMAT of the
+             data, never its CONTENT. You will meet duplicates, outliers, and
+             contradictions along the way. LEAVE THEM IN. Finding and acting
+             on them is tomorrow's job.
+
+  Outline:   I.  Initial setup
+
+             II. Run do-files
+                1. Import the raw export
+                2. De-identify
+                3. Tidy: reshape the child module
+                4. Clean: harmonize, encode, label (household + child)
+
+*******************************************************************************/
+
+**------------------------------------------------------------------------------
+**# 1 Select parts of the code to run
+**------------------------------------------------------------------------------
+	
+	local import		1
+	local deidentify	1
+	local tidy			1
+	local clean			1
+	
+**------------------------------------------------------------------------------
+**# 2 Set file paths
+**------------------------------------------------------------------------------
+
+* Main GitHub folder -----------------------------------------------------------
+
+	* Enter the file path to the github folder every new machine you use
 	* Type 'di c(username)' to see the name of your machine
-	if c(username) == "luizaandrade" {
-		global box 		"C:/Users/luizaandrade/Box/project-folder"
-		global github	"C:/Users/luizaandrade/GitHub/dil-template-repo"
-	}
-	else if c(username) == "username" {
-		global box 		"C:/Users/username/Box/project-folder"
-		global github	"C:/Users/username/GitHub/dil-template-repo"
-	}
 	
-	global	code		"${github}/code"
-	global	data_box	"${box}/data"
-	global  data_git	"${github}/data"
-	global	doc_box		"${box}/documentation"
-	global	doc_git		"${github}/documentation"
-	global	output		"${github}/output"
-	
-/*------------------------------------------------------------------------------
-	3 Initial settings
-------------------------------------------------------------------------------*/
+	// Luiza
+	if "`c(username)'" == "luizaandrade" {
+		global github "/Users/luizaandrade/Documents/GitHub"
+	}
+
+	// YOU
+	else if "`c(username)'" == "" {
+		global github ""
+	}
+
+* Subfolders -------------------------------------------------------------------
+
+	global repo		  "${github}/a-ww-datatrack2026"
+	global code       "${repo}/code"
+	global data_raw   "${repo}/data/raw"
+	global data_tidy  "${repo}/data/tidy"
+	global data_clean "${repo}/data/clean"
+	global output     "${repo}/output"
+	global doc 		  "${repo}/documentation"
+
+**------------------------------------------------------------------------------
+**# 3 Initial settings
+**------------------------------------------------------------------------------
 
 	* Find user-written commands in GitHub
 	sysdir set  PLUS "${code}/ado"
@@ -51,107 +82,66 @@ FOR THIS TEMPLATE TO WORK CORRECTLY, EDIT THE FILE PATHS IN SECTION 2 TO MATCH Y
 	* Set initial configurations as much as allowed by Stata version
 	ieboilstart, v(16.0)
 	`r(version)'
-	
+
+**------------------------------------------------------------------------------
+**# 4 Run code
+**------------------------------------------------------------------------------
+
+**## 4.1 Import
 /*------------------------------------------------------------------------------
-	4 Run code
+	Imports the raw csv export into a working .dta.
+
+  Inputs:   data/raw/household_water_questionnaire__v1.csv
+  Outputs:  data/raw/household_water_questionnaire.dta
 ------------------------------------------------------------------------------*/
 
-	if `import' {
+	if `import' do "${code}/1-import.do"
+
+**## 4.2 Deidentify
+/*------------------------------------------------------------------------------
+		Splits off direct identifiers into a PII crosswalk
+
+  Inputs:   data/raw/household_water_questionnaire.dta
+  Outputs:  data/raw/household_water_questionnaire-crosswalk-PII.dta
+            data/raw/household_water_questionnaire-deid.dta
+------------------------------------------------------------------------------*/
+
+	if `deidentify' do "${code}/2-deidentify.do"
+
+**## 4.3 Tidy
+/*-------------------------------------------------------------------------------
+		 Separates units of observations into tidy data sets
+		 
+  Inputs:   data/raw/household_water_questionnaire-deid.dta
+  Outputs:  data/tidy/household-tidy.dta
+            data/tidy/child-tidy.dta
+------------------------------------------------------------------------------*/
+
+	if `tidy' do "${code}/3-tidy.do"
+
+**## 4.5 Cleaning
+*-------------------------------------------------------------------------------
+*  		 Adjust data format to use in Stata
+
+  if `clean' {
+
+ **## 4.5.1 Household-level data
+/*------------------------------------------------------------------------------
+  Inputs:   data/tidy/household-tidy.dta
+  Outputs:  data/clean/household-clean.dta
+            documentation/data-dictionaries/household-clean.xlsx
+------------------------------------------------------------------------------*/
+		do "${code}/4-clean-household.do"
+
+**## 4.5.2 Child-level data
+/*------------------------------------------------------------------------------
+  Inputs:   data/tidy/child-tidy.dta
+  Outputs:  data/clean/child-clean.dta
+            documentation/data-dictionaries/child-clean.xlsx
+------------------------------------------------------------------------------*/
 		
-		/*----------------------------------------------------------------------
-			Import survey data into Stata format
-			
-			Requires: "${data_box}/encrypted/survey.csv"
-			Creates:  "${data_box}/encrypted/survey.dta"
-		----------------------------------------------------------------------*/
-		do "${code}/import/import-survey.do"
-		
-	}
-	if `deidentify' {
-		
-		/*----------------------------------------------------------------------
-			Remove identifying information from survey data
-			
-			Requires: "${data_box}/encrypted/survey.dta"
-			Creates:  "${data_box}/deidentified/survey-deindentified.dta"
-		----------------------------------------------------------------------*/
-		do "${code}/deidentify/deidentify-survey.do"
-		
-	}
-	if `tidy' {
-		
-		/*----------------------------------------------------------------------
-			Tidy household-level survey data
-			
-			Requires: "${data_box}/deidentified/survey-deindentified.dta"
-			Creates:  "${data_box}/tidy/survey-household-tidy.dta"
-		----------------------------------------------------------------------*/
-		do "${code}/tidy/tidy-household-survey.do"
-		
-		/*----------------------------------------------------------------------
-			Tidy child-level survey data
-			
-			Requires: "${data_box}/deidentified/survey-deindentified.dta"
-			Creates:  "${data_box}/tidy/survey-child-tidy.dta"
-		----------------------------------------------------------------------*/
-		do "${code}/clean/clean-child-survey.do"
-		
-	}
-	if `clean' {
-		
-		/*----------------------------------------------------------------------
-			Clean child-level data
-			
-			Requires: "${data_box}/tidy/survey-household-tidy.dta"
-			Creates:  "${data_box}/clean/survey-household-clean.dta"
-		----------------------------------------------------------------------*/
-		do "${code}/clean/clean-household-survey.do"
-		
-		/*----------------------------------------------------------------------
-			Clean household-level data
-			
-			Requires: "${data_box}/tidy/survey-child-tidy.dta"
-			Creates:  "${data_box}/clean/survey-child-clean.dta"
-		----------------------------------------------------------------------*/
-		do "${code}/clean/clean-child.do"
-		
-	}
-	if `construct' {
-		
-		/*----------------------------------------------------------------------
-			Construct education outcomes
-			
-			Requires: "${data_box}/clean/survey-child-clean.dta"
-			Creates:  "${data_box}/constructed/child-education-constructed.dta"
-		----------------------------------------------------------------------*/
-		do "${code}/construct/construct-education.do"
-		
-		/*----------------------------------------------------------------------
-			Construct household demographics
-			
-			Requires: "${data_box}/constructed/survey-household-tidy.dta"
-			Creates:  "${data_box}/constructed/household-demo-constructed.dta"
-		----------------------------------------------------------------------*/
-		do "${code}/construct/construct-demo.do"
-		
-		/*----------------------------------------------------------------------
-			Create child-level analysis data
-			
-			Requires: "${data_box}/constructed/household-demo-constructed.dta"
-					  "${data_box}/constructed/child-education-constructed.dta"
-			Creates:  "${data_box}/analysis/child.dta"
-		----------------------------------------------------------------------*/
-		do "${code}/construct/combine-child-data.do"
-	}
-	if `analyze' {
-		
-		/*----------------------------------------------------------------------
-			Balance table
-			
-			Requires: "${data_box}/analysis/child.dta"
-			Creates:  "${output}/balance-table.tex"
-		----------------------------------------------------------------------*/
-		do "${code}/analysis/balance-table.do"
+		do "${code}/5-clean-child.do"
+
 	}
 
-************************************************************ End of main do-file
+********************************************************************************
