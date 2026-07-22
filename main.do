@@ -26,9 +26,9 @@ FOR THIS TEMPLATE TO WORK CORRECTLY, EDIT THE FILE PATHS IN SECTION 2 TO MATCH Y
 		global box 		"C:/Users/luizaandrade/Box/project-folder"
 		global github	"C:/Users/luizaandrade/GitHub/dil-template-repo"
 	}
-	else if c(username) == "username" {
+	else if c(username) == "Alejandro Ortiz" {
 		global box 		"C:/Users/username/Box/project-folder"
-		global github	"C:/Users/username/GitHub/dil-template-repo"
+		global github	"C:/Users/Alejandro Ortiz/Git Projects/Others/welcomeweek/a-ww-datatrack2026"
 	}
 	
 	global	code		"${github}/code"
@@ -37,6 +37,10 @@ FOR THIS TEMPLATE TO WORK CORRECTLY, EDIT THE FILE PATHS IN SECTION 2 TO MATCH Y
 	global	doc_box		"${box}/documentation"
 	global	doc_git		"${github}/documentation"
 	global	output		"${github}/output"
+	global	data_raw	"${github}/data/raw"
+	global	data_tidy	"${github}/data/tidy"
+	global	data_clean	"${github}/data/clean"
+	global	doc			"${github}/documentation"
 	
 /*------------------------------------------------------------------------------
 	3 Initial settings

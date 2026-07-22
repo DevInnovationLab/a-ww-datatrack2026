@@ -9,7 +9,7 @@
   Inputs:     data/tidy/household-tidy.dta
 
   Outputs:    data/clean/household-clean.dta    (id: key)
-              data/raw/household.md             (iesave report)
+              data/clean/household-clean.md     (iesave report)
               documentation/data-dictionaries/household-clean.xlsx
                                                  (iecodebook mini-codebook)
 
@@ -24,10 +24,12 @@
 
               Remember the one rule: representation changes, values don't.
 
-  Notes:      -666/-888/-999 are this survey's sentinel codes for "Don't
-              know"/"Refused"/"Other"; they are recoded to Stata's extended
-              missing values (.o/.r/.k) rather than dropped, so they stay
-              analyzable as missing without being mistaken for real answers
+  Notes:      -666/-888/-999 are this survey's sentinel codes. Per the
+              SurveyCTO form's "choices" sheet: -666 = "Other", -888 =
+              "Declined to answer" (refused), -999 = "Don't know". They are
+              recoded to Stata's extended missing values (.o/.r/.d) rather
+              than dropped, so they stay analyzable as missing without being
+              mistaken for real answers
 
               Section 6 variable labels use the question wording and section/
               question codes (e.g. C6) from the SurveyCTO form in
@@ -54,6 +56,15 @@
 
 	local date_vars submissiondate starttime endtime
 
+	* SCTO exports these as strings like "7/12/26 4:40"; convert to Stata
+	* datetime (%tc). Two-digit year is read as 20YY.
+	foreach dvar of local date_vars {
+		gen double `dvar'_dt = clock(`dvar', "MD20Yhm")
+		format     `dvar'_dt %tc
+		drop       `dvar'
+		rename     `dvar'_dt `dvar'
+	}
+
 **## 1.4 GPS (requires identified data)
 **------------------------------------------------------------------------------
 
@@ -76,9 +87,15 @@
 **# 3 Replace missing codes
 **------------------------------------------------------------------------------
 
+	local num_vars consent resp_age resp_sex resp_hh_head resp_educ hh_size ///
+		hh_children hh_watersource stored_yn stored_container stored_covered ///
+		stored_clean storage_time stored_chlorine treat_chlorine treat_boil ///
+		treat_notablets water_safety water_satisfaction
+
+	* Sentinel codes from the form: -666 Other, -888 Refused, -999 Don't know
 	recode `num_vars' 	(-666 = .o) ///
 						(-888 = .r) ///
-						(-999 = .k)
+						(-999 = .d)
 
 **------------------------------------------------------------------------------
 **# 4 Label categories (extracted from survey form)
@@ -124,6 +141,15 @@
 							.o "Other", ///
 			add
 	}
+
+	* Attach value labels to their variables
+	lab val `dummy_vars'       yesno
+	lab val resp_sex           sex
+	lab val resp_educ          educ
+	lab val hh_watersource     source
+	lab val stored_container   container
+	lab val water_safety       safe
+	lab val water_satisfaction satisfied
 
 **------------------------------------------------------------------------------
 **# 5 Recategorize other values
@@ -195,5 +221,13 @@
 **------------------------------------------------------------------------------
 **# 7 Save and export codebook
 **------------------------------------------------------------------------------
+
+	iesave "${data_clean}/household-clean.dta", ///
+		idvars(key) ///
+		version(14) ///
+		replace userinfo ///
+		report(path("${data_clean}/household-clean.md") replace)
+
+	iecodebook export using "${doc}/data-dictionaries/household-clean.xlsx", replace
 
 ********************************************************************************

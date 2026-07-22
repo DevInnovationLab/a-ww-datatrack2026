@@ -22,10 +22,13 @@
                 - unique IDs before and after
                 - expected observation counts
                 - documentation of what each table now is
-              One household (key uuid:11cda278-5ad1-4913-b0b6-957cdc40f500)
-              lists children in hh_children but has no valid child-level data
-              for them; it is excluded only from the expected-count check
-              below, not from the data itself. 
+              hh_children (a household self-report) and the actual child
+              roster do NOT match: hh_children sums to 1631 children, but the
+              roster holds 1629. One household (key uuid:11cda278-5ad1-4913-
+              b0b6-957cdc40f500) reports 2 children in hh_children yet fills
+              no child slots. The child table's row count is driven by the
+              roster, never by hh_children; the discrepancy is a data-quality
+              issue preserved for the HFC stage, not reconciled here.
 
               hh_children is household-level
               information, so it is dropped before the reshape and lives only
@@ -38,6 +41,11 @@
 **# 1 Identify units of observation present									 
 **------------------------------------------------------------------------------
 
+	* Two units of observation are mixed in this wide file:
+	*   - household level: one row per submission (key)
+	*   - child level:     child_age_*, diarrhea_2d_*, diarrhea_7d_* hold up to
+	*                       3 children per household row
+	* Split them into one tidy table per unit of observation.
 
 **------------------------------------------------------------------------------
 **# 2 Household-level information
@@ -45,6 +53,8 @@
 
 	preserve
 
+		* Drop the child-level columns; keep one row per household
+		drop child_age_* diarrhea_2d_* diarrhea_7d_*
 
 		iesave "${data_tidy}/household-tidy.dta", ///
 			idvars(key) ///
@@ -60,17 +70,31 @@
 
 **## 3.1 Check expected number of obs
 **------------------------------------------------------------------------------
-	
+
+	* Expected child rows = filled roster slots (a non-missing child age),
+	* NOT the self-reported hh_children -- the two disagree and reconciling
+	* them is out of scope (see header Notes).
+	egen slot_filled = rownonmiss(child_age_1 child_age_2 child_age_3)
+	su   slot_filled, meanonly
+	local n_children = r(sum)
+	drop slot_filled
+
 
 **## 3.2 Keep relevant variables
 **------------------------------------------------------------------------------
+
+	keep key child_age_* diarrhea_2d_* diarrhea_7d_*
 
 
 **## 3.3 Change the relationship between rows and columns
 **------------------------------------------------------------------------------
 
-	reshape long /*[ variables here ]*/, i(key) j(child_index)
+	reshape long child_age_ diarrhea_2d_ diarrhea_7d_, i(key) j(child_index)
 	rename *_ *
+
+	* reshape emits 3 child slots per household; keep only filled roster
+	* slots, identified by a non-missing child age
+	drop if missing(child_age)
 
 **## 3.4 Confirm the ID and number of observations
 **------------------------------------------------------------------------------
