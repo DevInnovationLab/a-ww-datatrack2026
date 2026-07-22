@@ -1,12 +1,12 @@
 This report was created by the Stata command iesave (version 7.5). Read more about this command and the purpose of this report on https://dimewiki.worldbank.org/iesave
 
 - **Number of observations:** 1293
-- **Number of variables:** 40
+- **Number of variables:** 41
 - **ID variable(s):** key
 - **.dta version used:** 14
-- **Data signature:** 1293:40(4638):1954181211:2856497042
+- **Data signature:** 1293:41(68065):1860580722:2749149616
 - **Last saved by:** dtorresleon - DIL-35905
-- **Last saved at:** 16:18:51 22 Jul 2026
+- **Last saved at:** 16:20:27 22 Jul 2026
 
 ## Variable type: String
 
@@ -16,6 +16,7 @@ This report was created by the Stata command iesave (version 7.5). Read more abo
 | endtime | "" | str13 | 1293 | 1267 |
 | enum_comments | "" | str1 | 0 | 0 |
 | enumerator | "" | str6 | 1293 | 8 |
+| gps | "" | str27 | 1293 | 1290 |
 | hh_id | "" | str7 | 1293 | 1287 |
 | hh_watersource_o | "" | str24 | 65 | 9 |
 | key | "KEY" | str41 | 1293 | 1293 |
