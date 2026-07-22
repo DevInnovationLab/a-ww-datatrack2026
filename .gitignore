@@ -85,21 +85,8 @@
 # to change the name of the output folder to whatever it is called in your
 # project, but we strongly recommend that you only include these files in
 # a subset of the folders where you are certain no private data is ever stored.
-!/**/output/**/*.txt
-!/**/output/**/*.csv
-!/**/output/**/*.xml
-!/**/output/**/*.eps
-!/**/output/**/*.svg
-!/**/output/**/*.png
-!/**/output/**/*.jpg
-
-#######################
-# Include some additional file formats in any documentation folder. You might have
-# to change the name of the output folder to whatever it is called in your
-# project, but we strongly recommend that you only include these files in
-# a subset of the folders where you are certain no private data is ever stored.
-!/**/documentation/**/*.txt
-!/**/documentation/**/*.csv
+!*.csv
+!*.xlsx
 
 #######################
 # Include all the files with passwords or tokens here. All files named
