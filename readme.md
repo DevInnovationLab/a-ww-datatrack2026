@@ -1,138 +1,143 @@
-# How to use this template
+# a-ww-datatrack2026
 
-1. If you want to start a new repository, click on `Use this template` and then `Create a new repository`. If the repository was created for you, skip this step.
-1. Copy the relevant [issues](https://github.com/DevInnovationLab/dil-template-repo/issues) from the template repository to your new repository.
-1. Delete this section of the README.
-1. Follow the instructions in the issues.
+Teaching repository for the DIL Welcome Week "Data Ingestion, Cleaning & Tidying" session. It walks through a mock pipeline that takes a deliberately messy raw export of a household water/chlorine survey and turns it into tidy, labeled, de-identified Stata datasets, ready for a follow-up High-Frequency Checks (HFC) session.
 
-# Template README and Guidance
-
-> INSTRUCTIONS: Include a brief project summary here, as well as short instructions for how to run the code in the repository. This may be simple, or may involve many complicated steps. It should be a simple list, no excess prose. Strict linear sequence. If more than 4-5 manual steps, please wrap a master program/Makefile around them, in logical sequences. Examples follow.
-
-- Edit `programs/config.do` to adjust the default path
-- Run `programs/00_setup.do` once on a new system to set up the working environment. 
-- Download the data files referenced above. Each should be stored in the prepared subdirectories of `data/`, in the format that you download them in. Do not unzip. Scripts are provided in each directory to download the public-use files. Confidential data files requested as part of your FSRDC project will appear in the `/data` folder. No further action is needed on the replicator's part.
-- Run `programs/01_master.do` to run all steps in sequence.
+**The one rule the pipeline follows:** each step changes the *shape* and *format* of the data, never its *content*. Duplicates, outliers, and contradictions found in the raw data are intentionally left in place — finding and acting on them is out of scope for this pipeline.
 
 **Contents**
-- [Comments for replicators](#comments-for-replicators)
-- [Computational requirements](#computational-requirements)
+- [How to run](#how-to-run)
+- [Pipeline](#pipeline)
 - [Description of programs/code](#description-of-programscode)
-- [List of final outputs](#list-of-final-outputs)
 - [List of datasets](#list-of-datasets)
-- [Acknowledgements](#acknowledgements)
+- [Known inconsistencies](#known-inconsistencies)
+- [Repository structure](#repository-structure)
 
-## Comments for replicators
+## How to run
 
-- `programs/00_setup.do`: will create all output directories, install needed ado packages. 
-   - If wishing to update the ado packages used by this archive, change the parameter `update_ado` to `yes`. However, this is not needed to successfully reproduce the manuscript tables. 
-- `programs/01_dataprep`:  
-   - These programs were last run at various times in 2018. 
-   - Order does not matter, all programs can be run in parallel, if needed. 
-   - A `programs/01_dataprep/master.do` will run them all in sequence, which should take about 2 hours.
-- `programs/02_analysis/master.do`.
-   - If running programs individually, note that ORDER IS IMPORTANT. 
-   - The programs were last run top to bottom on July 4, 2019.
-- `programs/03_appendix/master-appendix.do`. The programs were last run top to bottom on July 4, 2019.
-- Figure 1: The figure can be reproduced using the data provided in the folder “2_data/data_map”, and ArcGIS Desktop (Version 10.7.1) by following these (manual) instructions:
-  - Create a new map document in ArcGIS ArcMap, browse to the folder
-“2_data/data_map” in the “Catalog”, with files  "provinceborders.shp", "lakes.shp", and "cities.shp". 
-  - Drop the files listed above onto the new map, creating three separate layers. Order them with "lakes" in the top layer and "cities" in the bottom layer.
-  - Right-click on the cities file, in properties choose the variable "health"... (more details)
+1. Open [main.do](main.do) and add your username/file path under **"2 Set file paths"** (`di c(username)` shows your machine's username).
+2. Toggle the `import` / `deidentify` / `tidy` / `clean` locals at the top of the file to `1` for the stages you want to run.
+3. Run `main.do`. It sets `adopath` to the project's `code/ado` folder (so the user-written commands below are found without an internet install) and calls the scripts in [code/](code) in sequence.
 
-## Computational requirements
+Note: `04-codebook-verify.do`, the last step `main.do` runs, is stale relative to the rest of the pipeline (it targets files/variables from an earlier version of this exercise) and will not run successfully as-is — see [Known inconsistencies](#known-inconsistencies).
 
-> INSTRUCTIONS: In general, the specific computer code used to generate the results in the article will be within the repository that also contains this README. However, other computational requirements - shared libraries or code packages, required software, specific computing hardware - may be important, and is always useful, for the goal of replication. Some example text follows. 
+### Software requirements
 
-### Software Requirements
+- Stata 15+ (`ieboilstart` pins version-specific settings at the top of `main.do`).
+- User-written commands from the `ietoolkit`/`iefieldkit` family, vendored in [code/ado/i](code/ado/i) (`iesave`, `iecodebook`, `ieboilstart`, etc.) — `main.do` points `adopath` at this folder, so no package install is needed.
 
-> INSTRUCTIONS: List all of the software requirements, up to and including any operating system requirements, for the entire set of code. It is suggested to distribute most dependencies together with the replication package if allowed, in particular if sourced from unversioned code repositories, Github repos, and personal webpages. In all cases, list the version *you* used. 
+## Pipeline
 
-- Stata (code was last run with version 15)
-  - the program "`0_setup.do`" will install all dependencies locally, and should be run once.
-- Python 3.6.4
-  - the file "`requirements.txt`" lists these dependencies, please run "`pip install -r requirements.txt`" as the first step. See [https://pip.readthedocs.io/en/1.1/requirements.html](https://pip.readthedocs.io/en/1.1/requirements.html) for further instructions on using the "`requirements.txt`" file.
-- R 3.4.3
-  - the file "`0_setup.R`" will install all dependencies (latest version), and should be run once prior to running other programs.
-
-### Controlled randomness
-
-> INSTRUCTIONS: Some estimation code uses random numbers, almost always provided by pseudorandom number generators (PRNGs). For reproducibility purposes, these should be provided with a deterministic seed, so that the sequence of numbers provided is the same for the original author and any replicators. While this is not always possible, it is a requirement by many journals’ policies. The seed should be set once, and not use a time-stamp. If using parallel processing, special care needs to be taken. If using multiple programs in sequence, care must be taken on how to call these programs, ideally from a main program, so that the sequence is not altered.
-
-Random seed is set at line ___ of program ____
-
-### Memory and Runtime Requirements
-
-> INSTRUCTIONS: Memory and compute-time requirements may also be relevant or even critical. Some example text follows. It may be useful to break this out by Table/Figure/section of processing. For instance, some estimation routines might run for weeks, but data prep and creating figures might only take a few minutes.
-
-Approximate time needed to reproduce the analyses on a standard (CURRENT YEAR) desktop machine: **______**
+```
+data/raw/household_water_questionnaire__v1.csv
+        │
+        ▼  1-import.do
+data/raw/household_water_questionnaire.dta
+        │
+        ▼  2-deidentify.do
+data/raw/household_water_questionnaire-deid.dta   (+ PII crosswalk kept in data/raw)
+        │
+        ▼  3-tidy.do
+data/tidy/household-tidy.dta          data/tidy/child-tidy.dta
+        │                                     │
+        ▼  4-clean-household.do               ▼  5-clean-child.do
+data/clean/household-clean.dta        data/clean/child-clean.dta
+documentation/data-dictionaries/      documentation/data-dictionaries/
+  household-clean.xlsx                  child-clean.xlsx
+        │                                     │
+        └───────────────────┬─────────────────┘
+                             ▼  04-codebook-verify.do
+              Excel codebook + HFC-readiness checks (console output)
+```
 
 ## Description of programs/code
 
-> INSTRUCTIONS: Give a high-level overview of the program files and their purpose.
-- Programs in `programs/01_dataprep` will extract and reformat all datasets referenced above. The file `programs/01_dataprep/master.do` will run them all.
-- Programs in `programs/02_analysis` generate all tables and figures in the main body of the article. The program `programs/02_analysis/master.do` will run them all. Each program called from `master.do` identifies the table or figure it creates (e.g., `05_table5.do`).  Output files are called appropriate names (`table5.tex`, `figure12.png`) and should be easy to correlate with the manuscript.
-- Programs in `programs/03_appendix` will generate all tables and figures  in the online appendix. The program `programs/03_appendix/master-appendix.do` will run them all. 
-- Ado files have been stored in `programs/ado` and the `master.do` files set the ADO directories appropriately. 
-- The program `programs/00_setup.do` will populate the `programs/ado` directory with updated ado packages, but for purposes of exact reproduction, this is not needed. The file `programs/00_setup.log` identifies the versions as they were last updated.
-- The program `programs/config.do` contains parameters used by all programs, including a random seed. Note that the random seed is set once for each of the two sequences (in `02_analysis` and `03_appendix`). If running in any order other than the one outlined below, your results may differ.
+All paths below are relative to [code/](code).
 
-## List of final outputs
+### [1-import.do](code/1-import.do)
+- **Input:** `data/raw/household_water_questionnaire__v1.csv` — the raw partner export: banner/junk formatting, every column read as text, two different date formats.
+- **Task:** Imports the CSV with all columns forced to string (`stringcols(_all)`), so Stata never guesses a type on a messy file, then `destring`s the numeric-looking columns and saves a working `.dta`.
+- **Output:** `data/raw/household_water_questionnaire.dta` (id: `key`) + an auto-generated `iesave` report, `data/raw/household_water_questionnaire.md`.
 
-> INSTRUCTIONS: Your programs should clearly identify the tables and figures as they appear in the manuscript, by number. Sometimes, this may be obvious, e.g. a program called "`table1.do`" generates a file called `table1.png`. Sometimes, mnemonics are used, and a mapping is necessary. In all circumstances, provide a list of tables and figures, identifying the program (and possibly the line number) where a figure is created.
+### [2-deidentify.do](code/2-deidentify.do)
+- **Input:** `data/raw/household_water_questionnaire.dta`.
+- **Task:** Separates direct identifiers (`devicephonenum`, `gps`, `child_name_*`) into a standalone crosswalk (in a real project this would live in encrypted storage), then drops them from the working data.
+- **Output:**
+  - `data/raw/household_water_questionnaire-crosswalk-PII.dta` — `key` + PII columns only.
+  - `data/raw/household_water_questionnaire-deid.dta` — de-identified working data, + `data/raw/household_water_questionnaire-deid.md` report.
 
+### [3-tidy.do](code/3-tidy.do)
+- **Input:** `data/raw/household_water_questionnaire-deid.dta`.
+- **Task:** The survey arrived wide, with one household row holding up to three children's data (`child_age_1..3`, `diarrhea_2d_1..3`, `diarrhea_7d_1..3`). Splits the file into a household-level table and a child-level table (reshaped long, one row per child), checking ID uniqueness and expected observation counts before and after the reshape.
+- **Output:**
+  - `data/tidy/household-tidy.dta` (id: `key`) + `data/tidy/household-tidy.md`.
+  - `data/tidy/child-tidy.dta` (id: `key child_index`) + `data/tidy/child-tidy.md`.
 
-| Figure/Table #    | Program                  | Line Number | Output file                      | Note                            |
-|-------------------|--------------------------|-------------|----------------------------------|---------------------------------|
-| Table 1           | 02_analysis/table1.do    |             | summarystats.csv                 ||
-| Table 2           | 02_analysis/table2and3.do| 15          | table2.csv                       ||
-| Table 3           | 02_analysis/table2and3.do| 145         | table3.csv                       ||
-| Figure 1          | n.a. (no data)           |             |                                  | Source: Herodus (2011)          |
-| Figure 2          | 02_analysis/fig2.do      |             | figure2.png                      ||
-| Figure 3          | 02_analysis/fig3.do      |             | figure-robustness.png            | Requires confidential data      |
+### [4-clean-household.do](code/4-clean-household.do)
+- **Input:** `data/tidy/household-tidy.dta`.
+- **Task:** Brings the household table to analysis-ready format without changing any values:
+  - encodes `enumerator`/`deviceid` as labeled categorical variables;
+  - parses `submissiondate`/`starttime`/`endtime` strings into Stata `%tc` datetimes;
+  - recodes numeric sentinel missing codes (`-666`, `-888`, `-999`) into Stata extended missing values (`.o`/`.r`/`.k`);
+  - value-labels categorical variables (consent, sex, education, water source, storage container, safety/satisfaction scales), reclassifying "other, specify" write-ins into existing or new categories (e.g. river/truck/rain water sources, plastic-drum containers);
+  - adds `.d`/`.r`/`.o` ("Don't know"/"Refused"/"Other") extended-missing labels to every label definition created.
+- **Output:** `data/clean/household-clean.dta` + `data/raw/household.md` report, and a mini-codebook exported to `documentation/data-dictionaries/household-clean.xlsx` (via `iecodebook export`).
+
+### [5-clean-child.do](code/5-clean-child.do)
+- **Input:** `data/tidy/child-tidy.dta`.
+- **Task:** Labels the child-level variables (`child_age`, `diarrhea_2d`, `diarrhea_7d`) and the `key`/`child_index` ID pair.
+- **Output:** `data/clean/child-clean.dta` + `data/clean/child-clean.md` report, and a mini-codebook exported to `documentation/data-dictionaries/child-clean.xlsx`. *(Not present as of this writing — either not yet run, or its outputs weren't committed; see [Known inconsistencies](#known-inconsistencies).)*
+
+### [04-codebook-verify.do](code/04-codebook-verify.do)
+- **Input (as currently written):** `data/clean/households.dta` and `data/clean/containers.dta`.
+- **Task:** Intended as the pipeline's final QA gate — exports a one-row-per-variable mini codebook to Excel, then runs an "HFC-readiness check": expected row count, no leftover PII columns, unique row key, harmonized Yes/No values, `chlorine_mgl` numeric, and a uniquely-identified container table.
+- **Output:** Excel codebook at `${codebook_excel}` (global not defined anywhere in this repo) + pass/fail messages printed to the console.
+- **Status:** stale relative to the rest of the pipeline — see [Known inconsistencies](#known-inconsistencies).
+
+### [4-clean.do](code/4-clean.do)
+Not called from `main.do`. Its first 145 lines duplicate `4-clean-household.do`, followed by an unreachable `exit` and leftover teaching-exercise stubs (`households.dta`, `containers.dta`, `chlorine_mgl`, `treats_water`, ...) from an earlier version of this exercise. Looks like a superseded draft left in the repo by accident rather than an active pipeline step.
 
 ## List of datasets
 
-> INSTRUCTIONS: In some cases, authors will provide one dataset (file) per data source, and the code to combine them. In others, in particular when data access might be restrictive, the replication package may only include derived/analysis data. Every file should be described. This can be provided as a Excel/CSV table, or in the table below. See a more detailed discussion on how to create these tables [here](https://dimewiki.worldbank.org/Data_Linkage_Table).
-
-### Master data sets
-
-| Data set name    | Location                            | [Key](https://dimewiki.worldbank.org/ID_Variable_Properties)        | [Foreign keys](https://en.wikipedia.org/wiki/Foreign_key)  | Main variables         | Created by |
-|------------------|-------------------------------------|------------|------------|------------------------------------------------|--------|
-| Village master   | Data/MasterData/VillageMaster.dta   | village_id |            | Treatment status, county, sub-county, location | Code/MasterData/create-village-master.do |
-| Household master | Data/MasterData/HouseholdMaster.dta | hh_id      | village_id | GPS location, Enrollment status             | Code/MasterData/create-hh-master.do |
-
 ### Raw data
 
-| Data set name    | Location                     | Unit of observation | Key        | Foreign keys | Main variables                          | Instrument/source |
-|------------------|------------------------------|---------------------|------------|--------------|-----------------------------------------|-------------------|
-| Chlorine tests   | Data/Raw/ChlorineTests.csv   | Household-time      | hh_id date | village_id   | Chlorine residual test result           | Link to survey instrument or data provider documentation |
-| Household survey | Data/Raw/HouseholdSurvey.csv | Household           | hh_id      | village_id   | Chlorine use (self-reported), migration | |
+| Data set | Location | Unit of observation | Key | Created by |
+|---|---|---|---|---|
+| Raw CSV export | `data/raw/household_water_questionnaire__v1.csv` | Household (wide, incl. up to 3 children) | `KEY` | Partner/survey platform export |
+| Imported | `data/raw/household_water_questionnaire.dta` | Household (wide) | `key` | `1-import.do` |
+| De-identified | `data/raw/household_water_questionnaire-deid.dta` | Household (wide) | `key` | `2-deidentify.do` |
+| PII crosswalk | `data/raw/household_water_questionnaire-crosswalk-PII.dta` | Household | `key` | `2-deidentify.do` |
 
 ### Tidy data
 
-| Data set name  | Location                    | Unit of observation | Key        | Foreign keys | Main variables                          | Created by |
-|----------------|-----------------------------|---------------------|------------|--------------|-----------------------------------------|------------|
-| Chlorine tests | Data/Tidy/ChlorineTests.dta | Household-time      | hh_id date | village_id   | Chlorine residual test result           | Code/Tidy/tidy-chlorine.do |
-| Household tidy | Data/Tidy/HouseholdTidy.dta | Household           | hh_id      | village_id   | Chlorine use (self-reported), migration | Code/Tidy/tidy-hh.do |
-| Children tidy  | Data/Tidy/ChildrenTidy.dta  | Household-child     | child_id   | hh_id        | Data of birth, date of death, symptoms  | Code/Tidy/tidy-child.do |
+| Data set | Location | Unit of observation | Key | Created by |
+|---|---|---|---|---|
+| Household tidy | `data/tidy/household-tidy.dta` | Household | `key` | `3-tidy.do` |
+| Child tidy | `data/tidy/child-tidy.dta` | Household-child | `key`, `child_index` | `3-tidy.do` |
 
+### Clean data
 
-### Intermediate/constructed data
+| Data set | Location | Unit of observation | Key | Main variables | Created by |
+|---|---|---|---|---|---|
+| Household clean | `data/clean/household-clean.dta` (+ codebook at `documentation/data-dictionaries/household-clean.xlsx`) | Household | `key` | Respondent demographics, water source, storage practices, treatment behavior, perceived safety/satisfaction | `4-clean-household.do` |
+| Child clean | `data/clean/child-clean.dta` (+ codebook at `documentation/data-dictionaries/child-clean.xlsx`) | Household-child | `key`, `child_index` | Child age, diarrhea in past 2/7 days | `5-clean-child.do` (outputs not yet present) |
 
-| Data set name         | Location                                  | Unit of observation | Key        | Foreign keys | Main variables               | Created by |
-|-----------------------|-------------------------------------------|---------------------|------------|--------------|------------------------------|------------|
-| Children constructed  | Data/Constructed/ChildrenConstructed.dta  | Household-child     | child_id   | hh_id        | Age at death, cause of death | Code/Construct/construct-child.do |
-| Household constructed | Data/Constructed/HouseholdConstructed.dta | Household           | hh_id      | village_id   | Chlorine use (self-reported, tested), exposure to treatment | Code/Construct/construct-hh.do |
+## Known inconsistencies
 
-### Analysis/final data
+The scripts were adapted from an older version of this teaching exercise (built around a differently-named "chlorine testing" dataset with `households.dta`/`containers.dta`/`submission_id`) to the current `household_water_questionnaire` data (`household-tidy.dta`/`child-tidy.dta`, keyed by `key`). That migration is incomplete:
 
-| Data set name    | Location                        | Unit of observation | Key      | Main variables | Created by |
-|------------------|---------------------------------|---------------------|----------|----------------|------------|
-| Children final   | Data/Analysis/ChildrenFinal.dta | Child               | child_id | Treatment status, death indicator, cause of death, chlorine use, exposure to treatment | Code/Construct/create-children-final.do |
+- **`04-codebook-verify.do` still targets the old schema** (`households.dta`, `containers.dta`, `submission_id`, `chlorine_mgl`, `treats_water`, `tested_this_morning`, `water_safe_yn`) instead of the files/variables the current pipeline actually produces (`household-clean.dta`, `child-clean.dta`, `key`, `water_safety`, `hh_watersource`, ...). It won't run successfully against current outputs without a rewrite, and it also references an undefined global, `${codebook_excel}`.
+- **`4-clean.do` is very likely dead code** — a pre-migration draft of `4-clean-household.do`, not referenced by `main.do`, containing an unreachable `exit` followed by exercise stubs for variables that don't exist in this dataset.
+- **`data/clean/` currently only contains `household-clean.dta`** (its codebook lives in `documentation/data-dictionaries/household-clean.xlsx`) — the child-level outputs described for `5-clean-child.do` are missing entirely, so it either hasn't been run yet or its outputs weren't committed.
 
----
+If you pick this pipeline back up: treat `1-import.do` → `2-deidentify.do` → `3-tidy.do` → `4-clean-household.do` → `5-clean-child.do` as the source of truth, and rewrite `04-codebook-verify.do` to match before relying on it.
 
-## Acknowledgements
+## Repository structure
 
-This file was adapted from the Social Science Data Editors website. For the latest version, visit [https://social-science-data-editors.github.io/template_README/](https://social-science-data-editors.github.io/template_README/)
+- [code/](code) — Stata do-files (this repo) plus vendored user-written ado packages in `code/ado/i`.
+- [data/raw/](data/raw) — raw CSV export, imported/de-identified `.dta` versions, and the PII crosswalk.
+- [data/tidy/](data/tidy) — one file per unit of observation (household, child), reshaped but not yet labeled.
+- [data/clean/](data/clean) — analysis-ready, labeled data.
+- [output/](output) — reserved for tables/figures; currently empty.
+- [documentation/](documentation) — the SurveyCTO questionnaire (`Household Water Questionnaire - V1.xlsx`), plain-text project documentation, and `data-dictionaries/` (the Excel mini-codebooks `iecodebook` exports for each clean dataset).
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the general DIL folder-structure/workflow conventions this repo is based on, and [CLAUDE.md](CLAUDE.md) for guidance on keeping this README in sync with the code.

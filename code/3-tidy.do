@@ -35,9 +35,11 @@
 	use "${data_raw}/household_water_questionnaire-deid.dta", clear
 
 **------------------------------------------------------------------------------
-**# 1 Identify units of observation present									 
+**# 1 Identify units of observation present
 **------------------------------------------------------------------------------
 
+	ds child_* diarrhea_* // This is why we use prefixes for variables in the same module
+	local child_vars = r(varlist)
 
 **------------------------------------------------------------------------------
 **# 2 Household-level information
@@ -45,6 +47,7 @@
 
 	preserve
 
+		drop `child_vars'
 
 		iesave "${data_tidy}/household-tidy.dta", ///
 			idvars(key) ///
@@ -60,20 +63,47 @@
 
 **## 3.1 Check expected number of obs
 **------------------------------------------------------------------------------
-	
+	preserve
+
+		* This household lists two children in the household, but there is
+		* no valid information for them
+		drop if key == "uuid:11cda278-5ad1-4913-b0b6-957cdc40f500"
+
+		collapse (sum) hh_children
+		sum hh_children
+
+		local n_children = r(mean)
+
+	restore
 
 **## 3.2 Keep relevant variables
 **------------------------------------------------------------------------------
 
+	keep key `child_vars'
 
 **## 3.3 Change the relationship between rows and columns
 **------------------------------------------------------------------------------
 
-	reshape long /*[ variables here ]*/, i(key) j(child_index)
+	reshape long child_age_ diarrhea_2d_ diarrhea_7d_, i(key) j(child_index)
 	rename *_ *
 
 **## 3.4 Confirm the ID and number of observations
 **------------------------------------------------------------------------------
+
+	egen valid_child = rownonmiss(child_age-diarrhea_7d), strok
+	replace valid_child = valid_child > 0
+	keep if valid_child
+	drop valid_child
+
+	/* This is how I found the household with no valid child data
+	preserve
+
+		collapse (sum) valid_child, by(key hh_children)
+
+		br if valid_child != hh_children
+
+	restore
+	*/
 
 	isid key child_index, sort
 	assert _N == `n_children'

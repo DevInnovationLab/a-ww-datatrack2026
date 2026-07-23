@@ -49,10 +49,27 @@
 **## 1.2 Categorical variables are turned into labelled values
 **------------------------------------------------------------------------------
 
+	local cat_vars enumerator deviceid
+
+	foreach var of local cat_vars {
+		tempvar str
+		rename `var' `str'
+		encode `str', gen(`var')
+		drop `str'
+	}
+
 **## 1.3 Dates
 **------------------------------------------------------------------------------
 
 	local date_vars submissiondate starttime endtime
+
+	foreach var of local date_vars {
+		tempvar date
+		rename `var' `date'
+		gen `var' = clock(strtrim(itrim(`date')), "MD20Y hm")
+		format `var' %tc
+		drop `date'
+	}
 
 **## 1.4 GPS (requires identified data)
 **------------------------------------------------------------------------------
@@ -76,6 +93,9 @@
 **# 3 Replace missing codes
 **------------------------------------------------------------------------------
 
+	ds, has(type numeric)
+	local num_vars `r(varlist)'
+
 	recode `num_vars' 	(-666 = .o) ///
 						(-888 = .r) ///
 						(-999 = .k)
@@ -89,31 +109,54 @@
 
 	lab def yesno 		1 "Yes" ///
 						0 "No"
-						
+	lab val `dummy_vars' yesno
+
 	lab def sex 		1 "Male" ///
 						2 "Female"
+	lab val resp_sex sex
 
 	lab def educ 		0 "None" ///
 						1 "Primary" ///
 						2 "Secondary" ///
 						3 "Tertiary"
-						
+	lab val resp_educ educ
+
 	lab def source 		1 "Piped" ///
 						2 "Protected well" ///
 						3 "River or stream" ///
 						4 "Trucked"
+	lab val hh_watersource source
 
 	lab def container 	1 "Bucket" ///
 						2 "Clay pot" ///
 						3 "Jerry can"
+	lab val stored_container container
 
 	lab def safe 		3 "Very safe" ///
 						2 "Somewhat safe" ///
 						1 "Not safe"
+	lab val water_safety safe
 
 	lab def satisfied 	3 "Very satisfied" ///
 						2 "Somewhat satisfied" ///
 						1 "Not satisfied"
+	lab val water_satisfaction satisfied
+
+**------------------------------------------------------------------------------
+**# 5 Recategorize other values
+**------------------------------------------------------------------------------
+
+	tab 	stored_container_o
+	replace stored_container = 	4 if stored_container_o == "Plastic drum"
+	lab def container 			4 "Plastic drum", add
+	drop 	stored_container_o
+
+	tab 	hh_watersource_o
+	replace hh_watersource = 3 if regex(lower(hh_watersource_o), "river")
+	replace hh_watersource = 4 if regex(lower(hh_watersource_o), "truck")
+	replace hh_watersource = 5 if regex(lower(hh_watersource_o), "rain")
+	lab def source 5 "Rainwater", add
+	drop 	hh_watersource_o
 
 	label dir
 	local labels `r(names)'
@@ -124,16 +167,6 @@
 							.o "Other", ///
 			add
 	}
-
-**------------------------------------------------------------------------------
-**# 5 Recategorize other values
-**------------------------------------------------------------------------------
-
-	* Water storage type
-	tab 	stored_container_o
-	replace stored_container = 	4 if stored_container_o == "Plastic drum"
-	lab def container 			4 "Plastic drum", add
-	drop 	stored_container_o
 
 **------------------------------------------------------------------------------
 **# 6 Label variables
@@ -151,12 +184,12 @@
 
 **## 6.2 Section A: Identification
 
-	lab var hh_id      		"(A1) Household ID"
-	lab var village_id 		"(A2) Community/village name"
+	lab var hh_id      "(A1) Household ID"
+	lab var village_id "(A2) Community/village name"
 
 **## 6.3 Section B: Consent
 
-	lab var consent 		"(B1) Respondent consents to the interview"
+	lab var consent "(B1) Respondent consents to the interview"
 
 **## 6.4 Section C: Respondent & household roster
 
@@ -195,5 +228,13 @@
 **------------------------------------------------------------------------------
 **# 7 Save and export codebook
 **------------------------------------------------------------------------------
+
+	iesave "${data_clean}/household-clean.dta", ///
+		idvars(key) ///
+		version(14) ///
+		replace userinfo ///
+		report(path("${data_raw}/household.md") replace)
+
+	iecodebook export using "${doc}/data-dictionaries/household-clean.xlsx", replace
 
 ********************************************************************************
