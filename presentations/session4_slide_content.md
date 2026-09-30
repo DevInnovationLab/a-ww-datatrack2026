@@ -13,7 +13,9 @@
 - [ ] **Cut exercises or content to fit the time.** The slides currently add up to about 83 minutes for a 75-minute session.
 - [ ] **Add an example of exploratory analysis results previously shared with MK.** A real, anonymized update would fit the "Before you share it" slide or the Slack examples in section 04.
 - [ ] Write the silent-bug story for "Why this session" (placeholder)
-- [ ] Review the draft agents-file rules on "Automating best practices"
+- [ ] **Review the draft agents file** ([`session4_AGENTS.md`](session4_AGENTS.md)) for "Automating best practices" (slide 14). Check the rules match what the slides teach, trim anything too long for participants to read, decide whether to pre-fill "About this project" for the course data, and put a copy in the exercise folders.
+- [ ] **Review the "Imputation and outlier treatment" rules** in [`session4_AGENTS.md`](session4_AGENTS.md). Check that the documentation and distribution-comparison steps are what we want RAs to hand the PIs, and decide whether this point also belongs on a slide (e.g. "Best practices" or the aggregating slide, where trimming comes up).
+- [ ] **Review the new "Combining rounds and datasets" and "state what you expect from every variable" rules** in [`session4_AGENTS.md`](session4_AGENTS.md), and the matching speaker notes on slides 9 and 22. Decide whether either point should go on the slides themselves (e.g. a row in the slide 9 table, or a line on "Best practices").
 - [ ] Pre-create each pair's GitHub repo and linked Overleaf project (the Overleaf licence covers GitHub sync)
 - [ ] Fix the stray text box on "Best practices", and get permission for the Slack screenshots
 
@@ -193,6 +195,7 @@ Turning field observations into economically meaningful data
 > **Notes:**
 > - A sum or a mean always returns a number. That doesn't make it the right one.
 > - **Units get mixed:** values recorded in different units (liters vs gallons, rupees vs thousands of rupees, days vs weeks) are summed as if they were the same thing. There's no error and no missing value, just a silently wrong number. A group of observations sitting a fixed multiple above the rest is the tell. Convert every observation to one unit before aggregating, never after, and assert a plausible range.
+> - **Units change between rounds:** a common version of the same bug. Different rounds or data sources record the same variable in different units, codes or names (e.g. baseline in litres, endline in gallons). Harmonise in construction, before appending; keep the data dictionary up to date with each round's original unit and the conversion; and check the dictionary when you run the analysis. Compare each variable's distribution by round after combining: a round sitting a fixed multiple above the others is the tell.
 > - **Codes count as values:** survey codes for "don't know" or "refused" (-99, -88, 999) enter sums and means as real numbers. Recode them to missing during construction, before any calculation.
 > - **Missing parts are ignored:** summing components while skipping missing values (`rowtotal()` in Stata, `na.rm = TRUE` in R) treats an unanswered item as zero, so units with more missing items get lower totals. Count the non-missing components next to every total, and decide on a rule: require all components, set a minimum, or impute.
 > - **Outliers drive the total:** one mis-keyed value, or a few extreme ones, can dominate a sum or mean. Decide on a trimming or winsorizing rule in construction, apply it once, and record it in the variable label and the data dictionary.
@@ -301,24 +304,19 @@ Your AI assistant wrote this script. It runs without errors. **It is wrong in fi
 ```markdown
 ## Data construction rules
 - Never overwrite an observed variable
+- Non-response codes → missing before any calculation
+- Build checks into the code: assert N, IDs, ranges
 - Merges: check keys, declare 1:1 / m:1 / 1:m, assert N
-- Sums and means: one unit, plausible range
-- Recode missing codes before any calculation
+- Sums and means: one unit, plausible range, report the N used
 - Collapses and reshapes: assert N, define "empty"
+- Never impute or drop missings without an instruction and a method
 - Label units and transformations; update the dictionary
 - Don't make research decisions: list them as questions
 ```
 
 > **Notes:**
 > - 30 seconds on the slide, then point at where the full file lives in the exercise folder. The AI follows these rules; it doesn't replace your judgement about the definitions.
-> - Full version of the rules for the file:
->   - Never overwrite an originally observed variable. Create a new one.
->   - Before any merge: run `isid` on the key in both datasets and state 1:1, m:1 or 1:m. Never use m:m. Assert the expected N after the merge.
->   - Before any sum or mean: check that all values share one unit and assert a plausible range.
->   - Recode survey missing codes (-99, -88, ...) to missing before any calculation. Never let them enter a sum.
->   - After every collapse or reshape: assert the expected number of observations, and decide explicitly whether "no observations" means missing or zero.
->   - Label every constructed variable with its unit and any transformation (trimming, winsorizing, normalization), and add it to the data dictionary.
->   - Do not make research decisions (definitions, cut-offs, trimming rules) on your own. List them as open questions for the team.
+> - The slide version is a reminder for people. An agent needs more: what to check, how, what to do when a check fails, and when to stop and ask. The full draft is in [`session4_AGENTS.md`](session4_AGENTS.md). It covers construction (checks, missing values, merges, aggregates, collapses, lags, labels), analysis code (the errors on slides 22–23), exploratory reports (no typed numbers), and the research decisions the agent must not make. Participants copy it to their project root as `AGENTS.md` or `CLAUDE.md` and fill in the "About this project" section.
 
 ---
 
@@ -452,6 +450,7 @@ Code that runs is not code that's right
 
 > **Notes:**
 > - These mistakes don't produce an error message. They give you the wrong number.
+> - **Opinionated advice: know your variables before you use them.** For every variable in an analysis, write down what you expect: unit of measurement, unit of observation, how many missing values and why, and a reasonable range. Check it against the data dictionary, then turn it into assertions at the top of the script. Most of the bugs on these two slides show up as a variable that doesn't look the way you expected.
 > - **Check the AI's code for these:** AI-written analysis code often has them, especially hand-rolled dummies, number-coded categories treated as continuous, and control lists retyped in each script. Read every regression line the AI writes against this list.
 > - **Categories treated as numbers** (Stata and R): a labeled variable is not automatically categorical. `reg y treat district` treats the district code as a number. Use `i.district` / `factor(district)`, and set the base category on purpose (`ib3.district`, `fct_relevel()`). This includes `haven`-imported labelled variables in R.
 > - **Hand-rolled dummies** (both, with a Stata-only detail): homemade indicators invite gaps, overlaps and confusion about which category is omitted. In Stata, `gen d1 = (district == 1)` also sets missing values to 0; R's `x == 1` returns `NA`. If you must build them: `gen d1 = (district == 1) if !missing(district)`.
