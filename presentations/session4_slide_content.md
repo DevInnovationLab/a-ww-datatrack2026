@@ -7,6 +7,17 @@
 - **Sources:** "S4 draft" = DIL_DataSession4_Construction_Analysis.pptx · "Copy" = 2026_Publication_Reports_Replicability · "S5 v2" = DIL_DataSession5_…_v2 · **NEW** = not in any existing deck
 - **Convention:** slide text is kept short; detail, examples and code live in the notes.
 
+## To-dos
+
+- [ ] **Review the exercises and harmonize them with other sessions.** Use the same dataset, variable names and file structure as the rest of the course. Check that Exercise 2's report is what Session 5 expects as its starting point, and that the Quarto, GitHub and Overleaf steps don't repeat Session 5's reporting exercise.
+- [ ] **Incorporate Nandita's feedback.**
+- [ ] **Cut exercises or content to fit the time.** The slides currently add up to about 83 minutes for a 75-minute session.
+- [ ] **Add an example of exploratory analysis results previously shared with MK.** A real, anonymized update would fit the "Before you share it" slide or the Slack examples in section 04.
+- [ ] Write the silent-bug story for "Why this session" (placeholder)
+- [ ] Review the draft agents-file rules on "Automating best practices"
+- [ ] Pre-create each pair's GitHub repo and linked Overleaf project (the Overleaf licence covers GitHub sync)
+- [ ] Fix the stray text box on "Best practices", and get permission for the Slack screenshots
+
 ---
 
 ## Slide 1 — Title · 1 min · *S4 draft 1*
@@ -317,13 +328,13 @@ Your AI assistant wrote this script. It runs without errors. **It is wrong in fi
 
 **02 · Exploratory analysis with literate programming**
 Fast results for the team, in one command
-~15 minutes, including Exercise 2
+~27 minutes, including Exercises 2 and 3
 
 ---
 
 ## Slide 16 — Some opinionated advice · 2 min · *S4 draft 11*
 
-1. **Use literate programming tools:** Quarto, RMarkdown, markstat
+1. **Use literate programming tools:** Quarto, RMarkdown
 2. **Compile in one command:** tables, graphs and inline results
 3. **Document as you go:** narrative next to code
 4. **AI writes the code, never the output**
@@ -351,7 +362,7 @@ Fast results for the team, in one command
 > - Merges two slides that said the same thing. Remove slide 17 from the S5 v2 deck.
 > - **Linear before fancy:** plain OLS, a few covariates at a time, a subsample if the data is big. Complexity is something you earn.
 > - **Simulated data:** build and test the whole pipeline before the real data arrives.
-> - **Exploratory means markdown:** Quarto, RMarkdown and markstat compile results for the team in one command, code visible, zero gold-plating.
+> - **Exploratory means markdown:** Quarto and RMarkdown compile results for the team in one command, code visible, zero gold-plating.
 > - **Minimal formatting:** don't spend time formatting a table or graph while the analysis is still moving. It will change.
 > - **Decide what to show:** deciding the exhibit is the hard part. Making it pretty is not: AI can do it in minutes once the story is stable. Polish comes in Session 5.
 > - The split is the message: your judgement goes into the content (the specification, the sample, the pipeline), while formatting is increasingly something you delegate. That's why spending hours on it during exploration is wasted time.
@@ -382,7 +393,48 @@ Fast results for the team, in one command
 
 ---
 
-## Slide 19 — Section divider · **NEW**
+## Slide 19 — Outputs that update themselves · 2 min · **NEW**
+
+**Code → files → GitHub → Overleaf**
+
+1. Your script exports tables (`.tex`), figures (`.png`) and key numbers
+2. You push them to GitHub
+3. Overleaf pulls them, and your short report to the PI recompiles with the new results
+
+**Nobody retypes a number. Nobody re-pastes a table.**
+
+> **Notes:**
+> - Same principle as inline code in Quarto, applied to a short LaTeX report: the kind of 2–3 page exploratory update a PI reads and comments on in Overleaf. The report is not a paper: a few exhibits, short notes, open questions. As with Quarto, the document only *references* outputs, it never contains typed results. Tables come in with `\input{tables/desc.tex}`, figures with `\includegraphics{figures/outcome.png}`, and numbers in the text with macros written by the code (e.g., `\Nhh`), so the text updates too.
+> - When the data or a decision changes: rerun the script, push, pull in Overleaf, recompile. Every exhibit and every number in the text moves together.
+> - **With AI:** AI can write the LaTeX around your outputs (the document skeleton, table formatting, the `\input` lines). It never types a result. Same rule as slide 16.
+> - **How the link works:** an Overleaf project is linked to a GitHub repository (Overleaf menu → GitHub → sync, or create the project via *Import from GitHub*). Changes come in with *Pull GitHub changes into Overleaf*; edits made in Overleaf go back with *Push Overleaf changes to GitHub*.
+> - **Access:** GitHub sync is an Overleaf premium feature; it's covered by the licence participants use. If someone's account isn't linked on the day, they can follow along on the facilitator's project on screen.
+> - Why Overleaf for this: it's where many PIs already read and comment, and a shared project means they always see the latest results without you emailing PDFs.
+> - Polished exhibits and the full paper pipeline are Session 5; here the goal is a quick report that keeps itself up to date.
+
+---
+
+## Slide 20 — EXERCISE 3 · A report that updates itself · 10 min (brief 1 · build 7 · update 2) · **NEW**
+
+*In pairs · your Exercise 2 project + `report_template/`*
+
+1. **Export:** save your descriptives table as `.tex` and your figure as `.png`
+2. **Push** them to your GitHub repository
+3. **Link:** open the linked Overleaf project, `\input` the table, include the figure, compile
+4. **Update:** flip `last_week_only`, rerun, push, pull in Overleaf, recompile
+
+**Did the report change without you typing anything?**
+
+> **Notes:**
+> - **Before the session:** each pair needs a GitHub repository created from the course template (with `report_template/main.tex`, a 2–3 page exploratory-update template: title, date, a short summary, one table, one figure, open questions), and an Overleaf project already linked to it. Set these up in advance: creating accounts and linking them eats the whole exercise. Add GitHub and Overleaf sign-ins to the pre-work email.
+> - **R export:** `modelsummary::datasummary_balance(~treat, data = hh, output = "tables/desc.tex")` and `ggsave(here("figures", "outcome.png"), width = 6, height = 4)`. Key number for the text: `writeLines(sprintf("\\newcommand{\\Nhh}{%s}", nrow(hh)), here("tables", "numbers.tex"))`.
+> - **Push:** `git add tables figures`, `git commit -m "Update descriptives"`, `git push`, or the GitHub Desktop equivalent.
+> - *Stretch:* `\input{tables/numbers.tex}` in the preamble of `main.tex`, use `\Nhh` in the summary sentence, and check that it changes after the update.
+> - AI can write the export code and the LaTeX lines. It can't type the numbers.
+
+---
+
+## Slide 21 — Section divider · **NEW**
 
 **03 · Silent bugs in analysis code**
 Code that runs is not code that's right
@@ -390,7 +442,7 @@ Code that runs is not code that's right
 
 ---
 
-## Slide 20 — Common errors in analysis code (1/2) · 2.5 min · **NEW** (absorbs Copy 27)
+## Slide 22 — Common errors in analysis code (1/2) · 2.5 min · **NEW** (absorbs Copy 27)
 
 *More silent bugs.*
 
@@ -411,7 +463,7 @@ Code that runs is not code that's right
 
 ---
 
-## Slide 21 — Common errors in analysis code (2/2) · 2.5 min · **NEW**
+## Slide 23 — Common errors in analysis code (2/2) · 2.5 min · **NEW**
 
 | Error | The fix |
 |---|---|
@@ -430,7 +482,7 @@ Code that runs is not code that's right
 
 ---
 
-## Slide 22 — SPOT THE SILENT BUG · 7 min (show 1 · race 4 · reveal 2) · **NEW**
+## Slide 24 — SPOT THE SILENT BUG · 7 min (show 1 · race 4 · reveal 2) · **NEW**
 
 *Whole room. Your AI assistant wrote this. It runs without errors. Find three problems.*
 
@@ -455,7 +507,7 @@ reg chlorine_mgl treat district
 
 ---
 
-## Slide 23 — Three silent bugs, revealed · *(part of the 7 min)* · **NEW**
+## Slide 25 — Three silent bugs, revealed · *(part of the 7 min)* · **NEW**
 
 | Line | Bug | Fix |
 |---|---|---|
@@ -469,7 +521,7 @@ reg chlorine_mgl treat district
 
 ---
 
-## Slide 24 — Section divider · *S4 draft 13, renumbered*
+## Slide 26 — Section divider · *S4 draft 13, renumbered*
 
 **04 · From result to PI**
 Judge the number, check the exhibit, then communicate
@@ -477,7 +529,7 @@ Judge the number, check the exhibit, then communicate
 
 ---
 
-## Slide 25 — Interpret first, then share · 3 min · *S5 v2 18, rewritten*
+## Slide 27 — Interpret first, then share · 3 min · *S5 v2 18, rewritten*
 
 *Construction has rules you can assert. Results don't. The check is whether you believe the number.*
 
@@ -501,7 +553,7 @@ Judge the number, check the exhibit, then communicate
 
 ---
 
-## Slide 26 — Before you share it · 2 min + 2 min peer check · *S4 draft 26, left column, trimmed*
+## Slide 28 — Before you share it · 2 min + 2 min peer check · *S4 draft 26, left column, trimmed*
 
 - **Clear & labeled:** units, estimation, sample
 - **Numbers make sense:** N and magnitudes as expected
@@ -518,7 +570,7 @@ Judge the number, check the exhibit, then communicate
 
 ---
 
-## Slide 27 — Managing your time and your PIs · 2 min · *S4 draft 15*
+## Slide 29 — Managing your time and your PIs · 2 min · *S4 draft 15*
 
 **1. Manage expectations**
 - Reply within 24 hours
@@ -542,7 +594,7 @@ Judge the number, check the exhibit, then communicate
 
 ---
 
-## Slides 28–29 — Managing your time and your PIs: real examples · 2 min total · *S4 draft 17–18*
+## Slides 30–31 — Managing your time and your PIs: real examples · 2 min total · *S4 draft 17–18*
 
 *One Slack screenshot per slide, with a one-line caption:*
 
@@ -557,7 +609,7 @@ Judge the number, check the exhibit, then communicate
 
 ---
 
-## Slide 30 — Wrap-up · 2 min · **NEW**
+## Slide 32 — Wrap-up · 2 min · **NEW**
 
 **Questions? Go construct something you can defend.**
 
@@ -575,8 +627,8 @@ Judge the number, check the exhibit, then communicate
 ## Appendix — Pre-work email (send 2–3 days before) · **NEW**
 
 1. Install Quarto (quarto.org) and render the test file in `explore_exercise/hello.qmd`
-2. R users: install `pacman`, then run `pacman::p_load(tidyverse, haven, here, fixest, assertthat)`
-3. Stata users: `ssc install markstat` and `ssc install whereis`, then point `whereis` at pandoc. Optionally install nbstata for Quarto.
+2. Install R and `pacman`, then run `pacman::p_load(tidyverse, haven, here, fixest, assertthat)`
+3. Create a GitHub account and an Overleaf account, send us both usernames, and install git (or GitHub Desktop)
 4. Sign in to the AI assistant you'll use during the exercises (e.g., Claude Desktop), and check that it can open files in the exercise folder.
 5. Reply with a screenshot of your rendered test file, or tell us what broke.
 
