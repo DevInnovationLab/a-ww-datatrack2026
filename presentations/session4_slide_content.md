@@ -4,7 +4,6 @@
 
 - **Header on every slide:** DATA ANALYSIS: CONSTRUCTION & EXPLORATION
 - **Footer:** Development Innovation Lab / University of Chicago · Data analysis: Construction & Exploration
-- **Sources:** "S4 draft" = DIL_DataSession4_Construction_Analysis.pptx · "Copy" = 2026_Publication_Reports_Replicability · "S5 v2" = DIL_DataSession5_…_v2 · **NEW** = not in any existing deck
 - **Convention:** slide text is kept short; detail, examples and code live in the notes.
 
 ## To-dos
@@ -20,7 +19,7 @@
 
 ---
 
-## Slide 1 — Title · 1 min · *S4 draft 1*
+## Slide 1 — Title · 1 min
 
 **DATA SESSION 4 · WELCOME WEEK INDIA 2026 · THURSDAY, OCTOBER 8 · 11:30 AM – 12:45 PM**
 
@@ -35,7 +34,7 @@ Development Innovation Lab · Welcome Week India 2026
 
 ---
 
-## Slide 2 — Why this session · 2 min · **NEW** (absorbs S4 draft 14) **(placeholder — story to add)**
+## Slide 2 — Why this session · 2 min **(placeholder — story to add)**
 
 **[PLACEHOLDER: a real silent bug that reached a PI — 1 minute]**
 
@@ -54,11 +53,10 @@ So your value is everything the code can't do:
 >   - **Deciding what to show** → exploratory reports, where content matters more than form (section 02)
 >   - **Catching what runs but is wrong** → silent bugs in analysis code (section 03)
 >   - **Judging and explaining results** → from result to PI (section 04)
-> - The original "hard parts" slide (S4 draft 14) listed: designing the research (mostly done already, and guided by the pre-analysis plan); managing your time and your PIs (explaining that updating results means adjusting a pipeline, not re-running `reg y x`); formatting outputs; and ensuring reproducibility. The last two are Session 5.
 
 ---
 
-## Slide 3 — By the end of this session, you'll be able to… · 1 min · *S4 draft 2, rewritten*
+## Slide 3 — By the end of this session, you'll be able to… · 1 min
 
 - Spot where construction goes wrong: joins, unit changes, aggregation, lags
 - Write code that stops loudly when the data isn't what you expect
@@ -68,7 +66,7 @@ So your value is everything the code can't do:
 
 ---
 
-## Slide 4 — Section divider · *S4 draft 3*
+## Slide 4 — Section divider
 
 **01 · Constructing indicators**
 Turning field observations into economically meaningful data
@@ -76,7 +74,7 @@ Turning field observations into economically meaningful data
 
 ---
 
-## Slide 5 — Data construction · 2 min · *S4 draft 4 + S4 draft 12*
+## Slide 5 — Data construction · 2 min
 
 **Inputs**
 - A clean, tidy dataset
@@ -99,7 +97,7 @@ Turning field observations into economically meaningful data
 
 ---
 
-## Slide 6 — This is the danger zone · 2 min · *S4 draft 5*
+## Slide 6 — This is the danger zone · 2 min
 
 > **The worst bug is the silent one.**
 
@@ -129,7 +127,7 @@ Turning field observations into economically meaningful data
 
 ---
 
-## Slide 7 — Joining data tables: what can go wrong · 2 min · *replaces S4 draft 8*
+## Slide 7 — Joining data tables: what can go wrong · 2 min
 
 | Consequence | How to tell | The fix |
 |---|---|---|
@@ -155,7 +153,7 @@ Turning field observations into economically meaningful data
 
 ---
 
-## Slide 8 — Changing units of observation: what can go wrong · 2.5 min · *replaces S4 draft 7*
+## Slide 8 — Changing units of observation: what can go wrong · 2.5 min
 
 | Consequence | How to tell | The fix |
 |---|---|---|
@@ -180,7 +178,7 @@ Turning field observations into economically meaningful data
 
 ---
 
-## Slide 9 — Aggregating values: what can go wrong · 2.5 min · *replaces S4 draft 6*
+## Slide 9 — Aggregating values: what can go wrong · 2.5 min
 
 | Consequence | How to tell | The fix |
 |---|---|---|
@@ -206,7 +204,7 @@ Turning field observations into economically meaningful data
 
 ---
 
-## Slide 10 — Creating lags: what can go wrong · 2 min · **NEW**
+## Slide 10 — Creating lags: what can go wrong · 2 min
 
 | Consequence | How to tell | The fix |
 |---|---|---|
@@ -229,7 +227,7 @@ Turning field observations into economically meaningful data
 
 ---
 
-## Slide 11 — EXERCISE 1 · Construction bug hunt · 12 min (brief 1 · work 8 · reveal 3) · **NEW**
+## Slide 11 — EXERCISE 1 · Construction bug hunt · 12 min (brief 1 · work 8 · reveal 3)
 
 *In pairs · `construction_exercise/`*
 
@@ -250,7 +248,7 @@ Your AI assistant wrote this script. It runs without errors. **It is wrong in fi
 
 ---
 
-## Slide 12 — Five bugs, revealed · *(part of the 12 min)* · **NEW**
+## Slide 12 — Five bugs, revealed · *(part of the 12 min)*
 
 | Bug | Step | Check |
 |---|---|---|
@@ -271,7 +269,7 @@ Your AI assistant wrote this script. It runs without errors. **It is wrong in fi
 
 ---
 
-## Slide 13 — Best practices · 1 min · *S4 draft 9*
+## Slide 13 — Best practices · 1 min
 
 **Values change in construction only**
 - Research decisions go into the data here, and nowhere else
@@ -296,7 +294,7 @@ Your AI assistant wrote this script. It runs without errors. **It is wrong in fi
 
 ---
 
-## Slide 14 — Automating best practices · 1 min · *S4 draft 10, completed* **(draft content — review)**
+## Slide 14 — Automating best practices · 1 min **(draft content — review)**
 
 *Put your construction rules in your agents file (`AGENTS.md`, `CLAUDE.md`).*
 
@@ -324,7 +322,7 @@ Your AI assistant wrote this script. It runs without errors. **It is wrong in fi
 
 ---
 
-## Slide 15 — Section divider · **NEW**
+## Slide 15 — Section divider
 
 **02 · Exploratory analysis with literate programming**
 Fast results for the team, in one command
@@ -332,7 +330,7 @@ Fast results for the team, in one command
 
 ---
 
-## Slide 16 — Some opinionated advice · 2 min · *S4 draft 11*
+## Slide 16 — Some opinionated advice · 2 min
 
 1. **Use literate programming tools:** Quarto, RMarkdown
 2. **Compile in one command:** tables, graphs and inline results
@@ -347,7 +345,7 @@ Fast results for the team, in one command
 
 ---
 
-## Slide 17 — Start simple, iterate fast · 3 min · *S5 v2 17 + S4 draft 19 box 01*
+## Slide 17 — Start simple, iterate fast · 3 min
 
 **Content: where your time goes**
 - Linear before fancy
@@ -359,7 +357,6 @@ Fast results for the team, in one command
 - Decide *what* to show; AI makes it pretty later
 
 > **Notes:**
-> - Merges two slides that said the same thing. Remove slide 17 from the S5 v2 deck.
 > - **Linear before fancy:** plain OLS, a few covariates at a time, a subsample if the data is big. Complexity is something you earn.
 > - **Simulated data:** build and test the whole pipeline before the real data arrives.
 > - **Exploratory means markdown:** Quarto and RMarkdown compile results for the team in one command, code visible, zero gold-plating.
@@ -369,7 +366,7 @@ Fast results for the team, in one command
 
 ---
 
-## Slide 18 — EXERCISE 2 · Descriptives in a literate report · 10 min (brief 1 · build 7 · re-render 2) · **NEW**
+## Slide 18 — EXERCISE 2 · Descriptives in a literate report · 10 min (brief 1 · build 7 · re-render 2)
 
 *In pairs · `explore_exercise/report.qmd`*
 
@@ -393,7 +390,7 @@ Fast results for the team, in one command
 
 ---
 
-## Slide 19 — Outputs that update themselves · 2 min · **NEW**
+## Slide 19 — Outputs that update themselves · 2 min
 
 **Code → files → GitHub → Overleaf**
 
@@ -414,7 +411,7 @@ Fast results for the team, in one command
 
 ---
 
-## Slide 20 — EXERCISE 3 · A report that updates itself · 10 min (brief 1 · build 7 · update 2) · **NEW**
+## Slide 20 — EXERCISE 3 · A report that updates itself · 10 min (brief 1 · build 7 · update 2)
 
 *In pairs · your Exercise 2 project + `report_template/`*
 
@@ -434,7 +431,7 @@ Fast results for the team, in one command
 
 ---
 
-## Slide 21 — Section divider · **NEW**
+## Slide 21 — Section divider
 
 **03 · Silent bugs in analysis code**
 Code that runs is not code that's right
@@ -442,7 +439,7 @@ Code that runs is not code that's right
 
 ---
 
-## Slide 22 — Common errors in analysis code (1/2) · 2.5 min · **NEW** (absorbs Copy 27)
+## Slide 22 — Common errors in analysis code (1/2) · 2.5 min
 
 *More silent bugs.*
 
@@ -463,7 +460,7 @@ Code that runs is not code that's right
 
 ---
 
-## Slide 23 — Common errors in analysis code (2/2) · 2.5 min · **NEW**
+## Slide 23 — Common errors in analysis code (2/2) · 2.5 min
 
 | Error | The fix |
 |---|---|
@@ -482,7 +479,7 @@ Code that runs is not code that's right
 
 ---
 
-## Slide 24 — SPOT THE SILENT BUG · 7 min (show 1 · race 4 · reveal 2) · **NEW**
+## Slide 24 — SPOT THE SILENT BUG · 7 min (show 1 · race 4 · reveal 2)
 
 *Whole room. Your AI assistant wrote this. It runs without errors. Find three problems.*
 
@@ -507,7 +504,7 @@ reg chlorine_mgl treat district
 
 ---
 
-## Slide 25 — Three silent bugs, revealed · *(part of the 7 min)* · **NEW**
+## Slide 25 — Three silent bugs, revealed · *(part of the 7 min)*
 
 | Line | Bug | Fix |
 |---|---|---|
@@ -521,7 +518,7 @@ reg chlorine_mgl treat district
 
 ---
 
-## Slide 26 — Section divider · *S4 draft 13, renumbered*
+## Slide 26 — Section divider
 
 **04 · From result to PI**
 Judge the number, check the exhibit, then communicate
@@ -529,7 +526,7 @@ Judge the number, check the exhibit, then communicate
 
 ---
 
-## Slide 27 — Interpret first, then share · 3 min · *S5 v2 18, rewritten*
+## Slide 27 — Interpret first, then share · 3 min
 
 *Construction has rules you can assert. Results don't. The check is whether you believe the number.*
 
@@ -549,11 +546,10 @@ Judge the number, check the exhibit, then communicate
 > - **Plausible:** sign and size make sense for this intervention and this population. If not, check for a bug first. Only then look for an explanation.
 > - If possible, put one regression table on screen and answer the four questions out loud. Examples to use: an effect on a share that is larger than the control mean is a bug until proven otherwise; an N that drops between columns should match a skip pattern or a control with missing values.
 > - Automation doesn't replace this step: a report that re-renders in one command repeats whatever wasn't checked.
-> - Remove slide 18 from S5 v2.
 
 ---
 
-## Slide 28 — Before you share it · 2 min + 2 min peer check · *S4 draft 26, left column, trimmed*
+## Slide 28 — Before you share it · 2 min + 2 min peer check
 
 - **Clear & labeled:** units, estimation, sample
 - **Numbers make sense:** N and magnitudes as expected
@@ -570,7 +566,7 @@ Judge the number, check the exhibit, then communicate
 
 ---
 
-## Slide 29 — Managing your time and your PIs · 2 min · *S4 draft 15*
+## Slide 29 — Managing your time and your PIs · 2 min
 
 **1. Manage expectations**
 - Reply within 24 hours
@@ -594,7 +590,7 @@ Judge the number, check the exhibit, then communicate
 
 ---
 
-## Slides 30–31 — Managing your time and your PIs: real examples · 2 min total · *S4 draft 17–18*
+## Slides 30–31 — Managing your time and your PIs: real examples · 2 min total
 
 *One Slack screenshot per slide, with a one-line caption:*
 
@@ -605,11 +601,10 @@ Judge the number, check the exhibit, then communicate
 > - **(1/2):** an RA asks for a reference on double machine learning and writes out how they currently understand the method, so the reply can correct their understanding, not just send a link.
 > - **(2/2):** an RA shares results with notes on what needs manual overrides, pushes the code, and proposes double-coding with a colleague, then asks "Do you think this is a good idea?"
 > - Ask the RAs in the screenshots for permission before presenting their messages.
-> - The S4 draft's first Slack slide (a bare link) is cut.
 
 ---
 
-## Slide 32 — Wrap-up · 2 min · **NEW**
+## Slide 32 — Wrap-up · 2 min
 
 **Questions? Go construct something you can defend.**
 
@@ -624,7 +619,7 @@ Judge the number, check the exhibit, then communicate
 
 ---
 
-## Appendix — Pre-work email (send 2–3 days before) · **NEW**
+## Appendix — Pre-work email (send 2–3 days before)
 
 1. Install Quarto (quarto.org) and render the test file in `explore_exercise/hello.qmd`
 2. Install R and `pacman`, then run `pacman::p_load(tidyverse, haven, here, fixest, assertthat)`
