@@ -1,6 +1,6 @@
 # Data Session 5 — Publication: reports & replicability
 
-**Slide content, 90 minutes** · first draft · follows `session4_session5_split_plan.md` and builds on `session4_slide_content.md`
+**Slide content, 90-minute session** (slides add up to 92 minutes) · first draft · follows `session4_session5_split_plan.md` and builds on `session4_slide_content.md`
 
 - **Header on every slide:** PUBLICATION: REPORTS & REPLICABILITY
 - **Footer:** Development Innovation Lab / University of Chicago · Publication: Reports & Replicability
@@ -10,10 +10,14 @@
 ## To-dos
 
 - [ ] **Start with a motivation slide**, as in Session 4's "Why this session": open with why reproducibility and publication-ready outputs matter, ideally a real story, before the objectives.
-- [ ] **Harmonize Exercise 1 with Session 4.** Session 4 now ends with an R/Quarto exploratory report (Exercise 2) and a GitHub → Overleaf report that updates itself (Exercise 3), and has no regression exercise. This draft makes Exercise 1 start from that report and supply the model in the packet. Check that it doesn't feel like a repeat of Session 4.
+- [ ] **Harmonize Exercise 1 with Session 4.** Session 4 now ends with an R/Quarto exploratory report (Exercise 2) and no longer has the GitHub → Overleaf exercise; that content moved here (slide 23). Session 4 has no regression exercise. This draft makes Exercise 1 start from that report and supply the model in the packet. Check that it doesn't feel like a repeat of Session 4.
 - [ ] **Decide the language for the exercises.** Session 4's report exercises are R-only. S5 v2 ran Exercise 1 with Stata chunks, and the replicability snippet is in Stata. This draft uses R for Exercise 1 and keeps the Stata snippet, with Stata notes where useful.
 - [ ] **Replace the placeholder script** on "What reproducible code looks like" with a real DIL snippet (the draft below is illustrative).
-- [ ] **Fit to time:** the slides add up to 90 minutes with no buffer. If you run behind, cut Part 05 (replication package), never Exercise 2.
+- [ ] **Fit to time:** the slides add up to 92 minutes for a 90-minute session, with no buffer: slide 23 (moved from Session 4) added 2 minutes. If you run behind, cut Part 05 (replication package), never Exercise 2.
+- [ ] **Check presenter notes that don't match the expected time.** At about 130 spoken words a minute, these notes are too long for their slide: 33 So: should a model run this checklist? (225 words, 1 min), 20 One source, two outputs, then a report (158, 1 min), 23 Outputs that update themselves (299, 2 min), 30 The DIL paper-submission checklist (146, 1 min). Trim the notes or give the slides more time.
+- [ ] **Decide how much GitHub → Overleaf practice to include.** Session 4's hands-on exercise (export the descriptives, push, `\input` in Overleaf, flip the switch and recompile; 10 min) was cut and can be recovered from git history. Right now it only appears here as slide 23 and the Exercise 1 stretch.
+- [ ] Pre-create each pair's GitHub repo and linked Overleaf project (the Overleaf licence covers GitHub sync) — moved from Session 4
+- [ ] Pre-work email: ask participants to create a GitHub account and an Overleaf account, send us both usernames, and install git (or GitHub Desktop) — moved from Session 4's pre-work email
 - [ ] **Carried over from S5 v2:**
   - [ ] Confirm Sneha's surname and title, and agree the presenter split
   - [ ] Exhibit skill: ask Sneha for her workflow; decide whether to demo it or present it as coming (owners: David and Sneha)
@@ -363,9 +367,9 @@ export excel using "backcheck.xlsx", replace
 
 **04 · From results to reports**
 One source, one report your code writes for you
-~19 minutes, including Exercise 1
+~21 minutes, including Exercise 1
 
-> **Notes:** The first hands-on anchor: 18 of the 19 minutes. If Part 03 overran, protect the exercise. Files are in `report_exercise/`; distribute them before the session, not during.
+> **Notes:** The first hands-on anchor: 18 of the 21 minutes. If Part 03 overran, protect the exercise. Files are in `report_exercise/`; distribute them before the session, not during.
 
 ---
 
@@ -403,7 +407,7 @@ One source, one report your code writes for you
 > - **Polish** means the self-standing checklist from slide 10: N per column, control mean, notes on the sample and specification, a caption that says what to conclude. AI can do the formatting; the content decisions are theirs.
 > - **The planted faults** (in `facilitator/FACILITATOR_NOTES.md`): the memo says the non-response rate is 3.6 percent and the data say 3.83; the claim "take-up is well above what we assumed at design stage" has no source at all. Watch for pairs who "fix" their code to match the memo: that instinct is what the session is trying to break, and it's worth naming out loud.
 > - **Prep:** `report_exercise/` distributed, Quarto installed, the data file opens in R. Test the render yourself the week before: a broken install eats the whole block.
-> - **Stretch:** push the exported table and figure to the Session 4 GitHub repo, and pull them into the Overleaf report.
+> - **Stretch:** push the exported table and figure to your pair's GitHub repo, and pull them into the linked Overleaf report (see the next slide).
 
 ---
 
@@ -423,7 +427,28 @@ One source, one report your code writes for you
 
 ---
 
-## Slide 23 — Section divider · *S5 v2 23*
+## Slide 23 — Outputs that update themselves · 2 min · *moved from Session 4*
+
+**Code → files → GitHub → Overleaf**
+
+1. Your script exports tables (`.tex`), figures (`.png`) and key numbers
+2. You push them to GitHub
+3. Overleaf pulls them, and your short report to the PI recompiles with the new results
+
+**Nobody retypes a number. Nobody re-pastes a table.**
+
+> **Notes:**
+> - Same principle as inline code in Quarto, applied to a short LaTeX report: the kind of 2–3 page exploratory update a PI reads and comments on in Overleaf. The report is not a paper: a few exhibits, short notes, open questions. As with Quarto, the document only *references* outputs, it never contains typed results. Tables come in with `\input{tables/desc.tex}`, figures with `\includegraphics{figures/outcome.png}`, and numbers in the text with macros written by the code (e.g., `\Nhh`), so the text updates too.
+> - When the data or a decision changes: rerun the script, push, pull in Overleaf, recompile. Every exhibit and every number in the text moves together.
+> - **With AI:** AI can write the LaTeX around your outputs (the document skeleton, table formatting, the `\input` lines). It never types a result. Same rule as Session 4: AI writes the code, never the output.
+> - **How the link works:** an Overleaf project is linked to a GitHub repository (Overleaf menu → GitHub → sync, or create the project via *Import from GitHub*). Changes come in with *Pull GitHub changes into Overleaf*; edits made in Overleaf go back with *Push Overleaf changes to GitHub*.
+> - **Access:** GitHub sync is an Overleaf premium feature; it's covered by the licence participants use. If someone's account isn't linked on the day, they can follow along on the facilitator's project on screen.
+> - Why Overleaf for this: it's where many PIs already read and comment, and a shared project means they always see the latest results without you emailing PDFs.
+> - Moved from Session 4, which now covers only the Quarto report. This is the step from the exploratory report to one the PI reads: the exhibits polished in Exercise 1 go through the same pipeline.
+
+---
+
+## Slide 24 — Section divider · *S5 v2 23*
 
 **05 · Replication package & data publication**
 One command, one stranger, one clean machine
@@ -433,7 +458,7 @@ One command, one stranger, one clean machine
 
 ---
 
-## Slide 24 — What the package looks like · 2.5 min · *S5 v2 24*
+## Slide 25 — What the package looks like · 2.5 min · *S5 v2 24*
 
 ```text
 paper-replication/
@@ -455,7 +480,7 @@ paper-replication/
 
 ---
 
-## Slide 25 — Publishing the data itself · 2 min · *S5 v2 25*
+## Slide 26 — Publishing the data itself · 2 min · *S5 v2 25*
 
 - **De-identify, again**
 - **A real repository, with a DOI**
@@ -471,7 +496,7 @@ paper-replication/
 
 ---
 
-## Slide 26 — Past replication packages: let's open real ones · 2.5 min · *S5 v2 26*
+## Slide 27 — Past replication packages: let's open real ones · 2.5 min · *S5 v2 26*
 
 - `github.com/DevInnovationLab/i-h2o-meta`
 - `github.com/DevInnovationLab/deworming`
@@ -479,14 +504,14 @@ paper-replication/
 **While you scroll:** Where's the one command? Is the data in the repo or behind a DOI? Do outputs map to exhibits? Is there a deviations table?
 
 > **Notes:**
-> - Open one live and scroll: two minutes of a real repository beats twenty of principles. Walk the folder structure and the master script of the first; compare the README of the second against slide 24.
+> - Open one live and scroll: two minutes of a real repository beats twenty of principles. Walk the folder structure and the master script of the first; compare the README of the second against slide 25.
 > - Also ask: what would you still need to ask the authors for?
 > - The deviations-table question is the deliberate handoff into Part 06. Ask it out loud: "does this package tell you what changed between the plan and the paper?"
 > - Prep: swap these two for whatever is most relevant to the India cohort's projects, and check both URLs the morning of.
 
 ---
 
-## Slide 27 — Section divider · *S5 v2 27*
+## Slide 28 — Section divider · *S5 v2 27*
 
 **06 · Paper-submission checklist & the PAP**
 You already know most of the list. So we stop reading it and start running it.
@@ -496,7 +521,7 @@ You already know most of the list. So we stop reading it and start running it.
 
 ---
 
-## Slide 28 — One rule, before the checklist · 2 min · *S5 v2 28*
+## Slide 29 — One rule, before the checklist · 2 min · *S5 v2 28*
 
 **Every claim in the paper is either a citation or an exhibit.**
 
@@ -512,7 +537,7 @@ You already know most of the list. So we stop reading it and start running it.
 
 ---
 
-## Slide 29 — The DIL paper-submission checklist · 1 min · *S5 v2 29*
+## Slide 30 — The DIL paper-submission checklist · 1 min · *S5 v2 29*
 
 1. Proof-read the text
 2. Journal guidelines
@@ -529,7 +554,7 @@ You already know most of the list. So we stop reading it and start running it.
 
 ---
 
-## Slide 30 — Compare your results to the pre-analysis plan · 2 min · *S5 v2 30*
+## Slide 31 — Compare your results to the pre-analysis plan · 2 min · *S5 v2 30*
 
 - Map each hypothesis to an exhibit
 - Report every registered outcome, nulls included
@@ -549,7 +574,7 @@ You already know most of the list. So we stop reading it and start running it.
 
 ---
 
-## Slide 31 — The deviations appendix · 2 min · *S5 v2 31*
+## Slide 32 — The deviations appendix · 2 min · *S5 v2 31*
 
 **Five columns come from the documents**
 - PAP section · what the plan said · what the paper does · why · where
@@ -569,7 +594,7 @@ You already know most of the list. So we stop reading it and start running it.
 
 ---
 
-## Slide 32 — So: should a model run this checklist? · 1 min · *S5 v2 32*
+## Slide 33 — So: should a model run this checklist? · 1 min · *S5 v2 32*
 
 > *"Have you tried throwing this submission checklist at LLMs? … Then the conversation becomes (1) what is the workflow for humans using LLMs with this checklist, (2) which items on the checklist people should do themselves."* — Witold Więcek
 
@@ -579,11 +604,11 @@ You already know most of the list. So we stop reading it and start running it.
 > - Full quote: "Have you tried throwing this submission checklist at LLMs? I doubt that people will be doing proof-reading themselves, but LLMs should be close to 100% at it. Then the conversation becomes (1) what is the workflow for humans using LLMs with this checklist, (2) which items on the checklist people should do themselves." Read it out loud; attributing it matters: this exercise exists because Witold asked on Slack on 25 August.
 > - **Lane A:** mechanical and fully determined by the documents. Faster and more consistent than you, and it doesn't get bored on page 30. **Lane B:** reading two documents against each other; it gets you a first version, but being wrong is expensive, so you read every row. **Lane C:** the answer isn't in the documents. A model here is guessing, and a confident guess is worse than a blank.
 > - Then say what the next twenty minutes are: they answer his second question themselves, on a real packet.
-> - Don't pre-fill the lanes here: the filled version is slide 35, after they've done it.
+> - Don't pre-fill the lanes here: the filled version is slide 36, after they've done it.
 
 ---
 
-## Slide 33 — EXERCISE 2 · Run the checklist with an LLM · 20 min (brief 2 · round 1 7 · round 2 6 · lanes 5) · *S5 v2 33*
+## Slide 34 — EXERCISE 2 · Run the checklist with an LLM · 20 min (brief 2 · round 1 7 · round 2 6 · lanes 5) · *S5 v2 33*
 
 *In pairs · `PAP_checklist_exercise/`*
 
@@ -602,7 +627,7 @@ You already know most of the list. So we stop reading it and start running it.
 
 ---
 
-## Slide 34 — The two prompts · *(left up while they work)* · *S5 v2 34*
+## Slide 35 — The two prompts · *(left up while they work)* · *S5 v2 34*
 
 **Round 1 · mechanical pass**
 Checklist sections 1, 3, 4, 6, 7 only. One table: item · where · what's wrong · how you know · confidence. Only rows you can point at. Then a list: CANNOT VERIFY FROM THESE DOCUMENTS. Find and report only; don't fix.
@@ -618,7 +643,7 @@ Checklist sections 1, 3, 4, 6, 7 only. One table: item · where · what's wrong 
 
 ---
 
-## Slide 35 — The three lanes, filled in · 3 min (part of the debrief) · *S5 v2 35*
+## Slide 36 — The three lanes, filled in · 3 min (part of the debrief) · *S5 v2 35*
 
 | **A · It does it** | **B · It drafts** | **C · Only you** |
 |---|---|---|
@@ -638,7 +663,7 @@ Checklist sections 1, 3, 4, 6, 7 only. One table: item · where · what's wrong 
 
 ---
 
-## Slide 36 — From an exercise to a skill you keep · 2 min · *S5 v2 36*
+## Slide 37 — From an exercise to a skill you keep · 2 min · *S5 v2 36*
 
 **`skill/paper-submission-check/`** is in the packet: a first draft
 
@@ -655,7 +680,7 @@ Checklist sections 1, 3, 4, 6, 7 only. One table: item · where · what's wrong 
 
 ---
 
-## Slide 37 — Wrap-up · 4 min · *S5 v2 37, adapted*
+## Slide 38 — Wrap-up · 4 min · *S5 v2 37, adapted*
 
 **Questions? Go make something a stranger could rerun.**
 

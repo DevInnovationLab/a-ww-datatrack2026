@@ -1,6 +1,6 @@
 # Data Session 4 — Data analysis: construction & exploration
 
-**Slide content, 75 minutes** · follows `session4_session5_split_plan.md`
+**Slide content, 75-minute session** (slides add up to 73 minutes) · follows `session4_session5_split_plan.md`
 
 - **Header on every slide:** DATA ANALYSIS: CONSTRUCTION & EXPLORATION
 - **Footer:** Development Innovation Lab / University of Chicago · Data analysis: Construction & Exploration
@@ -8,39 +8,42 @@
 
 ## To-dos
 
-- [ ] **Review the exercises and harmonize them with other sessions.** Use the same dataset, variable names and file structure as the rest of the course. Check that Exercise 2's report is what Session 5 expects as its starting point, and that the Quarto, GitHub and Overleaf steps don't repeat Session 5's reporting exercise.
-- [ ] **Incorporate Nandita's feedback.**
-- [ ] **Cut exercises or content to fit the time.** The slides currently add up to about 83 minutes for a 75-minute session.
+- [ ] **Review the exercises and harmonize them with other sessions.** Use the same dataset, variable names and file structure as the rest of the course. Check that Exercise 2's report is what Session 5 expects as its starting point, and that the Quarto steps don't repeat Session 5's reporting exercise.
 - [ ] **Add an example of exploratory analysis results previously shared with MK.** A real, anonymized update would fit the "Before you share it" slide or the Slack examples in section 04.
 - [ ] Write the silent-bug story for "Why this session" (placeholder)
-- [ ] **Review the draft agents file** ([`session4_AGENTS.md`](session4_AGENTS.md)) for "Automating best practices" (slide 14). Check the rules match what the slides teach, trim anything too long for participants to read, decide whether to pre-fill "About this project" for the course data, and put a copy in the exercise folders.
-- [ ] **Review the "Imputation and outlier treatment" rules** in [`session4_AGENTS.md`](session4_AGENTS.md). Check that the documentation and distribution-comparison steps are what we want RAs to hand the PIs, and decide whether this point also belongs on a slide (e.g. "Best practices" or the aggregating slide, where trimming comes up).
-- [ ] **Review the new "Combining rounds and datasets" and "state what you expect from every variable" rules** in [`session4_AGENTS.md`](session4_AGENTS.md), and the matching speaker notes on slides 9 and 22. Decide whether either point should go on the slides themselves (e.g. a row in the slide 9 table, or a line on "Best practices").
-- [ ] Pre-create each pair's GitHub repo and linked Overleaf project (the Overleaf licence covers GitHub sync)
-- [ ] Fix the stray text box on "Best practices", and get permission for the Slack screenshots
+- [ ] **Check presenter notes that don't match the expected time.** At about 130 spoken words a minute, these notes are too long for their slide: 14 Best practices (278 words, 1 min), 11 Creating lags (318, 2 min), 10 Aggregating values (361, 2.5 min), 21–22 Common errors (about 330 each, 2.5 min), 15 Automating best practices (132, 1 min), 9 Changing units of observation (277, 2.5 min), 17 Some opinionated advice (225, 2 min). Trim the notes or give the slides more time.
+- [x] **Review the draft agents file** ([`session4_AGENTS.md`](session4_AGENTS.md)) for "Automating best practices" (slide 15). Decide whether to pre-fill "About this project" for the course data, and put a copy in the exercise folders.
+- [x] **Review the "Imputation and outlier treatment" rules** in [`session4_AGENTS.md`](session4_AGENTS.md). Check that the documentation and distribution-comparison steps are what we want RAs to hand the PIs, and decide whether this point also belongs on a slide (e.g. "Best practices" or the aggregating slide, where trimming comes up).
+- [x] **Review the new "Combining rounds and datasets" and "state what you expect from every variable" rules** in [`session4_AGENTS.md`](session4_AGENTS.md), and the matching speaker notes on slides 10 and 21. Decide whether either point should go on the slides themselves (e.g. a row in the slide 10 table, or a line on "Best practices").
+- [x] Upload `session4_AGENTS.md` to the skills repo
+- [x] Fix the stray text box on "Best practices"
 
 ---
 
 ## Slide 1 — Title · 1 min
 
-**DATA SESSION 4 · WELCOME WEEK INDIA 2026 · THURSDAY, OCTOBER 8 · 11:30 AM – 12:45 PM**
-
 # Data analysis: construction & exploration
 
-*From clean data to a first result you can defend.*
+Luiza Andrade – Data Lead
+Nandita Gupta – Predoctoral Fellow
+David Torres Leon – Data Manager 
 
-David Torres Leon – Data Manager · Luiza Andrade – Data Lead · Nandita Gupta – Predoctoral Fellow
-Development Innovation Lab · Welcome Week India 2026
-
-> **Notes:** Replace the old speaker note (it describes Session 5: "90 min, David leads"). Laptops open. The exercise folders (`construction_exercise/`, `explore_exercise/`) should already be on everyone's machine.
+> **Notes:** Laptops open. The exercise folders (`construction_exercise/`, `explore_exercise/`) should already be on everyone's machine.
 
 ---
 
-## Slide 2 — Why this session · 2 min **(placeholder — story to add)**
+## Slide 2 — Why we're here · 2 min 
 
-**[PLACEHOLDER: a real silent bug that reached a PI — 1 minute]**
+**Where did the missing values go?**
 
-**Writing the code is the easy part. With AI, it's easier than ever.**
+> **Notes:**
+> - **Nandita:** the team knew from comments in the field that there were many students missing some fields, so they decided to do some exploration of these observations. When they tried to do that, though, the missing values were gone.
+
+---
+
+## Slide 3 — Why we're here · 2 min 
+
+**These days, writing code is the easy part of our jobs. With AI, it's easier than ever.**
 
 So your value is everything the code can't do:
 - Knowing what the data *should* look like
@@ -49,7 +52,6 @@ So your value is everything the code can't do:
 - Explaining it to your PI
 
 > **Notes:**
-> - **The story:** open with a real case, anonymised if needed: a result that looked fine, ran without errors, went to a PI, and turned out to be wrong because of a silent bug (a duplicated merge key, a missing code summed as a value, a lag taken from the wrong household). End on the cost: the time lost, the decision it nearly changed. This sets up "the worst bug is the silent one" before slide 6 names it.
 > - **The motivation:** when it comes to coding, analysis is the easy part, and AI now writes that code in seconds. That doesn't make the RA's job smaller. It moves the value to the parts that need human judgement, and we have to get better at them. Every principle today is one of those parts:
 >   - **Knowing what the data should look like** → the danger zone and the construction checks (section 01)
 >   - **Deciding what to show** → exploratory reports, where content matters more than form (section 02)
@@ -58,7 +60,7 @@ So your value is everything the code can't do:
 
 ---
 
-## Slide 3 — By the end of this session, you'll be able to… · 1 min
+## Slide 4 — By the end of this session, you'll be able to… · 1 min
 
 - Spot where construction goes wrong: joins, unit changes, aggregation, lags
 - Write code that stops loudly when the data isn't what you expect
@@ -68,15 +70,14 @@ So your value is everything the code can't do:
 
 ---
 
-## Slide 4 — Section divider
+## Slide 5 — Section divider
 
 **01 · Constructing indicators**
-Turning field observations into economically meaningful data
 ~27 minutes, including Exercise 1
 
 ---
 
-## Slide 5 — Data construction · 2 min
+## Slide 6 — Data construction · 2 min
 
 **Inputs**
 - A clean, tidy dataset
@@ -99,7 +100,7 @@ Turning field observations into economically meaningful data
 
 ---
 
-## Slide 6 — This is the danger zone · 2 min
+## Slide 7 — This is the danger zone · 2 min
 
 > **The worst bug is the silent one.**
 
@@ -129,58 +130,51 @@ Turning field observations into economically meaningful data
 
 ---
 
-## Slide 7 — Joining data tables: what can go wrong · 2 min
+## Slide 8 — Joining data tables: what can go wrong · 2 min
 
-| Consequence | How to tell | The fix |
-|---|---|---|
-| **Rows multiply** | N too high | Unique key; declare the relationship |
-| **Rows disappear** | N too low | Keep and count unmatched rows |
-| **Keys don't match** | Low match rate | Standardise key formats |
-| **Values get overwritten** | Duplicate or changed columns | Drop overlapping variables first |
-| **Unmatched becomes zero** | Too many zeros | Never fill missing by default |
+- Dropping rows unintentionally
+- Adding rows unintentionally
+- Combining non-harmonized surveys
+- Mismatched rows
+- Overwritten values
 
-**Write down the expected relationship and N. Then assert both.**
+**Always have a unique ID. Write down the expected relationship and the expected number of observations after joining N. Check mismatched observations -- if they are correct, take that into account when predicting your result. Check column names before joining.**
+
+NEVER USE `merge m:m`
 
 > **Notes:**
 > - A wrong join doesn't throw an error. It gives you a different dataset.
-> - **Rows multiply:** a key you assumed was unique isn't, so each match is duplicated and every mean or regression overweights those units. Check uniqueness before joining (Stata `isid`, R `distinct()` / `count()`), and declare the relationship you expect (one-to-one, many-to-one) so the software stops if it's wrong.
-> - **Rows disappear:** unmatched observations are dropped, often without comment. The sample may now exclude, say, households not found at endline. A suspiciously round match rate is another sign. Keep unmatched rows on purpose, count them, and decide what they mean before dropping any.
-> - **Keys don't match:** the same ID is stored differently (text vs number, leading zeros like "007" vs 7, trailing spaces, capitals), so the match rate falls far below what the field team reports. Standardise key formats during construction, and tabulate the unmatched IDs from both sides.
-> - **Values get overwritten:** both tables have a variable with the same name, so one silently wins or you end up with two copies (`.x` / `.y` in R). Rename or drop overlapping variables before joining, and keep only the columns you need.
-> - **Unmatched becomes zero:** missing values from non-matches are later filled in or summed as zeros. Flag unmatched rows explicitly, and never fill in missing values by default.
 > - **Stata users: never use `merge m:m`.** It doesn't check the keys. It pairs rows within each key in whatever order they happen to be sorted, so matches are arbitrary and can change between runs. Stata's own manual says it is almost never what you want. If you need every pairing, use `joinby`. Otherwise, fix the key so the merge is 1:1, m:1 or 1:m.
-> - **In code:** Stata: `isid`, `merge 1:m`, `assert _merge == 3`. R: `left_join(..., relationship = "one-to-many", unmatched = "error")` (dplyr ≥ 1.1).
 > - **AI makes these mistakes too, and confidently:** assistants routinely write joins with no declared relationship and no check on N. When AI writes a join, ask it for the uniqueness check and the expected N, or add them yourself.
-> - Links back to "Write the plan before the code" on slide 6, and to the join bug in Exercise 1.
+> - Links back to "Write the plan before the code" on slide 7, and to the join bug in Exercise 1.
 
 ---
 
-## Slide 8 — Changing units of observation: what can go wrong · 2.5 min
+## Slide 9 — Changing units of observation: what can go wrong · 2.5 min
 
-| Consequence | How to tell | The fix |
-|---|---|---|
-| **Units disappear** | Fewer units than the frame | Build onto the full list of units |
-| **Missing and zero get confused** | Unexpected zeros or missings | Decide what "empty" means |
-| **The average changes meaning** | Doesn't match the source | Choose weights on purpose |
-| **Information is lost** | Varying values become constant | Check what's constant in groups |
-| **Reshapes misalign** | Duplicate or missing cells | Unique ID × time first |
+- Missings and zeroes get confused
+- Implicit weighing
+- Creating missings columns or extra rows
 
-**Write down the expected number of units. Then assert it.**
+**Write down the expected number of units. Then assert it. Use all of a command's options**
 
 > **Notes:**
 > - Collapsing, aggregating and reshaping change what one row means. Nothing warns you when that goes wrong.
 > - **Units disappear:** groups with no observations simply don't appear after a collapse, so a village where no one was surveyed vanishes instead of showing up as empty. Compare the count against a known total, like the sampling frame. Start from the full list of units and join the aggregates onto it, so empty units stay visible.
 > - **Missing and zero get confused:** a sum over all-missing values returns 0 in both Stata (`collapse (sum)`) and R (`sum(x, na.rm = TRUE)`), and a mean over no observations returns missing. So a true zero can become missing, and a missing can become zero. Count the non-missing observations alongside every aggregate, and code the empty-group case yourself.
 > - **The average changes meaning:** a mean of household means is not the mean across individuals, and a village average weights every village equally regardless of size. Decide whose average the indicator represents (households, people, villages), and weight explicitly.
-> - **Information is lost:** variables left out of the collapse are dropped, and a variable that isn't constant within a group ends up with one arbitrary value (e.g., the first). Before collapsing, check which variables should be constant within the group, and assert it (Stata: `bysort village_id: assert x == x[1]`; R: `n_distinct(x) == 1` within `group_by()`).
 > - **Reshapes misalign:** duplicated ID × time pairs make a reshape fail or pick arbitrary rows, and unbalanced panels produce new missing cells when going wide. Check that the ID × time pairs are unique first, and count the new missing values afterwards.
-> - **In code:** Stata: `collapse`, `reshape`, `isid id time`, `assert _N == <expected>`. R: `summarise()`, `pivot_wider()` / `pivot_longer()`, `complete()` to keep empty units, `assert_that(nrow(df) == expected)`.
 > - Also write down what an empty group should mean (missing or zero) before collapsing. This is where Exercise 1's "false zeros" bug lives.
 > - **AI makes these mistakes too:** AI-written collapses almost never keep empty units or count non-missing observations, and they pick weights by default. Check both before you accept the code.
 
 ---
 
-## Slide 9 — Aggregating values: what can go wrong · 2.5 min
+## Slide 10 — Aggregating values: what can go wrong · 2.5 min
+
+- Aggregating different units
+- Including legacy survey codes
+- Double counting of nested observations
+- Treatment of missing values
 
 | Consequence | How to tell | The fix |
 |---|---|---|
@@ -201,13 +195,10 @@ Turning field observations into economically meaningful data
 > - **Outliers drive the total:** one mis-keyed value, or a few extreme ones, can dominate a sum or mean. Decide on a trimming or winsorizing rule in construction, apply it once, and record it in the variable label and the data dictionary.
 > - **Items are counted twice:** the questionnaire asks for a total and its sub-items, or overlapping categories, and all of them get summed. Check how the questions nest before choosing what to add.
 > - Document the unit of every constructed indicator.
-> - **In code:** Stata: `egen rowtotal()`, `rownonmiss()`, `mvdecode`, `assert inrange()`. R: `rowSums()`, `across()`, `na_if()`, `assert_that()`.
 > - Exercise 1's "mixed units" and "missing codes" bugs live here.
-> - **AI makes these mistakes too:** assistants add `na.rm = TRUE` (or `rowtotal()`) by default, which turns missing parts into zeros, and they don't know your survey's missing codes or units unless you tell them. Put both in the prompt or the agents file.
-
 ---
 
-## Slide 10 — Creating lags: what can go wrong · 2 min
+## Slide 11 — Creating lags: what can go wrong · 2 min
 
 | Consequence | How to tell | The fix |
 |---|---|---|
@@ -230,7 +221,7 @@ Turning field observations into economically meaningful data
 
 ---
 
-## Slide 11 — EXERCISE 1 · Construction bug hunt · 12 min (brief 1 · work 8 · reveal 3)
+## Slide 12 — EXERCISE 1 · Construction bug hunt · 12 min (brief 1 · work 8 · reveal 3)
 
 *In pairs · `construction_exercise/`*
 
@@ -251,7 +242,7 @@ Your AI assistant wrote this script. It runs without errors. **It is wrong in fi
 
 ---
 
-## Slide 12 — Five bugs, revealed · *(part of the 12 min)*
+## Slide 13 — Five bugs, revealed · *(part of the 12 min)*
 
 | Bug | Step | Check |
 |---|---|---|
@@ -262,7 +253,6 @@ Your AI assistant wrote this script. It runs without errors. **It is wrong in fi
 | **Lag across households** | Lags | Lag within unit; assert round 1 missing |
 
 > **Notes:**
-> - Take answers from pairs before showing the table. Point back to the matching slide for each row: joining (slide 7), changing units (8), aggregating (9), lags (10).
 > - **Duplicated key:** the survey is merged onto the roster with `m:m`. Fix: `isid hh_id` in the survey file, `merge 1:m`, then `assert _N == <expected>`. R: `left_join(..., relationship = "one-to-many")`.
 > - **False zeros:** `collapse (sum)` turns an all-missing village into 0. Fix: count non-missing obs in the collapse, then `replace water_lpd = . if n_obs == 0`. R: `sum(x, na.rm = TRUE)` also returns 0 for an all-`NA` group.
 > - **Mixed units:** one enumerator logged gallons. Check: `assert inrange(water_lpd, 0, 500) if !missing(water_lpd)`. R: `assert_that(all(hh$water_lpd <= 500, na.rm = TRUE))`.
@@ -272,7 +262,7 @@ Your AI assistant wrote this script. It runs without errors. **It is wrong in fi
 
 ---
 
-## Slide 13 — Best practices · 1 min
+## Slide 14 — Best practices · 1 min
 
 **Values change in construction only**
 - Research decisions go into the data here, and nowhere else
@@ -285,57 +275,62 @@ Your AI assistant wrote this script. It runs without errors. **It is wrong in fi
 **Documentation**
 - Keep a shareable data dictionary: AI can draft it from the code
 - Why, when and by whom each decision was made: only you can write that
+- Keep it up to date: it's what your AI checks before using a variable
 
-> **Fix before presenting:** the slide has a stray vertical text box ("e di t_ di ff er e nt st or y_ e d u"). Delete it.
->
 > **Notes:**
 > - Data construction should be the only point in your workflow where values change (not format). *Exception:* corrections based on field feedback.
 > - Create new variables instead of replacing the ones originally observed, so you can easily compare them. Names should be intuitive, descriptive and functional. Order variables so information is easy to find. Labels should say the units and any trimming, winsorizing or normalization.
 > - Internal documentation should tell your future reader or reviewer **why** a definition was chosen, **when** the decision was made, and **by whom**.
 > - **With AI:** an assistant can draft the data dictionary (names, labels, units, how each variable is computed) straight from the construction code. Review it. What it can't write is the reasoning: why a definition was chosen, when the decision was made, and by whom. That lives in the team's memory, so it's the part of the documentation that is yours.
+> - **Keep the documentation up to date, so the AI can use it:** an assistant can only check what's written down. If the data dictionary is current, the AI can look up each variable's unit, each dataset's unit of observation, and variable names and definitions before using them, instead of guessing from a name or label. An out-of-date dictionary is worse than none: the AI will trust it. Update it in the same change as the construction code.
 > - The data dictionary should be in a format you can easily export into a Supplemental Information page or an appendix, include references for the methods you followed, and explain decisions that were hard to make or could be questioned by a reviewer.
 
 ---
 
-## Slide 14 — Automating best practices · 1 min **(draft content — review)**
+## Slide 15 — Automating best practices · 1 min **(draft content — review)**
 
 *Put your construction rules in your agents file (`AGENTS.md`, `CLAUDE.md`).*
 
 ```markdown
 ## Data construction rules
-- Never overwrite an observed variable
-- Non-response codes → missing before any calculation
-- Build checks into the code: assert N, IDs, ranges
-- Merges: check keys, declare 1:1 / m:1 / 1:m, assert N
-- Sums and means: one unit, plausible range, report the N used
-- Collapses and reshapes: assert N, define "empty"
+- Never overwrite an observed value
+- Check units before aggregating values
+- Check data dictionaries before combining data sets
+- Build checks into the code
+  - Merges: check keys, declare expectation relationship, assert N
+  - Sums and means: one unit, plausible range, report the N used
+  - Collapses and reshapes: assert N, define "empty"
 - Never impute or drop missings without an instruction and a method
 - Label units and transformations; update the dictionary
 - Don't make research decisions: list them as questions
 ```
 
+**Full rules:** [`data-construction.md`](https://github.com/DevInnovationLab/a-ai-skills/blob/main/data-construction.md)
+
 > **Notes:**
-> - 30 seconds on the slide, then point at where the full file lives in the exercise folder. The AI follows these rules; it doesn't replace your judgement about the definitions.
-> - The slide version is a reminder for people. An agent needs more: what to check, how, what to do when a check fails, and when to stop and ask. The full draft is in [`session4_AGENTS.md`](session4_AGENTS.md). It covers construction (checks, missing values, merges, aggregates, collapses, lags, labels), analysis code (the errors on slides 22–23), exploratory reports (no typed numbers), and the research decisions the agent must not make. Participants copy it to their project root as `AGENTS.md` or `CLAUDE.md` and fill in the "About this project" section.
+> - 30 seconds on the slide, then point at where the full file lives: [`data-construction.md`](https://github.com/DevInnovationLab/a-ai-skills/blob/main/data-construction.md) in the DIL AI skills repo. The AI follows these rules; it doesn't replace your judgement about the definitions.
+> - The slide version is a reminder for people. An agent needs more: what to check, how, what to do when a check fails, and when to stop and ask. The full version is [`data-construction.md`](https://github.com/DevInnovationLab/a-ai-skills/blob/main/data-construction.md): participants copy it into their own agents file. It covers construction (checks, missing values, merges, aggregates, collapses, lags, labels), analysis code (the errors on slides 21–22), exploratory reports (no typed numbers), and the research decisions the agent must not make. Participants copy it to their project root as `AGENTS.md` or `CLAUDE.md` and fill in the "About this project" section.
 
 ---
 
-## Slide 15 — Section divider
+## Slide 16 — Section divider
 
 **02 · Exploratory analysis with literate programming**
-Fast results for the team, in one command
-~27 minutes, including Exercises 2 and 3
+~15 minutes, including Exercise 2
 
 ---
 
-## Slide 16 — Some opinionated advice · 2 min
+## Slide 17 — Some opinionated advice · 2 min
 
-1. **Use literate programming tools:** Quarto, RMarkdown
+1. **Automate your workflow:** Quarto, RMarkdown
 2. **Compile in one command:** tables, graphs and inline results
 3. **Document as you go:** narrative next to code
 4. **AI writes the code, never the output**
 
+**Rules for your agents file:** [`analysis-rules.md`](https://github.com/DevInnovationLab/a-ai-skills/blob/main/analysis-rules.md)
+
 > **Notes:**
+> - **Agents file:** [`analysis-rules.md`](https://github.com/DevInnovationLab/a-ai-skills/blob/main/analysis-rules.md), in the DIL AI skills repo, has the analysis rules written for an agent, alongside [`data-construction.md`](https://github.com/DevInnovationLab/a-ai-skills/blob/main/data-construction.md) from section 01. Participants copy both into their own agents file.
 > - These tools are powerful assets throughout your data processing and analysis workflow. They compile code directly into professional-grade documents, with graphs, formatted tables and inline results produced automatically. Writing code alongside a descriptive narrative, instead of relying on occasional code comments, makes the whole data lineage clear and reproducible.
 > - **AI writes the code, never the output:** ask your AI assistant for the chunks, the figures and the inline references. Every number in the document is computed when it renders. A number typed by you or by a model is a bug.
 > - Why they work well together: a literate document puts the code right next to the result it produces, so you can check what the AI wrote line by line, and re-render the moment the data changes.
@@ -343,14 +338,15 @@ Fast results for the team, in one command
 
 ---
 
-## Slide 17 — Start simple, iterate fast · 3 min
+## Slide 18 — Start simple, iterate fast · 3 min
 
 **Content: where your time goes**
+- Descriptives before regressions
 - Linear before fancy
 - Build the pipeline on simulated data
 
 **Form: cheap now, and cheaper with AI**
-- Exploratory means markdown
+- Exploratory means dynamic: make it easy to update
 - Minimal formatting while the analysis moves
 - Decide *what* to show; AI makes it pretty later
 
@@ -364,7 +360,8 @@ Fast results for the team, in one command
 
 ---
 
-## Slide 18 — EXERCISE 2 · Descriptives in a literate report · 10 min (brief 1 · build 7 · re-render 2)
+
+## Slide 19 — EXERCISE 2 · Descriptives in a literate report · 10 min (brief 1 · build 7 · re-render 2)
 
 *In pairs · `explore_exercise/report.qmd`*
 
@@ -388,48 +385,7 @@ Fast results for the team, in one command
 
 ---
 
-## Slide 19 — Outputs that update themselves · 2 min
-
-**Code → files → GitHub → Overleaf**
-
-1. Your script exports tables (`.tex`), figures (`.png`) and key numbers
-2. You push them to GitHub
-3. Overleaf pulls them, and your short report to the PI recompiles with the new results
-
-**Nobody retypes a number. Nobody re-pastes a table.**
-
-> **Notes:**
-> - Same principle as inline code in Quarto, applied to a short LaTeX report: the kind of 2–3 page exploratory update a PI reads and comments on in Overleaf. The report is not a paper: a few exhibits, short notes, open questions. As with Quarto, the document only *references* outputs, it never contains typed results. Tables come in with `\input{tables/desc.tex}`, figures with `\includegraphics{figures/outcome.png}`, and numbers in the text with macros written by the code (e.g., `\Nhh`), so the text updates too.
-> - When the data or a decision changes: rerun the script, push, pull in Overleaf, recompile. Every exhibit and every number in the text moves together.
-> - **With AI:** AI can write the LaTeX around your outputs (the document skeleton, table formatting, the `\input` lines). It never types a result. Same rule as slide 16.
-> - **How the link works:** an Overleaf project is linked to a GitHub repository (Overleaf menu → GitHub → sync, or create the project via *Import from GitHub*). Changes come in with *Pull GitHub changes into Overleaf*; edits made in Overleaf go back with *Push Overleaf changes to GitHub*.
-> - **Access:** GitHub sync is an Overleaf premium feature; it's covered by the licence participants use. If someone's account isn't linked on the day, they can follow along on the facilitator's project on screen.
-> - Why Overleaf for this: it's where many PIs already read and comment, and a shared project means they always see the latest results without you emailing PDFs.
-> - Polished exhibits and the full paper pipeline are Session 5; here the goal is a quick report that keeps itself up to date.
-
----
-
-## Slide 20 — EXERCISE 3 · A report that updates itself · 10 min (brief 1 · build 7 · update 2)
-
-*In pairs · your Exercise 2 project + `report_template/`*
-
-1. **Export:** save your descriptives table as `.tex` and your figure as `.png`
-2. **Push** them to your GitHub repository
-3. **Link:** open the linked Overleaf project, `\input` the table, include the figure, compile
-4. **Update:** flip `last_week_only`, rerun, push, pull in Overleaf, recompile
-
-**Did the report change without you typing anything?**
-
-> **Notes:**
-> - **Before the session:** each pair needs a GitHub repository created from the course template (with `report_template/main.tex`, a 2–3 page exploratory-update template: title, date, a short summary, one table, one figure, open questions), and an Overleaf project already linked to it. Set these up in advance: creating accounts and linking them eats the whole exercise. Add GitHub and Overleaf sign-ins to the pre-work email.
-> - **R export:** `modelsummary::datasummary_balance(~treat, data = hh, output = "tables/desc.tex")` and `ggsave(here("figures", "outcome.png"), width = 6, height = 4)`. Key number for the text: `writeLines(sprintf("\\newcommand{\\Nhh}{%s}", nrow(hh)), here("tables", "numbers.tex"))`.
-> - **Push:** `git add tables figures`, `git commit -m "Update descriptives"`, `git push`, or the GitHub Desktop equivalent.
-> - *Stretch:* `\input{tables/numbers.tex}` in the preamble of `main.tex`, use `\Nhh` in the summary sentence, and check that it changes after the update.
-> - AI can write the export code and the LaTeX lines. It can't type the numbers.
-
----
-
-## Slide 21 — Section divider
+## Slide 20 — Section divider
 
 **03 · Silent bugs in analysis code**
 Code that runs is not code that's right
@@ -437,7 +393,7 @@ Code that runs is not code that's right
 
 ---
 
-## Slide 22 — Common errors in analysis code (1/2) · 2.5 min
+## Slide 21 — Common errors in analysis code (1/2) · 2.5 min
 
 *More silent bugs.*
 
@@ -446,7 +402,7 @@ Code that runs is not code that's right
 | **Categories treated as numbers** | `i.` / `factor()`, with a chosen base |
 | **Hand-rolled dummies** | Let `i.` / factors build them |
 | **Missing values in conditions** | Handle missing explicitly |
-| **The sample shifts across columns** | Define the sample once; assert N |
+| **The sample shifts across models** | Define the sample once; assert N |
 
 > **Notes:**
 > - These mistakes don't produce an error message. They give you the wrong number.
@@ -459,13 +415,12 @@ Code that runs is not code that's right
 
 ---
 
-## Slide 23 — Common errors in analysis code (2/2) · 2.5 min
+## Slide 22 — Common errors in analysis code (2/2) · 2.5 min
 
 | Error | The fix |
 |---|---|
 | **Silently dropped variables** | Read the log; set the base; assert the coefficient exists |
 | **Interaction syntax** | `treat##c.age` · `treat * age` |
-| **Stale stored results** | Save results immediately |
 | **Changing data mid-script** | Define the sample once, at the top |
 | **No single source of truth** | Define everything once |
 
@@ -478,7 +433,7 @@ Code that runs is not code that's right
 
 ---
 
-## Slide 24 — SPOT THE SILENT BUG · 7 min (show 1 · race 4 · reveal 2)
+## Slide 23 — SPOT THE SILENT BUG · 7 min (show 1 · race 4 · reveal 2)
 
 *Whole room. Your AI assistant wrote this. It runs without errors. Find three problems.*
 
@@ -503,7 +458,7 @@ reg chlorine_mgl treat district
 
 ---
 
-## Slide 25 — Three silent bugs, revealed · *(part of the 7 min)*
+## Slide 24 — Three silent bugs, revealed · *(part of the 7 min)*
 
 | Line | Bug | Fix |
 |---|---|---|
@@ -517,15 +472,15 @@ reg chlorine_mgl treat district
 
 ---
 
-## Slide 26 — Section divider
+## Slide 25 — Section divider
 
 **04 · From result to PI**
 Judge the number, check the exhibit, then communicate
-~12 minutes, including the peer check
+~11 minutes, including the peer check
 
 ---
 
-## Slide 27 — Interpret first, then share · 3 min
+## Slide 26 — Interpret first, then share · 3 min
 
 *Construction has rules you can assert. Results don't. The check is whether you believe the number.*
 
@@ -534,7 +489,7 @@ Judge the number, check the exhibit, then communicate
 3. **How precise is it?**
 4. **Is it plausible?**
 
-**Write the answers in three sentences. Send them with the table.**
+**Interpret results. Write the answers in three sentences. Send them with the table.**
 
 > **Notes:**
 > - Contrast with the first half of the session: in construction you know what the data should look like (unique keys, the number of villages, plausible ranges), so you can write assertions. In analysis there's no hard rule for what an estimate should be, so you can't assert your way to a correct result. The check is your judgement: think hard about whether you believe the numbers you're seeing.
@@ -543,12 +498,11 @@ Judge the number, check the exhibit, then communicate
 > - **How big:** relative to the control mean, in the outcome's own units (percentage points, litres, rupees). Compared to what the study was powered to detect, or to similar studies.
 > - **How precise:** read the confidence interval, not just the stars. An insignificant estimate is not a zero effect: say what effect sizes the interval rules out.
 > - **Plausible:** sign and size make sense for this intervention and this population. If not, check for a bug first. Only then look for an explanation.
-> - If possible, put one regression table on screen and answer the four questions out loud. Examples to use: an effect on a share that is larger than the control mean is a bug until proven otherwise; an N that drops between columns should match a skip pattern or a control with missing values.
 > - Automation doesn't replace this step: a report that re-renders in one command repeats whatever wasn't checked.
 
 ---
 
-## Slide 28 — Before you share it · 2 min + 2 min peer check
+## Slide 27 — Before you share it · 2 min + 2 min peer check
 
 - **Clear & labeled:** units, estimation, sample
 - **Numbers make sense:** N and magnitudes as expected
@@ -565,7 +519,7 @@ Judge the number, check the exhibit, then communicate
 
 ---
 
-## Slide 29 — Managing your time and your PIs · 2 min
+## Slide 28 — Managing your time and your PIs · 2 min
 
 **1. Manage expectations**
 - Reply within 24 hours
@@ -589,7 +543,7 @@ Judge the number, check the exhibit, then communicate
 
 ---
 
-## Slides 30–31 — Managing your time and your PIs: real examples · 2 min total
+## Slides 29–30 — Managing your time and your PIs: real examples · 2 min total
 
 *One Slack screenshot per slide, with a one-line caption:*
 
@@ -599,11 +553,10 @@ Judge the number, check the exhibit, then communicate
 > **Notes:**
 > - **(1/2):** an RA asks for a reference on double machine learning and writes out how they currently understand the method, so the reply can correct their understanding, not just send a link.
 > - **(2/2):** an RA shares results with notes on what needs manual overrides, pushes the code, and proposes double-coding with a colleague, then asks "Do you think this is a good idea?"
-> - Ask the RAs in the screenshots for permission before presenting their messages.
 
 ---
 
-## Slide 32 — Wrap-up · 2 min
+## Slide 31 — Wrap-up · 2 min
 
 **Questions? Go construct something you can defend.**
 
@@ -612,7 +565,7 @@ Judge the number, check the exhibit, then communicate
 - Render a report with no typed numbers
 - Interpret before you share, and share early
 
-*The worst bug is the silent one: compute every number, assert every assumption.*
+*The worst bug is the silent one: compute every number, assert every assumption. AI can execute, you have to think*
 
 > **Notes:** Remind everyone to keep their Exercise 2 report: it's the starting point for Session 5 this afternoon.
 
@@ -622,8 +575,7 @@ Judge the number, check the exhibit, then communicate
 
 1. Install Quarto (quarto.org) and render the test file in `explore_exercise/hello.qmd`
 2. Install R and `pacman`, then run `pacman::p_load(tidyverse, haven, here, fixest, assertthat)`
-3. Create a GitHub account and an Overleaf account, send us both usernames, and install git (or GitHub Desktop)
-4. Sign in to the AI assistant you'll use during the exercises (e.g., Claude Desktop), and check that it can open files in the exercise folder.
-5. Reply with a screenshot of your rendered test file, or tell us what broke.
+3. Sign in to the AI assistant you'll use during the exercises (e.g., Claude Desktop), and check that it can open files in the exercise folder.
+4. Reply with a screenshot of your rendered test file, or tell us what broke.
 
 **Fallback on the day:** a hosted environment (e.g., Posit Cloud) with the exercise pre-loaded, and a pre-rendered HTML version of the template.
