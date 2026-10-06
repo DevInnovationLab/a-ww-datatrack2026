@@ -1,30 +1,20 @@
 /*******************************************************************************
-  00-import.do  ·  Tidying exercise                         [COMPLETE - read it]
---------------------------------------------------------------------------------
-  Summary:  The raw SurveyCTO export of household_water_v1, exactly as
-            downloaded. This file turns it into a working .dta: every column
-            imported as text first, then each type declared on purpose.
-            Read what each block fixes -- this is the unglamorous 80%.
-
-  Reads:    02_data/01_raw/household_water_questionnaire__v1.csv
-  Writes:   02_data/00_pii/00_imported_with_pii.dta
-            (it still has names, phone and GPS, so it goes to the restricted
-             folder, never to 02_clean)
+  
 *******************************************************************************/
 
 **# 0. Import everything as TEXT -----------------------------------------------
 
-*   Never let Stata guess types on a raw export:
-*   long numbers lose digits, and a phone number like +25672458591 becomes
-*   2.57e+10. Declare the encoding too, so accents survive.
+*   Import as text so Stata doesn't guess types on a raw export
+*   Declare the encoding too, in case there are special characters
 
-	import delimited "${data_box}/10-raw/100-raw-identified/household_water_questionnaire__v1.csv", clear varnames(1) ///
-		stringcols(_all) bindquote(strict) encoding("utf-8")
+	import delimited "${data_box}/10-raw/100-raw-identified/household_water_questionnaire__v1.csv", clear ///
+		varnames(1) stringcols(_all) bindquote(strict) encoding("utf-8")
 
-	describe, short
+* 	Standardize variable names
+
 	rename *, lower
 	
-**# 1. Check ID
+**# 1. Check ID ----------------------------------------------------------------
 
 *	You might expect hh_id to identify rows -- try it:
 
@@ -39,9 +29,9 @@
 *    Today we drop nothing. We just need a row ID, and SurveyCTO already
 *    gives us one: key, the unique ID of every submission.
 
-	//isid  key
-	label variable key "SurveyCTO submission ID (unique row ID)"
-	label variable submissiondate "Date-time the form reached the server"
+	isid	key
+	lab var	key 			"SurveyCTO submission ID (unique row ID)"
+	lab var submissiondate 	"Date-time the form reached the server"
 
 
 **# 2. Declare the numeric variables -------------------------------------------
@@ -76,17 +66,8 @@
 	format 	survey_date %tdCCYY-NN-DD
 	lab var	survey_date "Date of interview (from starttime)"
 
-**# 4. GPS ---------------------------------------------------------------------
-* 	A geopoint arrives as ONE text column with four numbers:
-*   "latitude longitude altitude accuracy". Split it into four numeric
-*   columns. (They are identifiers: 01 moves them to the crosswalk.)
 
-	split gps, parse(" ") generate(gps_) destring
-	rename (gps_1 gps_2 gps_3 gps_4) ///
-	       (gps_latitude gps_longitude gps_altitude gps_accuracy)
-	drop gps
-
-**# 5. Add metadata to the file itself -----------------------------------------
+**# 4. Add metadata to the file itself -----------------------------------------
 
 	order key hh_id village_id survey_date enumerator
 	
@@ -94,8 +75,10 @@
 	notes: Source: SurveyCTO export of form household_water_v1
 	notes: Imported on ${today}. One row = one submission. ID: key.
 
-**# 6. Save data and metadata --------------------------------------------------
+**# 5. Save data and metadata --------------------------------------------------
 
+	missings dropvars, force
+	
 	local file "10-raw/100-raw-identified/1000-household-raw-pii"
 	
 	iesave "${data_box}/`file'.dta", ///
