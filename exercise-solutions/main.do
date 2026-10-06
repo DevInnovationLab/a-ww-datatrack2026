@@ -50,7 +50,9 @@
 	if `tidy' 		do "${code}/21-wrangling/212-tidy.do"
 	if `clean' 		do "${code}/21-wrangling/213-clean/2131-clean-household.do"
 	if `clean' 		do "${code}/21-wrangling/213-clean/2132-clean-child.do"
-	if `construct' 	do "${code}/21-wrangling/214-construct.do"
+	if `construct' 	do "${code}/21-wrangling/214-construct/2141-construct-household.do"
+	if `construct' 	do "${code}/21-wrangling/214-construct/2142-construct-child.do"
+	if `construct' 	do "${code}/21-wrangling/214-construct/2149-construct-combine.do"
 
 ***************************************************************** End of do-file
 àÞ

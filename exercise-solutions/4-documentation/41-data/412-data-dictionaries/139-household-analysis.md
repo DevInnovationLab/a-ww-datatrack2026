@@ -1,12 +1,13 @@
-# Data dictionary: 131-household-construct
+# Data dictionary: 139-household-analysis
 
 | | |
 |---|---|
-| **File** | `${data_box}/1-data/13-construct/131-household-construct.dta` (Box) |
-| **Created by** | `2-code/21-wrangling/214-construct.do` |
-| **Inputs** | `12-clean/121-household-clean.dta`, `12-clean/122-child-clean.dta` |
+| **File** | `${data_box}/1-data/13-construct/139-household-analysis.dta` (Box) |
+| **Created by** | `2-code/21-wrangling/214-construct/`: `2141-construct-household.do` (household indicators), `2142-construct-child.do` (child indicators by household), `2149-construct-combine.do` (merge and analysis variables) |
+| **Inputs** | `12-clean/121-household-clean.dta`, `12-clean/122-child-clean.dta`, through the intermediate files `13-construct/131-household-indicators.dta` (all clean household variables plus indicators) and `13-construct/132-child-indicators.dta` (one row per household with a roster) |
 | **Unit of observation** | Household survey submission, consenting households only |
-| **ID** | `key` (SurveyCTO submission ID). `hh_id` is **not** unique: 6 values have two submissions each, kept for the HFC session. |
+| **ID** | `key` (SurveyCTO submission ID). The household ID (`hh_id`, in the intermediate files) is **not** unique: 6 values have two submissions each, kept for the HFC session. |
+| **Variables** | 23 analysis variables. Variables used only to build them (`hh_id`, `enumerator`, `stored_yn`, `storage_time`, `n_children_roster`, `n_answered_2d`, `n_answered_7d`, ...) are in the intermediate files, and all of them together (42 variables) are in `13-construct/133-household-constructed.dta`, also saved by `2149-construct-combine.do`. |
 | **Observations** | 1,254 |
 | **Questionnaire** | [`4-documentation/Household_Water_Questionnaire.md`](../../Household_Water_Questionnaire.md). Codes in brackets are question numbers. |
 | **Last updated** | 7 October 2026 |
@@ -18,9 +19,7 @@ Missing values: `.` is system missing (not asked, or not applicable), `.d` is "D
 | Variable | Definition | Type / unit | Source | Missing values |
 |---|---|---|---|---|
 | `key` | SurveyCTO submission ID. Unique row ID. | string | metadata | none |
-| `hh_id` | Household ID as entered by the enumerator. Not unique (see above). | numeric ID | A2 | none |
 | `village_id` | Village | numeric code | A3 | none |
-| `enumerator` | Enumerator ID | string | metadata | none |
 
 ## Respondent and household (Section C)
 
@@ -29,22 +28,19 @@ Missing values: `.` is system missing (not asked, or not applicable), `.d` is "D
 | `resp_age` | Respondent's age. Stands in for the age of the person responsible for water (see Decisions). | years | C1 | as recorded |
 | `resp_sex` | Respondent's sex. Stands in for the sex of the person responsible for water (see Decisions). | 1 = Male, 2 = Female | C2 | as recorded |
 | `hh_size` | People living in the household | people | C5 | as recorded |
-| `hh_children` | Children under 5 in the household, as reported | children | C6 | as recorded |
-| `n_children_roster` | Children under 5 listed in the child roster | children | G (count of roster rows) | 0 when C6 = 0 and there's no roster. Missing when C6 > 0 but there's no roster (2 households). |
+| `hh_children` | Children under 5 in the household, as reported. This is the analysis count; the roster count is only used to check it. | children | C6 | as recorded |
 | `hh_watersource` | Main drinking water source | 1 Piped, 2 Protected well, 3 River or stream, 4 Trucked, -666 Other | C7 | as recorded |
 
 ## Water storage (Section D)
 
-D2–D7 are only asked if D1 = Yes, so they are missing for households without stored water.
+D2–D7 are only asked if D1 = Yes (`stored_yn`, in the intermediate file), so they are missing for households without stored water.
 
 | Variable | Definition | Type / unit | Source | Missing values |
 |---|---|---|---|---|
-| `stored_yn` | Drinking water stored now | 1 Yes, 0 No | D1 | as recorded |
 | `stored_container` | Storage container type | 1 Bucket, 2 Clay pot, 3 Jerry can, -666 Other | D2 | skipped if D1 = No |
 | `stored_covered` | Storage container covered | 1 Yes, 0 No | D4 | skipped if D1 = No |
 | `stored_clean` | Container washed with soap in the past 7 days | 1 Yes, 0 No | D5 | skipped if D1 = No |
-| `storage_time` | Hours since the stored water was collected, as recorded. 99 is a code for "more than 72 hours", not a number of hours: don't average this variable. | hours (0–72), 99 = more than 72 | D6 | skipped if D1 = No |
-| `storage_time_cat` | Hours since the stored water was collected, in 12-hour groups. Upper bound included (12 hours is in "0–12"). Code 99 and the 2 answers above 72 that aren't 99 are in "More than 72 hours". | 1 0–12, 2 13–24, 3 25–36, 4 37–48, 5 49–60, 6 61–72, 7 More than 72 hours | D6 | same as `storage_time`; `.d`/`.r` carried over |
+| `storage_time_cat` | Hours since the stored water was collected, in 12-hour groups. Upper bound included (12 hours is in "0–12"). Code 99 and the 2 answers above 72 that aren't 99 are in "More than 72 hours". | 1 0–12, 2 13–24, 3 25–36, 4 37–48, 5 49–60, 6 61–72, 7 More than 72 hours | D6 | skipped if D1 = No; `.d`/`.r` carried over |
 | `stored_chlorine` | Chlorine added to the stored water before storing it | 1 Yes, 0 No | D7 | skipped if D1 = No |
 
 ## Water treatment (Section E)
@@ -72,13 +68,11 @@ Shares and any-child indicators are missing for households without children unde
 
 | Variable | Definition | Type / unit | Source | Missing values |
 |---|---|---|---|---|
-| `n_answered_2d` | Children with an answer to G3 (the denominator of `share_diarrhea_2d`) | children | G3 | missing if no roster |
 | `n_diarrhea_2d` | Children under 5 with diarrhoea in the past 48 hours | children | G3 | 0 if C6 = 0; missing if no roster and C6 > 0 |
-| `share_diarrhea_2d` | `n_diarrhea_2d` / `n_answered_2d` | share (0–1) | G3 | missing if no child answered |
+| `share_diarrhea_2d` | `n_diarrhea_2d` / children with a G3 answer | share (0–1) | G3 | missing if no child answered |
 | `any_diarrhea_2d` | At least one child under 5 with diarrhoea in the past 48 hours | 1 Yes, 0 No | G3 | missing if no child answered |
-| `n_answered_7d` | Children with a 7-day answer (G4, or G3 = Yes) (the denominator of `share_diarrhea_7d`) | children | G3, G4 | missing if no roster |
 | `n_diarrhea_7d` | Children under 5 with diarrhoea in the past 7 days | children | G3, G4 | 0 if C6 = 0; missing if no roster and C6 > 0 |
-| `share_diarrhea_7d` | `n_diarrhea_7d` / `n_answered_7d` | share (0–1) | G3, G4 | missing if no child answered |
+| `share_diarrhea_7d` | `n_diarrhea_7d` / children with a 7-day answer | share (0–1) | G3, G4 | missing if no child answered |
 | `any_diarrhea_7d` | At least one child under 5 with diarrhoea in the past 7 days | 1 Yes, 0 No | G3, G4 | missing if no child answered |
 
 ## Decisions
@@ -91,6 +85,8 @@ Shares and any-child indicators are missing for households without children unde
 | Group D6 into 12-hour categories, with code 99 as "More than 72 hours" | L. Andrade | 7 Oct 2026 | *to fill in* |
 | "Treated with chlorine" = E1 > 0; keep E1 and E2 separate; also keep D7 | L. Andrade | 7 Oct 2026 | *to fill in* |
 | Counts of children are 0 (not missing) when C6 = 0 and there's no roster | *to confirm* | 7 Oct 2026 | Section G was skipped because C6 = 0. |
+| Number of children under 5 = C6; the roster count is only a check | *to confirm* | 7 Oct 2026 | *to fill in* |
+| Analysis dataset keeps only the 23 variables listed here | *to confirm* | 7 Oct 2026 | *to fill in* |
 
 ## Known data issues (kept, for the HFC session)
 
