@@ -12,7 +12,7 @@
 
 		* YOUR TURN 1
 		keep key hh_id village_id enumerator child_age_* diarrhea_2d_* diarrhea_7d_*
-		reshape long child_age_ diarrhea_2d_ diarrhea_7d_, i(key) j(child_no)
+		reshape long child_age_ diarrhea_2d_ diarrhea_7d_, i(key) j(child_index)
 		rename (child_age_ diarrhea_2d_ diarrhea_7d_) (child_age diarrhea_2d diarrhea_7d)
 		* (i(hh_id) fails: "variable id does not uniquely identify the observations")
 
@@ -28,7 +28,7 @@
 		local file "11-tidy/112-tidy-child"
 
 		iesave "${data_box}/`file'.dta", ///
-			idvars(key child_no) version(15) ///
+			idvars(key child_index) version(15) ///
 			report(path("${data_box}/`file'.md") replace) ///
 			replace
 	

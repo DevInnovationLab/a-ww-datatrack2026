@@ -83,7 +83,7 @@
 	
 	iesave "${data_box}/`file'.dta", ///
 		idvars(key) version(15) ///
-        report(path("${data_box}/`file'.md") replace) ///
+        report(path("${data_git}/`file'.md") replace) ///
 		replace
 	
 ***************************************************************** End of do-file

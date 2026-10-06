@@ -87,6 +87,7 @@
 # a subset of the folders where you are certain no private data is ever stored.
 !*.csv
 !*.xlsx
+!*.md
 
 #######################
 # Exercise outputs that Overleaf needs from GitHub: the figures written into

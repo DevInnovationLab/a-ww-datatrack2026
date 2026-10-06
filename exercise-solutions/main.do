@@ -17,13 +17,13 @@
 **## Users ---------------------------------------------------------------------
 
 	if "`c(username)'" == "luizaandrade" {
-		global github 	"/Users/luizaandrade/Documents/GitHub/a-ww-datatrack2026"
+		global github 	"/Users/luizaandrade/Documents/GitHub/a-ww-datatrack2026/exercise-solutions"
 		global box		"/Users/luizaandrade/Library/CloudStorage/Box-Box/a-ww-datatrack2026"
 	}
 
 **## Subfolders -------------------------------------------------------------
 
-	global code 			"${github}/exercise-solutions/2-code"
+	global code 			"${github}/2-code"
 	global data_box			"${box}/1-data"
 	global data_git			"${github}/1-data"
 	global output 			"${github}/3-output/32-overleaf/321-exhibits"
@@ -31,23 +31,24 @@
 **## Sections to run -----------------------------------------------------------
 
 	local import 		1
-	local deidentify	0
-	local tidy			0
-	local clean			0
+	local deidentify	1
+	local tidy			1
+	local clean			1
 	local construct		0
 	
-********************************************************************************
+********************************************************************************	
 **#  II. Run do-files
 ********************************************************************************
 
 **## Stata session ----------------------------------------------------------
+
 	 ieboilstart , versionnumber(15.1) adopath("${code}/20-programs/ado", strict) noclear
     `r(version)'
 	
-
 	if `import' 	do "${code}/21-wrangling/210-import.do"
 	if `deidentify' do "${code}/21-wrangling/211-deidentify.do"
-	if `tidy' 		do "${code}/21-wrangling/212-tidy-reshape.do"
-	if `clean' 		do "${code}/21-wrangling/213-clean-label.do"
+	if `tidy' 		do "${code}/21-wrangling/212-tidy.do"
+	if `clean' 		do "${code}/21-wrangling/213-clean/2131-clean-household.do"
+	if `clean' 		do "${code}/21-wrangling/213-clean/2132-clean-child.do"
 
 ***************************************************************** End of do-file
