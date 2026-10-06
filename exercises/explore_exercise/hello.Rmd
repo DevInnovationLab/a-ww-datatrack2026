@@ -1,0 +1,15 @@
+---
+title: "Hello"
+output: html_document
+---
+
+Pre-work check for Session 4. If you can read the sentence below with a number in it, R Markdown works on your computer.
+
+This file was rendered on `r format(Sys.Date(), "%d %B %Y")`, and 2 + 2 = `r 2 + 2`.
+
+```{r packages}
+# These are the packages Exercise 2 uses. If this chunk fails, run:
+# install.packages(c("dplyr", "ggplot2", "rmarkdown"))
+library(dplyr)
+library(ggplot2)
+```
