@@ -89,6 +89,21 @@
 !*.xlsx
 
 #######################
+# Exercise outputs that Overleaf needs from GitHub: the figures written into
+# the Session 5 Overleaf folder (no data is ever stored there)
+!exercises/**/overleaf/figures/*.png
+# ...and the zipped Overleaf project participants upload
+!exercises/overleaf_exercise/overleaf.zip
+# ...and the zipped exercise packages shared with participants
+!exercises/session4_explore_exercise.zip
+!exercises/session5_overleaf_exercise.zip
+# ...and the plain-text instructions shipped with each exercise
+!exercises/**/README.txt
+# ...but not the HTML that knitting the R Markdown exercises leaves behind
+exercises/explore_exercise/*.html
+exercises/facilitator/*.html
+
+#######################
 # Include all the files with passwords or tokens here. All files named
 # password or passwords are with this template ignored no matter which
 # format you are using. Additionally, all content in any folder called
