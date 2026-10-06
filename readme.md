@@ -9,6 +9,7 @@ Teaching repository for the DIL Welcome Week "Data Ingestion, Cleaning & Tidying
 - [Pipeline](#pipeline)
 - [Description of programs/code](#description-of-programscode)
 - [List of datasets](#list-of-datasets)
+- [Exercises](#exercises)
 - [Known inconsistencies](#known-inconsistencies)
 - [Repository structure](#repository-structure)
 
@@ -121,6 +122,25 @@ Not called from `main.do`. Its first 145 lines duplicate `4-clean-household.do`,
 | Household clean | `data/clean/household-clean.dta` (+ codebook at `documentation/data-dictionaries/household-clean.xlsx`) | Household | `key` | Respondent demographics, water source, storage practices, treatment behavior, perceived safety/satisfaction | `4-clean-household.do` |
 | Child clean | `data/clean/child-clean.dta` (+ codebook at `documentation/data-dictionaries/child-clean.xlsx`) | Household-child | `key`, `child_index` | Child age, diarrhea in past 2/7 days | `5-clean-child.do` (outputs not yet present) |
 
+## Exercises
+
+Hands-on exercises live in [exercises/](exercises), one self-contained folder each (`README.txt` with participant instructions, and facilitator notes). They are separate from the pipeline above: `main.do` at the repository root does not run them.
+
+### [explore_exercise](exercises/explore_exercise)
+- **Session:** 4, Exercise 2 (syntax on slide 19a, solution on slide 19b). Self-contained, four files, no paths to set. Solution: `exercises/facilitator/explore_exercise_solution.Rmd`.
+- **Input:** `exercises/explore_exercise/household_water_clean.csv` (id: `key`) — one row per consenting household, built by `exercises/facilitator/make_exercise_data.R` from the Session 2 export (with `exercises/facilitator/prep-standin.R`), the same construction as the Session 5 Overleaf exercise's data, so the numbers match the Session 5 Overleaf report. Rerun that script (from `exercises/facilitator/`) if the construction changes.
+- **Task:** `report.Rmd` has the instructions and the variable list at the top, and the code written with `___` where variable names go: descriptives by water source, a figure, an inline-code sentence, and a `last_week_only` parameter. `hello.Rmd` is the pre-work check.
+- **Output:** the knitted `report.html` (not tracked in git).
+
+### [overleaf_exercise](exercises/overleaf_exercise)
+- **Session:** 5 (demoed in Session 4, slide 19c). Self-contained: shared with participants as is. Facilitator notes: `exercises/facilitator/overleaf_exercise_notes.md`.
+- **Input:** `exercises/overleaf_exercise/data/households_clean.csv` (id: `key`; one row per household visited, including non-consenting ones) and `data/children_clean.csv` (id: `key child_index`). Clean data only: built by `exercises/facilitator/make_exercise_data.R` from the Session 2 export of the same survey (kept in `exercises/facilitator/raw/`; see [Known inconsistencies](#known-inconsistencies)). Participants get no raw data or prep code.
+- **Task:** two equivalent versions that write identical outputs:
+  - Stata — `stata/main.do` runs `stata/code/2-export-outputs.do`; `ieboilstart` (with `iesave`/`ietoolkit`) is copied into `stata/ado/` from `code/ado/i`.
+  - R — `R/main.R` runs `R/2-export-outputs.R` (same logic; can optionally commit and push the outputs to GitHub).
+  Participants upload `overleaf.zip` to Overleaf, sync it to a GitHub repository, point the code at their local clone, run, push and pull, then flip `last_week_only` and rerun.
+- **Output:** in the participant's Overleaf clone (or `overleaf/` here): `tables/numbers.tex` (one LaTeX command per number quoted in `main.tex`), `tables/tab1-water-practices.tex`, `figures/fig1-chlorination-village.png`.
+
 ## Known inconsistencies
 
 The scripts were adapted from an older version of this teaching exercise (built around a differently-named "chlorine testing" dataset with `households.dta`/`containers.dta`/`submission_id`) to the current `household_water_questionnaire` data (`household-tidy.dta`/`child-tidy.dta`, keyed by `key`). That migration is incomplete:
@@ -128,6 +148,10 @@ The scripts were adapted from an older version of this teaching exercise (built 
 - **`04-codebook-verify.do` still targets the old schema** (`households.dta`, `containers.dta`, `submission_id`, `chlorine_mgl`, `treats_water`, `tested_this_morning`, `water_safe_yn`) instead of the files/variables the current pipeline actually produces (`household-clean.dta`, `child-clean.dta`, `key`, `water_safety`, `hh_watersource`, ...). It won't run successfully against current outputs without a rewrite, and it also references an undefined global, `${codebook_excel}`.
 - **`4-clean.do` is very likely dead code** — a pre-migration draft of `4-clean-household.do`, not referenced by `main.do`, containing an unreachable `exit` followed by exercise stubs for variables that don't exist in this dataset.
 - **`data/clean/` currently only contains `household-clean.dta`** (its codebook lives in `documentation/data-dictionaries/household-clean.xlsx`) — the child-level outputs described for `5-clean-child.do` are missing entirely, so it either hasn't been run yet or its outputs weren't committed.
+
+- **Two versions of the raw export.** `data/raw/household_water_questionnaire__v1.csv` is an earlier export than the one Session 2's tidying exercise uses (copied to `exercises/facilitator/raw/`, from which the exercises' clean CSVs are built). Same 1,293 submissions and columns, different content: the earlier file has 3 refusals (`consent = 0`) and dates like `7/12/26 4:40`; the Session 2 file has 39 refusals, dates like `Jul 12, 2026 4:04:50 AM`, and the planted HFC problems (e.g. section D blank for most of ENUM05's interviews). The pipeline in `code/` parses only the earlier date format.
+
+- **`.Rprofile` sources `renv/activate.R`, but the repository has no `renv/` folder**, so starting R from the repository root (e.g. opening it as an RStudio project) prints an error. Either add the renv setup or remove the line.
 
 If you pick this pipeline back up: treat `1-import.do` → `2-deidentify.do` → `3-tidy.do` → `4-clean-household.do` → `5-clean-child.do` as the source of truth, and rewrite `04-codebook-verify.do` to match before relying on it.
 
@@ -138,6 +162,7 @@ If you pick this pipeline back up: treat `1-import.do` → `2-deidentify.do` →
 - [data/tidy/](data/tidy) — one file per unit of observation (household, child), reshaped but not yet labeled.
 - [data/clean/](data/clean) — analysis-ready, labeled data.
 - [output/](output) — reserved for tables/figures; currently empty.
+- [exercises/](exercises) — hands-on session exercises, each self-contained (see [Exercises](#exercises)).
 - [documentation/](documentation) — the SurveyCTO questionnaire (`Household Water Questionnaire - V1.xlsx`), plain-text project documentation, and `data-dictionaries/` (the Excel mini-codebooks `iecodebook` exports for each clean dataset).
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for the general DIL folder-structure/workflow conventions this repo is based on, and [CLAUDE.md](CLAUDE.md) for guidance on keeping this README in sync with the code.
