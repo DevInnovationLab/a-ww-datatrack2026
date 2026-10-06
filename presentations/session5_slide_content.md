@@ -16,7 +16,7 @@
 - [ ] **Fit to time:** the slides add up to 104 minutes for a 90-minute session, with no buffer: slide 23 (moved from Session 4) added 2 minutes and the Overleaf exercise (slide 23b) 12. If you run behind, cut Part 05 (replication package), never Exercise 2.
 - [ ] **Check presenter notes that don't match the expected time.** At about 130 spoken words a minute, these notes are too long for their slide: 33 So: should a model run this checklist? (225 words, 1 min), 20 One source, two outputs, then a report (158, 1 min), 23 Outputs that update themselves (299, 2 min), 30 The DIL paper-submission checklist (146, 1 min). Trim the notes or give the slides more time.
 - [x] **Decide how much GitHub → Overleaf practice to include.** Decided: a standalone exercise (slide 23b, 12 min in session) in `exercises/session5/exercise1b/`, shared with participants as is: instructions, data, Stata and R scripts, and the Overleaf project. Participants set their paths to their own Overleaf clone, run, push and pull, then flip `last_week_only` and rerun. Session 4 shows it as a demo (Session 4 slide 19c). Facilitator notes: `exercises/facilitator/session5_exercise1b_notes.md`.
-- [ ] **Session 4's Exercise 2 is now R Markdown** (`exercise2/report.Rmd`, rendered with `rmarkdown::render`), not Quarto. Exercise 1 here still says `report.qmd` and Quarto: align the format (and the pre-work) before building Part A's materials.
+- [ ] **Session 4's Exercise 2 is now R Markdown** (`session4/exercise2/report.Rmd`, rendered with `rmarkdown::render`), not Quarto. Exercise 1 here still says `report.qmd` and Quarto: align the format (and the pre-work) before building Part A's materials.
 - [ ] **Fit to time after adding slide 23b:** it adds 12 minutes (about 104 for 90). Cut Part 05 (replication package) first, as the to-do above suggests, and decide what else goes.
 - [ ] **Pre-work email:** ask participants to create a GitHub account and an Overleaf account (with GitHub sync), install GitHub Desktop, download `exercises/session5/exercise1b/`, and do steps 1–3 of its `README.txt` (upload `overleaf.zip` to Overleaf, sync it to GitHub, clone it with GitHub Desktop), so the session time is only steps 4–5.
 - [x] ~~Pre-create each pair's GitHub repo and linked Overleaf project~~ — no longer needed: participants create their own in the pre-work (steps 1–3 of the exercise README). Still confirm the Overleaf licence covers GitHub sync for everyone.
@@ -27,7 +27,7 @@
   - [ ] Fold section 8 (compare to the PAP) and the deviations table into the published submission guide (owner: David, reviewer: Witold)
   - [ ] Confirm the paper-submission-check skill loads in Claude Desktop, and decide on a 60-second demo
   - [ ] Pick the two replication packages to open live, and check the URLs the morning of
-  - [ ] Distribute `report_exercise/`, `PAP_checklist_exercise/` and `exercise1b/` before the session; everyone signed in to Claude Desktop
+  - [ ] Distribute `exercise1/`, `exercise2/` and `exercise1b/` before the session; everyone signed in to Claude Desktop
 
 ---
 
@@ -372,7 +372,7 @@ export excel using "backcheck.xlsx", replace
 One source, one report your code writes for you
 ~21 minutes, including Exercise 1
 
-> **Notes:** The first hands-on anchor: 18 of the 21 minutes. If Part 03 overran, protect the exercise. Files are in `report_exercise/`; distribute them before the session, not during.
+> **Notes:** The first hands-on anchor: 18 of the 21 minutes. If Part 03 overran, protect the exercise. Files are in `exercise1/`; distribute them before the session, not during.
 
 ---
 
@@ -396,7 +396,7 @@ One source, one report your code writes for you
 
 ## Slide 21 — EXERCISE 1 · The report that writes itself · 18 min (brief 2 · build 10 · render and flip 4 · debrief 2) · *S5 v2 21, adapted to Session 4*
 
-*In pairs · `report_exercise/` · start from your Session 4 report*
+*In pairs · `exercise1/` · start from your Session 4 report*
 
 1. **Read the debt:** `static_report.md`, a memo with every number typed. Pick one you don't trust.
 2. **Rebuild it:** use the prompt to turn it into `report.qmd`, with the model from `code/01_analysis.R`
@@ -409,7 +409,7 @@ One source, one report your code writes for you
 > - **The packet:** `static_report.md` (a midline memo whose numbers were typed from a log), `code/01_analysis.R` (one model, one table, one coefficient plot from the same object), and a starter `report.qmd` for anyone who didn't finish Session 4's Exercise 2. The Stata analysis script is included as a handout.
 > - **Polish** means the self-standing checklist from slide 10: N per column, control mean, notes on the sample and specification, a caption that says what to conclude. AI can do the formatting; the content decisions are theirs.
 > - **The planted faults** (in `facilitator/FACILITATOR_NOTES.md`): the memo says the non-response rate is 3.6 percent and the data say 3.83; the claim "take-up is well above what we assumed at design stage" has no source at all. Watch for pairs who "fix" their code to match the memo: that instinct is what the session is trying to break, and it's worth naming out loud.
-> - **Prep:** `report_exercise/` distributed, Quarto installed, the data file opens in R. Test the render yourself the week before: a broken install eats the whole block.
+> - **Prep:** `exercise1/` distributed, Quarto installed, the data file opens in R. Test the render yourself the week before: a broken install eats the whole block.
 > - **Stretch:** push the exported table and figure to your GitHub repo and pull them into Overleaf: that is the Overleaf exercise on slide 23b.
 
 ---
@@ -426,7 +426,7 @@ One source, one report your code writes for you
 > - Say the two rules before people start, not after: they are the assessment criteria for the exercise.
 > - Session 4's rule applies: AI writes the code, never the output. You're the fact-checker of record. Check the rendered output against `code/01_analysis.R`, line by line, the first time.
 > - The last line of the prompt, asking which numbers it could NOT reproduce, sets up Part 06: automation handles recall, not judgement.
-> - Full prompt: `report_exercise/ai_prompt.txt`.
+> - Full prompt: `exercise1/ai_prompt.txt`.
 
 ---
 
@@ -682,7 +682,7 @@ You already know most of the list. So we stop reading it and start running it.
 
 ## Slide 34 — EXERCISE 2 · Run the checklist with an LLM · 20 min (brief 2 · round 1 7 · round 2 6 · lanes 5) · *S5 v2 33*
 
-*In pairs · `PAP_checklist_exercise/`*
+*In pairs · `exercise2/`*
 
 1. **Round 1 · mechanical pass (7 min):** prompt 1 over the paper. Meanwhile, read the abstract and Table 1 yourself, then compare.
 2. **Round 2 · PAP pass (6 min):** attach the plan, run prompt 2. Is every registered outcome accounted for?

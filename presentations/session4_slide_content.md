@@ -30,7 +30,7 @@ Luiza Andrade – Data Lead
 Nandita Gupta – Predoctoral Fellow
 David Torres Leon – Data Manager 
 
-> **Notes:** Laptops open. The exercise folders (`construction_exercise/`, `exercise2/`) should already be on everyone's machine.
+> **Notes:** Laptops open. The exercise folders (`exercise1/`, `exercise2/`) should already be on everyone's machine.
 
 ---
 
@@ -225,7 +225,7 @@ NEVER USE `merge m:m`
 
 ## Slide 12 — EXERCISE 1 · Construction bug hunt · 12 min (brief 1 · work 8 · reveal 3)
 
-*In pairs · `construction_exercise/`*
+*In pairs · `exercise1/`*
 
 Your AI assistant wrote this script. It runs without errors. **It is wrong in five places.**
 
