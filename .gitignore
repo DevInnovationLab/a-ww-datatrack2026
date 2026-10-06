@@ -93,14 +93,13 @@
 # the Session 5 Overleaf folder (no data is ever stored there)
 !exercises/**/overleaf/figures/*.png
 # ...and the zipped Overleaf project participants upload
-!exercises/overleaf_exercise/overleaf.zip
+!exercises/**/overleaf.zip
 # ...and the zipped exercise packages shared with participants
-!exercises/session4_explore_exercise.zip
-!exercises/session5_overleaf_exercise.zip
+!exercises/session*/exercise*.zip
 # ...and the plain-text instructions shipped with each exercise
 !exercises/**/README.txt
 # ...but not the HTML that knitting the R Markdown exercises leaves behind
-exercises/explore_exercise/*.html
+exercises/session*/**/*.html
 exercises/facilitator/*.html
 
 #######################

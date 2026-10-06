@@ -1,6 +1,6 @@
 # Facilitator notes · Session 5 Overleaf exercise
 
-*Not part of the folder participants get. The exercise itself is `exercises/overleaf_exercise/`; share that folder as is.*
+*Not part of the folder participants get. The exercise itself is `exercises/session5/exercise1b/`; share that folder as is.*
 
 ## What participants do (~20 min)
 
@@ -17,7 +17,7 @@ Nothing to pre-create per pair: each participant makes their own Overleaf projec
 
 ## Before the session
 
-- **Run both versions once**, with the flag off and on, and check against the numbers below. Already checked: the R scripts (both settings, plus a push to a test repository) and the Stata do-files (run on 5 October, before the folder was reorganized: run `stata/main.do` once from `overleaf_exercise/` to confirm the paths).
+- **Run both versions once**, with the flag off and on, and check against the numbers below. Already checked: the R scripts (both settings, plus a push to a test repository) and the Stata do-files (run on 5 October, before the folder was reorganized: run `stata/main.do` once from `exercise1b/` to confirm the paths).
 - **Overleaf licence:** GitHub sync is premium. Confirm every participant's account has it. Without it, the README's fallback (upload the three files by hand) still works.
 - **Pre-work email:** GitHub account, GitHub Desktop installed, Overleaf account, Stata 15+ or R with `dplyr`, `tidyr`, `ggplot2`, and the folder downloaded.
 
@@ -49,4 +49,4 @@ Table 1, households (piped / other / all): 567 / 679 / 1,254 off; 204 / 239 / 44
 
 Participants get clean data only: `data/households_clean.csv` (one row per household visited, including non-consenting ones, so the report can quote households visited and the consent rate; id `key`) and `data/children_clean.csv` (one row per child under 5; id `key child_index`). No raw data or prep code is in their folder.
 
-Both files (and Session 4's `explore_exercise/household_water_clean.csv`) are built by `facilitator/make_exercise_data.R`, which runs `facilitator/prep-standin.R` on the Session 2 export in `facilitator/raw/` (de-identify, recode missing codes, construct indicators). Run it from `exercises/facilitator/` if the construction changes, then re-zip both exercise folders. When the course's constructed data exists, build the CSVs from it instead, keeping the same variable names. `facilitator/prep-standin.do` is the old Stata version of the same construction, kept for reference only.
+Both files (and Session 4's `exercise2/household_water_clean.csv`) are built by `facilitator/make_exercise_data.R`, which runs `facilitator/prep-standin.R` on the Session 2 export in `facilitator/raw/` (de-identify, recode missing codes, construct indicators). Run it from `exercises/facilitator/` if the construction changes, then re-zip both exercise folders. When the course's constructed data exists, build the CSVs from it instead, keeping the same variable names. `facilitator/prep-standin.do` is the old Stata version of the same construction, kept for reference only.

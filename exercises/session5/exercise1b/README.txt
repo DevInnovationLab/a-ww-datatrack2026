@@ -1,4 +1,4 @@
-EXERCISE - RESULTS THAT UPDATE THEMSELVES IN OVERLEAF
+EXERCISE 1b - RESULTS THAT UPDATE THEMSELVES IN OVERLEAF
 DIL Welcome Week - Data Session 5 - Publication: Reports & Replicability
 About 20 minutes - Stata or R
 
@@ -70,14 +70,14 @@ STEPS
 
      // YOU
      else if "`c(username)'" == "yourusername" {         // di c(username) shows it
-         global ex           "/path/to/overleaf_exercise"  // this folder
+         global ex           "/path/to/exercise1b"  // this folder
          global report_clone "/path/to/your/overleaf/clone"
      }
 
    R: open R/main.R. In section "2 Your two paths", do the same:
 
      } else if (user == "yourusername") {                # Sys.info()[["user"]] shows it
-       exercise_dir <- "/path/to/overleaf_exercise"      # this folder
+       exercise_dir <- "/path/to/exercise1b"      # this folder
        overleaf_dir <- "/path/to/your/overleaf/clone"
      }
 

@@ -15,10 +15,10 @@
 - [ ] **Replace the placeholder script** on "What reproducible code looks like" with a real DIL snippet (the draft below is illustrative).
 - [ ] **Fit to time:** the slides add up to 104 minutes for a 90-minute session, with no buffer: slide 23 (moved from Session 4) added 2 minutes and the Overleaf exercise (slide 23b) 12. If you run behind, cut Part 05 (replication package), never Exercise 2.
 - [ ] **Check presenter notes that don't match the expected time.** At about 130 spoken words a minute, these notes are too long for their slide: 33 So: should a model run this checklist? (225 words, 1 min), 20 One source, two outputs, then a report (158, 1 min), 23 Outputs that update themselves (299, 2 min), 30 The DIL paper-submission checklist (146, 1 min). Trim the notes or give the slides more time.
-- [x] **Decide how much GitHub → Overleaf practice to include.** Decided: a standalone exercise (slide 23b, 12 min in session) in `exercises/overleaf_exercise/`, shared with participants as is: instructions, data, Stata and R scripts, and the Overleaf project. Participants set their paths to their own Overleaf clone, run, push and pull, then flip `last_week_only` and rerun. Session 4 shows it as a demo (Session 4 slide 19c). Facilitator notes: `exercises/facilitator/overleaf_exercise_notes.md`.
-- [ ] **Session 4's Exercise 2 is now R Markdown** (`explore_exercise/report.Rmd`, rendered with `rmarkdown::render`), not Quarto. Exercise 1 here still says `report.qmd` and Quarto: align the format (and the pre-work) before building Part A's materials.
+- [x] **Decide how much GitHub → Overleaf practice to include.** Decided: a standalone exercise (slide 23b, 12 min in session) in `exercises/session5/exercise1b/`, shared with participants as is: instructions, data, Stata and R scripts, and the Overleaf project. Participants set their paths to their own Overleaf clone, run, push and pull, then flip `last_week_only` and rerun. Session 4 shows it as a demo (Session 4 slide 19c). Facilitator notes: `exercises/facilitator/session5_exercise1b_notes.md`.
+- [ ] **Session 4's Exercise 2 is now R Markdown** (`exercise2/report.Rmd`, rendered with `rmarkdown::render`), not Quarto. Exercise 1 here still says `report.qmd` and Quarto: align the format (and the pre-work) before building Part A's materials.
 - [ ] **Fit to time after adding slide 23b:** it adds 12 minutes (about 104 for 90). Cut Part 05 (replication package) first, as the to-do above suggests, and decide what else goes.
-- [ ] **Pre-work email:** ask participants to create a GitHub account and an Overleaf account (with GitHub sync), install GitHub Desktop, download `exercises/overleaf_exercise/`, and do steps 1–3 of its `README.txt` (upload `overleaf.zip` to Overleaf, sync it to GitHub, clone it with GitHub Desktop), so the session time is only steps 4–5.
+- [ ] **Pre-work email:** ask participants to create a GitHub account and an Overleaf account (with GitHub sync), install GitHub Desktop, download `exercises/session5/exercise1b/`, and do steps 1–3 of its `README.txt` (upload `overleaf.zip` to Overleaf, sync it to GitHub, clone it with GitHub Desktop), so the session time is only steps 4–5.
 - [x] ~~Pre-create each pair's GitHub repo and linked Overleaf project~~ — no longer needed: participants create their own in the pre-work (steps 1–3 of the exercise README). Still confirm the Overleaf licence covers GitHub sync for everyone.
 - [x] ~~Pre-work email: GitHub and Overleaf accounts, git or GitHub Desktop~~ — merged into the pre-work email to-do above (no usernames needed now: participants create their own repositories)
 - [ ] **Carried over from S5 v2:**
@@ -27,7 +27,7 @@
   - [ ] Fold section 8 (compare to the PAP) and the deviations table into the published submission guide (owner: David, reviewer: Witold)
   - [ ] Confirm the paper-submission-check skill loads in Claude Desktop, and decide on a 60-second demo
   - [ ] Pick the two replication packages to open live, and check the URLs the morning of
-  - [ ] Distribute `report_exercise/`, `PAP_checklist_exercise/` and `overleaf_exercise/` before the session; everyone signed in to Claude Desktop
+  - [ ] Distribute `report_exercise/`, `PAP_checklist_exercise/` and `exercise1b/` before the session; everyone signed in to Claude Desktop
 
 ---
 
@@ -451,9 +451,9 @@ One source, one report your code writes for you
 
 ---
 
-## Slide 23b — EXERCISE · Results that update themselves in Overleaf · 12 min (paths and first run 6 · flag 4 · debrief 2) **(new)**
+## Slide 23b — EXERCISE 1b · Results that update themselves in Overleaf · 12 min (paths and first run 6 · flag 4 · debrief 2) **(new)**
 
-*Individually or in pairs · `overleaf_exercise/` · Stata (`stata/main.do`) or R (`R/main.R`)*
+*Individually or in pairs · `exercise1b/` · Stata (`stata/main.do`) or R (`R/main.R`)*
 
 *Before the session: your Overleaf project is synced with GitHub and cloned on your computer (README steps 1–3)*
 
@@ -465,7 +465,7 @@ One source, one report your code writes for you
 
 > **Notes:**
 > - The folder is self-contained: `README.txt` (all steps, both languages), `data/` (the clean household and child data, ready to use: no raw data or prep code), `stata/` and `R/` (same logic, identical output files), `overleaf/` and `overleaf.zip` (the PI update, which only `\input`s `tables/numbers.tex`, Table 1 and Figure 1).
-> - With the flag off the report covers 1,293 households visited and 1,254 interviewed; on, 452 and 445, from 14 to 20 July. Full expected numbers: `exercises/facilitator/overleaf_exercise_notes.md`.
+> - With the flag off the report covers 1,293 households visited and 1,254 interviewed; on, 452 and 445, from 14 to 20 July. Full expected numbers: `exercises/facilitator/session5_exercise1b_notes.md`.
 > - Most common problem: a wrong path to the clone. GitHub Desktop → *Repository → Show in Finder* gives the real one.
 > - R users can push from R (`push_to_github <- TRUE`); everyone else uses GitHub Desktop.
 > - Without GitHub sync on their Overleaf account, participants run with the folder's own `overleaf/` and upload the three files by hand.
@@ -484,7 +484,7 @@ global last_week_only 0
 
 * Section 2: copy Nandita's block for yourself
 else if "`c(username)'" == "yourname" {
-    global ex           "/path/to/overleaf_exercise"
+    global ex           "/path/to/exercise1b"
     global report_clone "/path/to/your/overleaf/clone"
 }
 ```
@@ -501,7 +501,7 @@ last_week_only <- FALSE
 
 # Section 2: copy Nandita's block for yourself
 } else if (user == "yourname") {
-  exercise_dir <- "/path/to/overleaf_exercise"
+  exercise_dir <- "/path/to/exercise1b"
   overleaf_dir <- "/path/to/your/overleaf/clone"
 }
 ```

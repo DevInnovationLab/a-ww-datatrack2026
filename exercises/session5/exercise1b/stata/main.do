@@ -44,7 +44,7 @@
 * Your two paths ----------------------------------------------------------------
 
 	* Type 'di c(username)' to see the name of your machine.
-	*   ex           : this exercise folder (overleaf_exercise/), wherever you saved it
+	*   ex           : this exercise folder (exercise1b/), wherever you saved it
 	*   report_clone : your local clone of the GitHub repository synced with
 	*                  your Overleaf project. Leave it empty to write to the
 	*                  overleaf/ folder in the exercise folder.
@@ -53,7 +53,7 @@
 
 	// Nandita
 	if "`c(username)'" == "admin" {
-		global ex           "/Users/admin/Desktop/DIL/a-ww-datatrack2026/exercises/overleaf_exercise"
+		global ex           "/Users/admin/Desktop/DIL/a-ww-datatrack2026/exercises/session5/exercise1b"
 		global report_clone "/Users/admin/Desktop/DIL/ww-datatrack-gitoverleaf"
 	}
 

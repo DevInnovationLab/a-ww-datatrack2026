@@ -59,7 +59,7 @@ library(ggplot2)
 
 # The clean data. This solution lives in exercises/facilitator/, next to the
 # exercise folder.
-hh <- read.csv(file.path("..", "explore_exercise", "household_water_clean.csv"))
+hh <- read.csv(file.path("..", "session4", "exercise2", "household_water_clean.csv"))
 
 # STEP 5: remove the # and fill the ___ (the variable for "interviewed in the
 # last 7 days of fieldwork")

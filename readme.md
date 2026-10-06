@@ -124,17 +124,17 @@ Not called from `main.do`. Its first 145 lines duplicate `4-clean-household.do`,
 
 ## Exercises
 
-Hands-on exercises live in [exercises/](exercises), one self-contained folder each (`README.txt` with participant instructions, and facilitator notes). They are separate from the pipeline above: `main.do` at the repository root does not run them.
+Hands-on exercises live in [exercises/](exercises), in one folder per session (`session4/`, `session5/`) with one self-contained folder per exercise, zipped next to it for sharing (`README.txt` with participant instructions, and facilitator notes). They are separate from the pipeline above: `main.do` at the repository root does not run them.
 
-### [explore_exercise](exercises/explore_exercise)
-- **Session:** 4, Exercise 2 (syntax on slide 19a, solution on slide 19b). Self-contained, four files, no paths to set. Solution: `exercises/facilitator/explore_exercise_solution.Rmd`.
-- **Input:** `exercises/explore_exercise/household_water_clean.csv` (id: `key`) — one row per consenting household, built by `exercises/facilitator/make_exercise_data.R` from the Session 2 export (with `exercises/facilitator/prep-standin.R`), the same construction as the Session 5 Overleaf exercise's data, so the numbers match the Session 5 Overleaf report. Rerun that script (from `exercises/facilitator/`) if the construction changes.
+### [Session 4 · exercise2](exercises/session4/exercise2)
+- **Session:** 4, Exercise 2 (syntax on slide 19a, solution on slide 19b). Self-contained, four files, no paths to set. Solution: `exercises/facilitator/session4_exercise2_solution.Rmd`.
+- **Input:** `exercises/session4/exercise2/household_water_clean.csv` (id: `key`) — one row per consenting household, built by `exercises/facilitator/make_exercise_data.R` from the Session 2 export (with `exercises/facilitator/prep-standin.R`), the same construction as the Session 5 Overleaf exercise's data, so the numbers match the Session 5 Overleaf report. Rerun that script (from `exercises/facilitator/`) if the construction changes.
 - **Task:** `report.Rmd` has the instructions and the variable list at the top, and the code written with `___` where variable names go: descriptives by water source, a figure, an inline-code sentence, and a `last_week_only` parameter. `hello.Rmd` is the pre-work check.
 - **Output:** the knitted `report.html` (not tracked in git).
 
-### [overleaf_exercise](exercises/overleaf_exercise)
-- **Session:** 5 (demoed in Session 4, slide 19c). Self-contained: shared with participants as is. Facilitator notes: `exercises/facilitator/overleaf_exercise_notes.md`.
-- **Input:** `exercises/overleaf_exercise/data/households_clean.csv` (id: `key`; one row per household visited, including non-consenting ones) and `data/children_clean.csv` (id: `key child_index`). Clean data only: built by `exercises/facilitator/make_exercise_data.R` from the Session 2 export of the same survey (kept in `exercises/facilitator/raw/`; see [Known inconsistencies](#known-inconsistencies)). Participants get no raw data or prep code.
+### [Session 5 · exercise1b](exercises/session5/exercise1b)
+- **Session:** 5 (demoed in Session 4, slide 19c). Self-contained: shared with participants as is. Facilitator notes: `exercises/facilitator/session5_exercise1b_notes.md`.
+- **Input:** `exercises/session5/exercise1b/data/households_clean.csv` (id: `key`; one row per household visited, including non-consenting ones) and `data/children_clean.csv` (id: `key child_index`). Clean data only: built by `exercises/facilitator/make_exercise_data.R` from the Session 2 export of the same survey (kept in `exercises/facilitator/raw/`; see [Known inconsistencies](#known-inconsistencies)). Participants get no raw data or prep code.
 - **Task:** two equivalent versions that write identical outputs:
   - Stata — `stata/main.do` runs `stata/code/2-export-outputs.do`; `ieboilstart` (with `iesave`/`ietoolkit`) is copied into `stata/ado/` from `code/ado/i`.
   - R — `R/main.R` runs `R/2-export-outputs.R` (same logic; can optionally commit and push the outputs to GitHub).

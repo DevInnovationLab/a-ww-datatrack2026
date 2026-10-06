@@ -6,11 +6,11 @@
 #
 #  Input:     raw/household_water_questionnaire__v1.csv
 #             prep-standin.R  (the construction, run here only)
-#  Output:    ../explore_exercise/household_water_clean.csv      (Session 4, Ex 2)
+#  Output:    ../session4/exercise2/household_water_clean.csv      (Session 4, Ex 2)
 #               one row per consenting household (id: key)
-#             ../overleaf_exercise/data/households_clean.csv      (Session 5)
+#             ../session5/exercise1b/data/households_clean.csv      (Session 5)
 #               one row per household visited, incl. non-consenting (id: key)
-#             ../overleaf_exercise/data/children_clean.csv        (Session 5)
+#             ../session5/exercise1b/data/children_clean.csv        (Session 5)
 #               one row per child under 5 (id: key, child_index)
 #
 #  Summary:   Participants get clean CSVs only, so they have no prep code and
@@ -41,7 +41,7 @@ explore <- hh %>%
             stored_chlor, ran_out, safe_very)
 
 stopifnot(!anyDuplicated(explore$key), nrow(explore) == 1254)
-write_clean(explore, file.path("..", "explore_exercise", "household_water_clean.csv"))
+write_clean(explore, file.path("..", "session4", "exercise2", "household_water_clean.csv"))
 
 # ---- 2 Session 5, Overleaf exercise: households and children ---------------
 households <- hh %>%
@@ -58,6 +58,6 @@ stopifnot(!anyDuplicated(households$key), nrow(households) == 1293,
           !anyDuplicated(kids[c("key", "child_index")]),
           all(kids$key %in% households$key))
 
-dir.create(file.path("..", "overleaf_exercise", "data"), showWarnings = FALSE)
-write_clean(households, file.path("..", "overleaf_exercise", "data", "households_clean.csv"))
-write_clean(kids,       file.path("..", "overleaf_exercise", "data", "children_clean.csv"))
+dir.create(file.path("..", "session5", "exercise1b", "data"), showWarnings = FALSE)
+write_clean(households, file.path("..", "session5", "exercise1b", "data", "households_clean.csv"))
+write_clean(kids,       file.path("..", "session5", "exercise1b", "data", "children_clean.csv"))

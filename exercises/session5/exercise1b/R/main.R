@@ -31,7 +31,7 @@ last_week_only <- FALSE
 push_to_github <- FALSE
 
 # ---- 2 Your two paths -----------------------------------------------------------
-#   exercise_dir : this exercise folder (overleaf_exercise/), wherever you saved it
+#   exercise_dir : this exercise folder (exercise1b/), wherever you saved it
 #   overleaf_dir : your local clone of the GitHub repository synced with your
 #                  Overleaf project
 # Sys.info()[["user"]] shows your username. Copy Nandita's block for yourself.
@@ -39,7 +39,7 @@ push_to_github <- FALSE
 user <- Sys.info()[["user"]]
 
 if (user == "admin") {                                   # Nandita
-  exercise_dir <- "/Users/admin/Desktop/DIL/a-ww-datatrack2026/exercises/overleaf_exercise"
+  exercise_dir <- "/Users/admin/Desktop/DIL/a-ww-datatrack2026/exercises/session5/exercise1b"
   overleaf_dir <- "/Users/admin/Desktop/DIL/ww-datatrack-gitoverleaf"
 } else if (user == "") {                                 # YOU
   exercise_dir <- ""
