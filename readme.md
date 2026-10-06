@@ -19,7 +19,7 @@ Teaching repository for the DIL Welcome Week "Data Ingestion, Cleaning & Tidying
 2. Toggle the `import` / `deidentify` / `tidy` / `clean` locals at the top of the file to `1` for the stages you want to run.
 3. Run `main.do`. It sets `adopath` to the project's `code/ado` folder (so the user-written commands below are found without an internet install) and calls the scripts in [code/](code) in sequence.
 
-Note: `04-codebook-verify.do`, the last step `main.do` runs, is stale relative to the rest of the pipeline (it targets files/variables from an earlier version of this exercise) and will not run successfully as-is — see [Known inconsistencies](#known-inconsistencies).
+Note: the pipeline currently has no final QA/verification step — the earlier `04-codebook-verify.do` (an HFC-readiness check) has been removed. See [Known inconsistencies](#known-inconsistencies).
 
 ### Software requirements
 
@@ -44,10 +44,6 @@ data/tidy/household-tidy.dta          data/tidy/child-tidy.dta
 data/clean/household-clean.dta        data/clean/child-clean.dta
 documentation/data-dictionaries/      documentation/data-dictionaries/
   household-clean.xlsx                  child-clean.xlsx
-        │                                     │
-        └───────────────────┬─────────────────┘
-                             ▼  04-codebook-verify.do
-              Excel codebook + HFC-readiness checks (console output)
 ```
 
 ## Description of programs/code
@@ -86,13 +82,7 @@ All paths below are relative to [code/](code).
 ### [5-clean-child.do](code/5-clean-child.do)
 - **Input:** `data/tidy/child-tidy.dta`.
 - **Task:** Labels the child-level variables (`child_age`, `diarrhea_2d`, `diarrhea_7d`) and the `key`/`child_index` ID pair.
-- **Output:** `data/clean/child-clean.dta` + `data/clean/child-clean.md` report, and a mini-codebook exported to `documentation/data-dictionaries/child-clean.xlsx`. *(Not present as of this writing — either not yet run, or its outputs weren't committed; see [Known inconsistencies](#known-inconsistencies).)*
-
-### [04-codebook-verify.do](code/04-codebook-verify.do)
-- **Input (as currently written):** `data/clean/households.dta` and `data/clean/containers.dta`.
-- **Task:** Intended as the pipeline's final QA gate — exports a one-row-per-variable mini codebook to Excel, then runs an "HFC-readiness check": expected row count, no leftover PII columns, unique row key, harmonized Yes/No values, `chlorine_mgl` numeric, and a uniquely-identified container table.
-- **Output:** Excel codebook at `${codebook_excel}` (global not defined anywhere in this repo) + pass/fail messages printed to the console.
-- **Status:** stale relative to the rest of the pipeline — see [Known inconsistencies](#known-inconsistencies).
+- **Output:** `data/clean/child-clean.dta` + `data/clean/child-clean.md` report, and a mini-codebook exported to `documentation/data-dictionaries/child-clean.xlsx`.
 
 ### [4-clean.do](code/4-clean.do)
 Not called from `main.do`. Its first 145 lines duplicate `4-clean-household.do`, followed by an unreachable `exit` and leftover teaching-exercise stubs (`households.dta`, `containers.dta`, `chlorine_mgl`, `treats_water`, ...) from an earlier version of this exercise. Looks like a superseded draft left in the repo by accident rather than an active pipeline step.
@@ -120,7 +110,7 @@ Not called from `main.do`. Its first 145 lines duplicate `4-clean-household.do`,
 | Data set | Location | Unit of observation | Key | Main variables | Created by |
 |---|---|---|---|---|---|
 | Household clean | `data/clean/household-clean.dta` (+ codebook at `documentation/data-dictionaries/household-clean.xlsx`) | Household | `key` | Respondent demographics, water source, storage practices, treatment behavior, perceived safety/satisfaction | `4-clean-household.do` |
-| Child clean | `data/clean/child-clean.dta` (+ codebook at `documentation/data-dictionaries/child-clean.xlsx`) | Household-child | `key`, `child_index` | Child age, diarrhea in past 2/7 days | `5-clean-child.do` (outputs not yet present) |
+| Child clean | `data/clean/child-clean.dta` (+ codebook at `documentation/data-dictionaries/child-clean.xlsx`) | Household-child | `key`, `child_index` | Child age, diarrhea in past 2/7 days | `5-clean-child.do` |
 
 ## Exercises
 
@@ -143,7 +133,7 @@ Hands-on exercises live in [exercises/](exercises), in one folder per session (`
 
 ## Known inconsistencies
 
-The scripts were adapted from an older version of this teaching exercise (built around a differently-named "chlorine testing" dataset with `households.dta`/`containers.dta`/`submission_id`) to the current `household_water_questionnaire` data (`household-tidy.dta`/`child-tidy.dta`, keyed by `key`). That migration is incomplete:
+The scripts were adapted from an older version of this teaching exercise (built around a differently-named "chlorine testing" dataset with `households.dta`/`containers.dta`/`submission_id`) to the current `household_water_questionnaire` data (`household-tidy.dta`/`child-tidy.dta`, keyed by `key`). Most of that migration is now complete — `1-import.do` → `2-deidentify.do` → `3-tidy.do` → `4-clean-household.do` → `5-clean-child.do` all run against the current data, and the stale `04-codebook-verify.do` (which still targeted the old schema) has been removed rather than fixed. What's left:
 
 - **`04-codebook-verify.do` still targets the old schema** (`households.dta`, `containers.dta`, `submission_id`, `chlorine_mgl`, `treats_water`, `tested_this_morning`, `water_safe_yn`) instead of the files/variables the current pipeline actually produces (`household-clean.dta`, `child-clean.dta`, `key`, `water_safety`, `hh_watersource`, ...). It won't run successfully against current outputs without a rewrite, and it also references an undefined global, `${codebook_excel}`.
 - **`4-clean.do` is very likely dead code** — a pre-migration draft of `4-clean-household.do`, not referenced by `main.do`, containing an unreachable `exit` followed by exercise stubs for variables that don't exist in this dataset.
@@ -154,6 +144,10 @@ The scripts were adapted from an older version of this teaching exercise (built 
 - **`.Rprofile` sources `renv/activate.R`, but the repository has no `renv/` folder**, so starting R from the repository root (e.g. opening it as an RStudio project) prints an error. Either add the renv setup or remove the line.
 
 If you pick this pipeline back up: treat `1-import.do` → `2-deidentify.do` → `3-tidy.do` → `4-clean-household.do` → `5-clean-child.do` as the source of truth, and rewrite `04-codebook-verify.do` to match before relying on it.
+
+- **There is no QA/verification step.** With `04-codebook-verify.do` gone, nothing in the pipeline checks that `household-clean.dta`/`child-clean.dta` have the right row counts, no leftover PII, or fully-applied labels before they'd be handed off to an HFC session. If this pipeline is picked back up, a replacement check (rewritten against `key`, `household-clean.dta`, `child-clean.dta`, etc.) would need to be added.
+- **`4-clean.do` is very likely dead code** — a pre-migration draft of `4-clean-household.do`, not referenced by `main.do`, containing an unreachable `exit` followed by exercise stubs for variables (`households.dta`, `containers.dta`, `chlorine_mgl`, `treats_water`, ...) that don't exist in this dataset. Consider deleting it, the same way `04-codebook-verify.do` was.
+- **`main.do`'s step numbering skips 4.4** — section 4 goes `4.1 Import`, `4.2 Deidentify`, `4.3 Tidy`, `4.5 Cleaning` (with `4.5.1`/`4.5.2` for household/child). Cosmetic only, but worth tidying up next time `main.do` is touched.
 
 ## Repository structure
 

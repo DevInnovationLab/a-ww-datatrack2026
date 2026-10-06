@@ -50,6 +50,7 @@ David Torres Leon – Data Manager
 So your value is everything the code can't do:
 - Knowing what the data *should* look like
 - Deciding what to show
+- Showing your work so your PI can give feedback
 - Judging whether you believe a number
 - Explaining it to your PI
 
@@ -57,6 +58,7 @@ So your value is everything the code can't do:
 > - **The motivation:** when it comes to coding, analysis is the easy part, and AI now writes that code in seconds. That doesn't make the RA's job smaller. It moves the value to the parts that need human judgement, and we have to get better at them. Every principle today is one of those parts:
 >   - **Knowing what the data should look like** → the danger zone and the construction checks (section 01)
 >   - **Deciding what to show** → exploratory reports, where content matters more than form (section 02)
+>   - **Showing your work so your PI can give feedback** → an exploratory report that is easy to update and puts exhibits, text and code in one place, so the PI can comment on the results and check the code if needed (section 02)
 >   - **Catching what runs but is wrong** → silent bugs in analysis code (section 03)
 >   - **Judging and explaining results** → from result to PI (section 04)
 
@@ -66,7 +68,7 @@ So your value is everything the code can't do:
 
 - Spot where construction goes wrong: joins, unit changes, aggregation, lags
 - Write code that stops loudly when the data isn't what you expect
-- Build an exploratory report that re-renders in one command
+- Build an exploratory report that's easy to update: exhibits, text and code in one place, so your PI can see what you did, give feedback on the results, and check the code if needed
 - Avoid silent errors in analysis code
 - Judge results before you share them, and keep your PIs informed
 
@@ -229,15 +231,15 @@ NEVER USE `merge m:m`
 
 Your AI assistant wrote this script. It runs without errors. **It is wrong in five places.**
 
-1. Run it. Does anything look implausible?
+1. Run it. Does anything look wrong? (It may not.)
 2. Find at least **two** bugs
 3. Add **one assertion** per bug that would have stopped the script
 
 **Success = writing the checks, not finding all five.**
 
 > **Notes:**
-> - **The packet:** `hh_roster.csv`, `hh_survey.csv` (two survey rounds), and a construction script in both flavors, `01_construct.do` and `01_construct.R`. The script produces a village-level water-use indicator and its change since the last round.
-> - Each bug matches one of the four dangerous steps. Assertions: `assert` in Stata, `assertthat::assert_that()` in R.
+> - **The packet:** the course's clean data (`households.csv`, one row per submission; `children.csv`, one row per child under 5) and a construction script in both flavors, `01_construct.do` and `01_construct.R`. The script produces three village-level indicators: the share of households with a child with diarrhoea in the past 7 days, days per week water is treated, and hours water has been stored.
+> - The bugs aren't planted: they come from problems the clean data really has. They sit in three of the four dangerous steps (joining, changing units, aggregating). There's no panel, so no lag bug; slide 11 covers lags. Assertions: `assert` in Stata, `assertthat::assert_that()` in R.
 > - Framing: reviewing code an AI wrote is now the realistic version of this task. The script looks clean and well commented, which is the point: plausible code with silent bugs.
 > - *Stretch 1:* ask your AI assistant to review the script, then compare what it found with what you found. Which bugs did it miss? Did it flag anything that wasn't a bug?
 > - *Stretch 2:* write the data-dictionary entry for the corrected indicator (name, definition, unit, decisions made).
@@ -248,20 +250,21 @@ Your AI assistant wrote this script. It runs without errors. **It is wrong in fi
 
 | Bug | Step | Check |
 |---|---|---|
-| **Duplicated key** in the merge | Joining | `isid`, then `assert _N` |
-| **False zeros** after the collapse | Changing units | Count non-missing obs |
-| **Mixed units** (gallons) | Aggregating | Assert a plausible range |
-| **`-99` codes** in the total | Aggregating | Recode, then assert ≥ 0 |
-| **Lag across households** | Lags | Lag within unit; assert round 1 missing |
+| **Joined on `hh_id`**, which isn't unique | Joining | `isid`, then `assert _N` |
+| **Skipped question** read as missing | Missing values | Construct it from the skip pattern |
+| **Households without children** become 0 | Changing units | Count non-missing obs |
+| **Chlorine + boiling days** add up past 7 | Aggregating | Assert a plausible range |
+| **"More than 72 hours" = 99** in the mean | Aggregating | Assert the range; recode the code |
 
 > **Notes:**
-> - **Duplicated key:** the survey is merged onto the roster with `m:m`. Fix: `isid hh_id` in the survey file, `merge 1:m`, then `assert _N == <expected>`. R: `left_join(..., relationship = "one-to-many")`.
-> - **False zeros:** `collapse (sum)` turns an all-missing village into 0. Fix: count non-missing obs in the collapse, then `replace water_lpd = . if n_obs == 0`. R: `sum(x, na.rm = TRUE)` also returns 0 for an all-`NA` group.
-> - **Mixed units:** one enumerator logged gallons. Check: `assert inrange(water_lpd, 0, 500) if !missing(water_lpd)`. R: `assert_that(all(hh$water_lpd <= 500, na.rm = TRUE))`.
-> - **Missing codes:** `mvdecode water_*, mv(-99 = .a)`, then `assert water_lpd >= 0 if !missing(water_lpd)`.
-> - **Lag across households:** the previous round's value is taken from the row above without grouping by household. Fix: `xtset hh_id round`, use `L.water_lpd`, then `assert missing(L.water_lpd) if round == 1`. R: `group_by(hh_id) %>% arrange(round) %>% mutate(water_lag = lag(water_lpd))`.
+> - Most of these aren't data errors: they're correct answers read the wrong way. Fixing them moves the diarrhoea indicator from about 16% to about 36% of households with children.
+> - **Joined on `hh_id`:** six `hh_id` values have two submissions each, so `joinby hh_id` (R: `relationship = "many-to-many"`, added to silence dplyr's warning) attaches each pair's children to both. Check: `isid hh_id` fails. Fix: join on `key`, the submission ID, with `merge m:1 key`, and `assert _N == 1587` children. Which of the two submissions counts is for the HFC session.
+> - **Skipped question:** G4 (diarrhoea, 7 days) was only asked when G3 (48 hours) was no, so 165 children who had diarrhoea in the past 48 hours have no G4 answer, and the sum skips them. Fix: a new variable that is 1 when G3 = yes, then `assert !missing(diarrhea_7d_all)`. This is the "missing is not zero" rule: a question that wasn't asked has an answer you can construct.
+> - **Households without children:** 314 consenting households have no child under 5. After the join, `collapse (sum)` (R: `sum(na.rm = TRUE)`) gives them 0 children with diarrhoea, so they count as "no" and dilute the share. Fix: count children per household and leave the indicator missing when there are none; `assert missing(hh_diarrhea) if missing(n_children)`.
+> - **Chlorine + boiling days:** E1 and E2 are separate questions, so a day with both is counted twice: 383 households add up to more than 7 days. `rowtotal()` also turns the 39 non-consenting households into 0 days. Check: `assert inrange(treat_chlorine + treat_boil, 0, 7)`. The overlap can't be recovered, so the fix is a different indicator (treated at least once in the past 7 days): a research decision.
+> - **99 = "more than 72 hours":** D6 is in hours except for this code, so 70 households enter the mean as 99 hours. Check: `assert storage_time <= 72 if !missing(storage_time)`. A mean can't use a "more than" answer, so the fix is again a new indicator (water stored more than 24 hours).
+> - The data also has values outside the questionnaire's range (12 days of chlorine, 400 hours of storage). Keep them and assert that they're the only ones: fixing values is for the HFC session.
 > - This closes the dangerous-steps block; the best-practices slides that follow generalise the checks they just wrote.
-
 ---
 
 ## Slide 14 — Best practices · 1 min

@@ -7,11 +7,13 @@
   Updated:  6 October 2026
 
   Inputs:   ${data_box}/11-tidy/112-tidy-child.dta
+            ${data_box}/12-clean/121-household-clean.dta  (run 2131 first)
   Outputs:  ${data_box}/12-clean/122-child-clean.dta
             ${data_git}/12-clean/122-child-clean.md  (iesave report)
 
-  Summary:  Brings the child table (Section G, one row per child) to
-            analysis-ready format without changing any values: turns the
+  Summary:  Keeps children of consenting submissions only, then brings the
+            child table (Section G, one row per child) to analysis-ready
+            format without changing any values: turns the
             special missing codes into extended missing values, attaches the
             Yes/No value label, adds variable labels from the questionnaire,
             and checks that no special missing codes or unlabeled variables
@@ -19,11 +21,15 @@
 
   Notes:    - -999 (Don't know) -> .d and -888 (Declined) -> .r, same as the
               household table.
-            - hh_id, village_id and enumerator are carried over from the
-              household table by 212-tidy.do, so they are labeled here too
-              (same labels as 2131-clean-household.do).
+            - The child table keeps only key from the household: household
+              variables (hh_id, village_id, ...) come from the household
+              table by merging on key.
             - Variable labels and question codes come from
-              4-documentation/Household_Water_Questionnaire.docx.
+              4-documentation/Household_Water_Questionnaire.md.
+            - Children are kept only if their submission is in the clean
+              household data, which has consenting submissions only. 2
+              children belong to non-consenting submissions (a skip-pattern
+              violation) and are dropped. Decision: L. Andrade, 7 October 2026.
             - G4 is only asked if G3 = No, so diarrhea_7d is blank by design
               for children with diarrhea in the past 48 hours. Skip-pattern
               violations are left as they are, for the HFC session.
@@ -31,14 +37,32 @@
 
 	use "${data_box}/11-tidy/112-tidy-child.dta", clear
 
-* (a) Special codes -> extended missing values, in every numeric variable:
+* (a) Keep children of consenting submissions only. The clean household data
+*     has consenting submissions only, so match on its key:
+
+	assert _N == 1587
+
+	preserve
+		use key using "${data_box}/12-clean/121-household-clean.dta", clear
+		tempfile consented
+		save `consented'
+	restore
+
+	merge m:1 key using `consented', keep(master match)
+	count if _merge == 1
+	assert r(N) == 2
+	keep if _merge == 3
+	drop _merge
+	assert _N == 1585
+
+* (b) Special codes -> extended missing values, in every numeric variable:
 
 	ds, has(type numeric)
 	foreach var of varlist `r(varlist)' {
 		quietly recode `var' (-999 = .d) (-888 = .r)
 	}
 
-* (b) Value labels. The form's choice list, plus the extended missing codes:
+* (c) Value labels. The form's choice list, plus the extended missing codes:
 
 	lab def yesno       	1    "Yes" ///
 							0    "No", replace
@@ -50,19 +74,16 @@
 
 	lab val diarrhea_2d diarrhea_7d yesno
 
-* (c) Variable labels: the question number + a short version of the wording.
+* (d) Variable labels: the question number + a short version of the wording.
 *     Metadata variables that are not survey questions get no code:
 
 	lab var key              	"SurveyCTO submission ID (unique row ID)"
 	lab var child_index         "Child number in the roster (G)"
-	lab var hh_id            	"A2. Household ID"
-	lab var village_id       	"A3. Village"
-	lab var enumerator       	"Enumerator ID"
 	lab var child_age        	"G2. Child's age (months)"
 	lab var diarrhea_2d      	"G3. Diarrhoea in the past 48 hours"
 	lab var diarrhea_7d      	"G4. Diarrhoea in the past 7 days"
 
-* (d) Check: no pre-listed missing codes left in the data.
+* (e) Check: no pre-listed missing codes left in the data.
 
 	ds, has(type numeric)
 	foreach var of varlist `r(varlist)' {

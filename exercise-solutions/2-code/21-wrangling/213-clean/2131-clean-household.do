@@ -10,8 +10,9 @@
   Outputs:  ${data_box}/12-clean/121-household-clean.dta
             ${data_git}/12-clean/121-household-clean.md  (iesave report)
 
-  Summary:  Brings the household table to analysis-ready format without
-            changing any values: turns the special missing codes into
+  Summary:  Keeps consenting submissions only, then brings the household
+            table to analysis-ready format without changing any values:
+            turns the special missing codes into
             extended missing values, attaches value labels from the form's
             choice lists, adds variable labels from the questionnaire, and
             checks that no special missing codes or unlabeled variables are
@@ -22,21 +23,31 @@
             - storage_time is hours (0-72), but 99 is a code for "more than
               72 hours" (D6), so it gets a value label.
             - Variable labels and question codes come from
-              4-documentation/Household_Water_Questionnaire.docx.
+              4-documentation/Household_Water_Questionnaire.md.
+            - Non-consenting submissions (39) are dropped: the interview
+              ended at B1, so there is nothing to analyse. 3 of them have
+              answers after B1 (a skip-pattern violation) and are dropped
+              too. Decision: L. Andrade, 7 October 2026.
             - Duplicates, outliers and skip-pattern violations are left as
               they are, for the HFC session.
 *******************************************************************************/
 
 	use "${data_box}/11-tidy/111-tidy-household.dta", clear
 
-* (a) Special codes -> extended missing values, in every numeric variable:
+* (a) Keep consenting submissions only:
+
+	assert _N == 1293
+	keep if consent == 1
+	assert _N == 1254
+
+* (b) Special codes -> extended missing values, in every numeric variable:
 
 	ds, has(type numeric)
 	foreach var of varlist `r(varlist)' {
 		quietly recode `var' (-999 = .d) (-888 = .r)
 	}
 
-* (b) Value labels. The form's choice lists, defined once:
+* (c) Value labels. The form's choice lists, defined once:
 
 	lab def yesno       	1    "Yes" ///
 							0    "No"
@@ -85,7 +96,7 @@
 	lab val water_safety       safety
 	lab val water_satisfaction satisfaction
 
-* (c) Variable labels: the question number + a short version of the wording.
+* (d) Variable labels: the question number + a short version of the wording.
 *     Metadata variables that are not survey questions get no code:
 
 	lab var hh_id            	"A2. Household ID"
@@ -118,7 +129,7 @@
 	lab var water_safety       	"F1. Perceived safety of drinking water"
 	lab var water_satisfaction 	"F2. Satisfaction with water quality"
 
-* (d) Check: no pre-listed missing codes left in the data. -666 "Other" is a
+* (e) Check: no pre-listed missing codes left in the data. -666 "Other" is a
 *     real answer and stays, so only -999 and -888 are checked.
 
 	ds, has(type numeric)
