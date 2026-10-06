@@ -1,6 +1,6 @@
 # Data Session 5 — Publication: reports & replicability
 
-**Slide content, 90-minute session** (slides add up to 92 minutes) · first draft · follows `session4_session5_split_plan.md` and builds on `session4_slide_content.md`
+**Slide content, 90-minute session** (slides add up to 104 minutes, including the 12-minute Overleaf exercise on slide 23b) · first draft · follows `session4_session5_split_plan.md` and builds on `session4_slide_content.md`
 
 - **Header on every slide:** PUBLICATION: REPORTS & REPLICABILITY
 - **Footer:** Development Innovation Lab / University of Chicago · Publication: Reports & Replicability
@@ -10,21 +10,24 @@
 ## To-dos
 
 - [ ] **Start with a motivation slide**, as in Session 4's "Why this session": open with why reproducibility and publication-ready outputs matter, ideally a real story, before the objectives.
-- [ ] **Harmonize Exercise 1 with Session 4.** Session 4 now ends with an R/Quarto exploratory report (Exercise 2) and no longer has the GitHub → Overleaf exercise; that content moved here (slide 23). Session 4 has no regression exercise. This draft makes Exercise 1 start from that report and supply the model in the packet. Check that it doesn't feel like a repeat of Session 4.
+- [ ] **Harmonize Exercise 1 with Session 4.** Session 4 now ends with an R Markdown exploratory report (Exercise 2), followed by a 3-minute GitHub → Overleaf demo (Session 4 slide 19c); the hands-on version is here (slides 23 and 23b). Session 4 has no regression exercise. This draft makes Exercise 1 start from that report and supply the model in the packet. Check that it doesn't feel like a repeat of Session 4.
 - [ ] **Decide the language for the exercises.** Session 4's report exercises are R-only. S5 v2 ran Exercise 1 with Stata chunks, and the replicability snippet is in Stata. This draft uses R for Exercise 1 and keeps the Stata snippet, with Stata notes where useful.
 - [ ] **Replace the placeholder script** on "What reproducible code looks like" with a real DIL snippet (the draft below is illustrative).
-- [ ] **Fit to time:** the slides add up to 92 minutes for a 90-minute session, with no buffer: slide 23 (moved from Session 4) added 2 minutes. If you run behind, cut Part 05 (replication package), never Exercise 2.
+- [ ] **Fit to time:** the slides add up to 104 minutes for a 90-minute session, with no buffer: slide 23 (moved from Session 4) added 2 minutes and the Overleaf exercise (slide 23b) 12. If you run behind, cut Part 05 (replication package), never Exercise 2.
 - [ ] **Check presenter notes that don't match the expected time.** At about 130 spoken words a minute, these notes are too long for their slide: 33 So: should a model run this checklist? (225 words, 1 min), 20 One source, two outputs, then a report (158, 1 min), 23 Outputs that update themselves (299, 2 min), 30 The DIL paper-submission checklist (146, 1 min). Trim the notes or give the slides more time.
-- [ ] **Decide how much GitHub → Overleaf practice to include.** Session 4's hands-on exercise (export the descriptives, push, `\input` in Overleaf, flip the switch and recompile; 10 min) was cut and can be recovered from git history. Right now it only appears here as slide 23 and the Exercise 1 stretch.
-- [ ] Pre-create each pair's GitHub repo and linked Overleaf project (the Overleaf licence covers GitHub sync) — moved from Session 4
-- [ ] Pre-work email: ask participants to create a GitHub account and an Overleaf account, send us both usernames, and install git (or GitHub Desktop) — moved from Session 4's pre-work email
+- [x] **Decide how much GitHub → Overleaf practice to include.** Decided: a standalone exercise (slide 23b, 12 min in session) in `exercises/overleaf_exercise/`, shared with participants as is: instructions, data, Stata and R scripts, and the Overleaf project. Participants set their paths to their own Overleaf clone, run, push and pull, then flip `last_week_only` and rerun. Session 4 shows it as a demo (Session 4 slide 19c). Facilitator notes: `exercises/facilitator/overleaf_exercise_notes.md`.
+- [ ] **Session 4's Exercise 2 is now R Markdown** (`explore_exercise/report.Rmd`, rendered with `rmarkdown::render`), not Quarto. Exercise 1 here still says `report.qmd` and Quarto: align the format (and the pre-work) before building Part A's materials.
+- [ ] **Fit to time after adding slide 23b:** it adds 12 minutes (about 104 for 90). Cut Part 05 (replication package) first, as the to-do above suggests, and decide what else goes.
+- [ ] **Pre-work email:** ask participants to create a GitHub account and an Overleaf account (with GitHub sync), install GitHub Desktop, download `exercises/overleaf_exercise/`, and do steps 1–3 of its `README.txt` (upload `overleaf.zip` to Overleaf, sync it to GitHub, clone it with GitHub Desktop), so the session time is only steps 4–5.
+- [x] ~~Pre-create each pair's GitHub repo and linked Overleaf project~~ — no longer needed: participants create their own in the pre-work (steps 1–3 of the exercise README). Still confirm the Overleaf licence covers GitHub sync for everyone.
+- [x] ~~Pre-work email: GitHub and Overleaf accounts, git or GitHub Desktop~~ — merged into the pre-work email to-do above (no usernames needed now: participants create their own repositories)
 - [ ] **Carried over from S5 v2:**
   - [ ] Confirm Sneha's surname and title, and agree the presenter split
   - [ ] Exhibit skill: ask Sneha for her workflow; decide whether to demo it or present it as coming (owners: David and Sneha)
   - [ ] Fold section 8 (compare to the PAP) and the deviations table into the published submission guide (owner: David, reviewer: Witold)
   - [ ] Confirm the paper-submission-check skill loads in Claude Desktop, and decide on a 60-second demo
   - [ ] Pick the two replication packages to open live, and check the URLs the morning of
-  - [ ] Distribute `report_exercise/` and `PAP_checklist_exercise/` before the session; everyone signed in to Claude Desktop
+  - [ ] Distribute `report_exercise/`, `PAP_checklist_exercise/` and `overleaf_exercise/` before the session; everyone signed in to Claude Desktop
 
 ---
 
@@ -407,7 +410,7 @@ One source, one report your code writes for you
 > - **Polish** means the self-standing checklist from slide 10: N per column, control mean, notes on the sample and specification, a caption that says what to conclude. AI can do the formatting; the content decisions are theirs.
 > - **The planted faults** (in `facilitator/FACILITATOR_NOTES.md`): the memo says the non-response rate is 3.6 percent and the data say 3.83; the claim "take-up is well above what we assumed at design stage" has no source at all. Watch for pairs who "fix" their code to match the memo: that instinct is what the session is trying to break, and it's worth naming out loud.
 > - **Prep:** `report_exercise/` distributed, Quarto installed, the data file opens in R. Test the render yourself the week before: a broken install eats the whole block.
-> - **Stretch:** push the exported table and figure to your pair's GitHub repo, and pull them into the linked Overleaf report (see the next slide).
+> - **Stretch:** push the exported table and figure to your GitHub repo and pull them into Overleaf: that is the Overleaf exercise on slide 23b.
 
 ---
 
@@ -444,7 +447,76 @@ One source, one report your code writes for you
 > - **How the link works:** an Overleaf project is linked to a GitHub repository (Overleaf menu → GitHub → sync, or create the project via *Import from GitHub*). Changes come in with *Pull GitHub changes into Overleaf*; edits made in Overleaf go back with *Push Overleaf changes to GitHub*.
 > - **Access:** GitHub sync is an Overleaf premium feature; it's covered by the licence participants use. If someone's account isn't linked on the day, they can follow along on the facilitator's project on screen.
 > - Why Overleaf for this: it's where many PIs already read and comment, and a shared project means they always see the latest results without you emailing PDFs.
-> - Moved from Session 4, which now covers only the Quarto report. This is the step from the exploratory report to one the PI reads: the exhibits polished in Exercise 1 go through the same pipeline.
+> - Session 4 showed this as a 3-minute demo (its slide 19c). Here participants do it themselves in the exercise that follows (slide 23b), with their own Overleaf project.
+
+---
+
+## Slide 23b — EXERCISE · Results that update themselves in Overleaf · 12 min (paths and first run 6 · flag 4 · debrief 2) **(new)**
+
+*Individually or in pairs · `overleaf_exercise/` · Stata (`stata/main.do`) or R (`R/main.R`)*
+
+*Before the session: your Overleaf project is synced with GitHub and cloned on your computer (README steps 1–3)*
+
+1. **Set your paths** to this folder and to your Overleaf clone (next slide)
+2. **Run, push, pull** in Overleaf, recompile
+3. **Change the flag:** `last_week_only` on. Run, push, pull, recompile
+
+**Every number in the PDF changes. Nobody typed one.**
+
+> **Notes:**
+> - The folder is self-contained: `README.txt` (all steps, both languages), `data/` (the clean household and child data, ready to use: no raw data or prep code), `stata/` and `R/` (same logic, identical output files), `overleaf/` and `overleaf.zip` (the PI update, which only `\input`s `tables/numbers.tex`, Table 1 and Figure 1).
+> - With the flag off the report covers 1,293 households visited and 1,254 interviewed; on, 452 and 445, from 14 to 20 July. Full expected numbers: `exercises/facilitator/overleaf_exercise_notes.md`.
+> - Most common problem: a wrong path to the clone. GitHub Desktop → *Repository → Show in Finder* gives the real one.
+> - R users can push from R (`push_to_github <- TRUE`); everyone else uses GitHub Desktop.
+> - Without GitHub sync on their Overleaf account, participants run with the folder's own `overleaf/` and upload the three files by hand.
+
+---
+
+## Slide 23c — The lines you change: Stata or R · *(part of the 12 min)* **(new)**
+
+<!-- columns -->
+
+**Stata · `stata/main.do`**
+
+```stata
+* Section 1: the switch (0 first, then 1)
+global last_week_only 0
+
+* Section 2: copy Nandita's block for yourself
+else if "`c(username)'" == "yourname" {
+    global ex           "/path/to/overleaf_exercise"
+    global report_clone "/path/to/your/overleaf/clone"
+}
+```
+
+Run: **Do** (Ctrl/Cmd+D) on the whole file
+
+<!-- next column -->
+
+**R · `R/main.R`**
+
+```r
+# Section 1: the switch (FALSE first, then TRUE)
+last_week_only <- FALSE
+
+# Section 2: copy Nandita's block for yourself
+} else if (user == "yourname") {
+  exercise_dir <- "/path/to/overleaf_exercise"
+  overleaf_dir <- "/path/to/your/overleaf/clone"
+}
+```
+
+Run: **Source** (Ctrl/Cmd+Shift+S) on the whole file
+
+<!-- end columns -->
+
+**Your username:** `di c(username)` in Stata · `Sys.info()[["user"]]` in R · **Your clone's path:** GitHub Desktop → *Repository → Show in Finder*
+
+> **Notes:**
+> - Leave this up while people work: it is the only code anyone edits. Both versions write the same three files, so the rest of the exercise (push, pull, recompile) is identical.
+> - Nobody needs to read or change `2-export-outputs`. If someone asks what it does: it reads the clean data in `data/` and writes `numbers.tex`, Table 1 and Figure 1 into the clone.
+> - Windows paths: use forward slashes (`C:/Users/...`) in both Stata and R.
+> - R users can set `push_to_github <- TRUE` (section 1 of `main.R`) to commit and push from R; everyone else uses GitHub Desktop.
 
 ---
 
