@@ -9,6 +9,25 @@ github.com/DevInnovationLab/trainings-public/tree/main/rp-workshop
 maroon, maroon section dividers, gold exercise slides.
 The page adds a review panel with each slide's timing, flags and speaker
 notes. Re-run the script after editing the markdown.
+
+Slide types, from the "## Slide N — <title> · <timing>" headings:
+  Title, Section divider        special layouts
+  EXERCISE ... / SPOT THE ...   gold background (participants work)
+  DEMO ...                      light-gold background (facilitator on screen,
+                                e.g. slide 19c, the GitHub -> Overleaf demo)
+  ... solved / ... revealed     solution slide: "SOLUTION" tag, compact code
+                                and tables (e.g. 13 Five bugs, revealed;
+                                19b Exercise 2, solved)
+  anything else                 regular content slide
+Slide labels can carry a letter suffix (e.g. "Slide 19a") for slides
+inserted between existing ones.
+
+Two columns (e.g. Stata next to R): put these HTML comments on their own
+lines, with blank lines around them. They are invisible when the markdown is
+read as plain text.
+  <!-- columns -->      ...left column...
+  <!-- next column -->  ...right column...
+  <!-- end columns -->
 """
 
 import base64
@@ -112,9 +131,22 @@ def inline(md):
     return s
 
 
+def columns(md):
+    """Turn the column markers into a two-column grid (see the docstring)."""
+    md = md.replace("<!-- columns -->", '<div class="cols"><div class="col">\n')
+    md = md.replace("<!-- next column -->", '\n</div><div class="col">\n')
+    return md.replace("<!-- end columns -->", "\n</div></div>")
+
+
 def build():
     todos, slides = split_slides(SRC.read_text())
-    logo = base64.b64encode(LOGO.read_bytes()).decode()
+    if LOGO.exists():
+        logo_html = ('<img class="logo" src="data:image/svg+xml;base64,'
+                     f'{base64.b64encode(LOGO.read_bytes()).decode()}" alt="DIL logo">')
+    else:
+        print(f"Note: {LOGO} not found; the title slide shows text instead of the logo.")
+        logo_html = '<p class="logo-text">Development Innovation Lab</p>'
+
     sections, clock = [], 0.0
     for heading, body in slides:
         label, title, timing, flags = parse_heading(heading)
@@ -132,7 +164,7 @@ def build():
                     if l not in (kicker, sub) and not l.startswith("# ")]
             parts = [
                 f'<section class="title-slide"{attrs}>',
-                f'<img class="logo" src="data:image/svg+xml;base64,{logo}" alt="DIL logo">',
+                logo_html,
             ]
             if kicker:
                 parts.append(f'<p class="kicker">{inline(kicker)}</p>')
@@ -154,10 +186,15 @@ def build():
                 + '</section>')
         else:
             is_ex = bool(re.match(r"^(EXERCISE|SPOT THE)", title))
+            is_demo = title.startswith("DEMO")
             cls = ' data-background="#faa319" class="exercise"' if is_ex else ""
+            if is_demo:
+                cls = ' data-background="#fde8c2" class="demo"'
+            if re.search(r"\b(solved|revealed)\b", title, re.I):
+                cls = ' class="solution"'
             if label.startswith("Appendix"):
                 cls = ' class="appendix"'
-            md = f"## {title}\n\n{content}"
+            md = f"## {title}\n\n{columns(content)}"
             sections.append(md_section(md, notes, cls + attrs))
 
     todo_md = "## Draft to-dos\n\n" + "\n".join(todos).strip()
@@ -247,6 +284,7 @@ html, body { margin: 0; height: 100%; background: #d9d9d9; }
 .hide-chrome .chrome { display: none; }
 .reveal .slides section.title-slide { text-align: left; }
 .title-slide .logo { width: 300px; margin: 0 0 30px; }
+.title-slide .logo-text { font-family: var(--r-heading-font); color: #80001E; font-size: .7em; margin: 0 0 30px; }
 .title-slide .kicker { font-size: .5em; letter-spacing: .08em; color: #80001E; }
 .title-slide .subtitle { font-size: .8em; }
 .title-slide .byline { font-size: .55em; margin: 4px 0; }
@@ -254,6 +292,17 @@ html, body { margin: 0; height: 100%; background: #d9d9d9; }
 .reveal .divider h2 { color: #fff; font-size: 2em; }
 .divider .divider-sub { color: #fff; font-size: .8em; margin: 6px 0; opacity: .9; }
 .reveal .exercise h2 { color: #222; }
+.reveal .demo h2 { color: #80001E; }
+.reveal .solution h2::after { content: "SOLUTION"; margin-left: .6em; vertical-align: middle; font: 700 .32em "Open Sans", sans-serif; letter-spacing: .1em; color: #fff; background: #2e7d32; padding: .25em .6em; border-radius: 3px; }
+.reveal .solution p { margin: 8px 0 4px; }
+.reveal .solution pre { font-size: .5em; margin: 4px 0 10px; }
+.reveal .solution pre code { max-height: none; padding: 6px 12px; }
+.reveal .solution table { font-size: .68em; }
+.reveal .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: start; }
+.reveal .cols p { margin: 8px 0; }
+.reveal .cols pre { font-size: .62em; margin: 6px 0; }
+.reveal .cols pre code { max-height: none; }
+.reveal .demo p:first-of-type em { color: #80001E; font-weight: 700; font-style: normal; letter-spacing: .02em; }
 .reveal .exercise, .reveal .exercise table th, .reveal .exercise table td { color: #222; }
 .reveal .todos { font-size: .6em; }
 .reveal .todos ul { list-style: none; margin: 0; }
