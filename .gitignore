@@ -97,6 +97,8 @@
 !exercises/session*/exercise*.zip
 # ...and the plain-text instructions shipped with each exercise
 !exercises/**/README.txt
+# ...and the codebooks shipped with them
+!exercises/**/codebook.txt
 # ...but not the HTML that knitting the R Markdown exercises leaves behind
 exercises/session*/**/*.html
 exercises/facilitator/*.html

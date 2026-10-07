@@ -116,6 +116,12 @@ Not called from `main.do`. Its first 145 lines duplicate `4-clean-household.do`,
 
 Hands-on exercises live in [exercises/](exercises), in one folder per session (`session4/`, `session5/`) with one self-contained folder per exercise, zipped next to it for sharing (`README.txt` with participant instructions, and facilitator notes). They are separate from the pipeline above: `main.do` at the repository root does not run them.
 
+### [Session 4 · exercise1](exercises/session4/exercise1)
+- **Session:** 4, Exercise 1, construction bug hunt (slides 12–13). Self-contained, no solutions in the packet. Solution: `exercises/facilitator/session4_exercise1_solution.do` / `.R`.
+- **Input:** `data/households.csv` (id: `key`; one row per submission, 1,293) and `data/children.csv` (id: `key child_no`; 1,587), exported from the course's clean data (`121-household-clean.dta`, `122-clean-child.dta`), plus `codebook.txt`.
+- **Task:** run `01_construct.do` or `01_construct.R` (same logic, "written by an AI"), which builds three village-level indicators and has five silent bugs (join on `hh_id`, skipped G4, households without children as 0, E1 + E2 added, code 99 averaged as hours); add one assertion per bug.
+- **Output:** `output/village_indicators.csv`. Original script: 15.9% of households had a child with diarrhoea; corrected: 35.8% of the 938 consenting households with children.
+
 ### [Session 4 · exercise2](exercises/session4/exercise2)
 - **Session:** 4, Exercise 2 (syntax on slide 19a, solution on slide 19b). Self-contained, four files, no paths to set. Solution: `exercises/facilitator/session4_exercise2_solution.Rmd`.
 - **Input:** `exercises/session4/exercise2/household_water_clean.csv` (id: `key`) — one row per consenting household, built by `exercises/facilitator/make_exercise_data.R` from the Session 2 export (with `exercises/facilitator/prep-standin.R`), the same construction as the Session 5 Overleaf exercise's data, so the numbers match the Session 5 Overleaf report. Rerun that script (from `exercises/facilitator/`) if the construction changes.
