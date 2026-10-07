@@ -1,12 +1,12 @@
 This report was created by the Stata command iesave (version 7.5). Read more about this command and the purpose of this report on https://dimewiki.worldbank.org/iesave
 
 - **Number of observations:** 1254
-- **Number of variables:** 33
+- **Number of variables:** 34
 - **ID variable(s):** key
 - **.dta version used:** 14
-- **Data signature:** 1254:33(39015):3960969149:1311389233
+- **Data signature:** 1254:34(62176):3887482450:15397993
 - **Last saved by:** User info withheld, see option userinfo in command iesave.
-- **Last saved at:** 03:19:59 7 Oct 2026
+- **Last saved at:** 14:47:54 7 Oct 2026
 
 ## Variable type: String
 
@@ -26,7 +26,7 @@ This report was created by the Stata command iesave (version 7.5). Read more abo
 | hh_children | "C6. Children under 5 in household" | byte | 1254 | 1.274 | .9888 | 0 | 0 | 1 | 2 | 6 |
 | hh_id | "A2. Household ID" | long | 1254 | 1300146 | 81705 | 1201001 | 1203116 | 1302103 | 1401093 | 1404105 |
 | hh_size | "C5. People living in household" | byte | 1252 | 5.611 | 2.681 | 2 | 4 | 6 | 8 | 45 |
-| resp_age | "C1. Respondent's age (years) - stands in for person responsible for water" | int | 1246 | 49.93 | 18.67 | 8 | 34 | 50 | 66 | 112 |
+| resp_age | "C1. Respondent's age (years)" | int | 1246 | 49.93 | 18.67 | 8 | 34 | 50 | 66 | 112 |
 | treat_boil | "E2. Days water boiled, past 7 days" | byte | 1246 | 3.003 | 2.395 | 0 | 1 | 3 | 5 | 10 |
 | treat_chlorine | "E1. Days chlorine added, past 7 days" | byte | 1245 | 2.824 | 2.529 | 0 | 0 | 3 | 5 | 12 |
 | village_id | "A3. Village" | int | 1254 | 1300 | 81.71 | 1201 | 1203 | 1302 | 1401 | 1404 |
@@ -48,15 +48,16 @@ This report was created by the Stata command iesave (version 7.5). Read more abo
 | hh_watersource | "C7. Main drinking water source" | watersource | 1246 | 5 | 0 | Piped:567 Protected well:328 River or stream:174 Trucked:114 Other:63 |
 | resp_educ | "C4. Respondent's education" | educ | 1244 | 4 | 0 | Secondary:331 None:313 Tertiary:310 Primary:290 |
 | resp_hh_head | "C3. Respondent is household head" | yesno | 1246 | 2 | 0 | Yes:629 No:617 |
-| resp_sex | "C2. Respondent's sex - stands in for person responsible for water" | sex | 1252 | 2 | 0 | Male:631 Female:621 |
+| resp_sex | "C2. Respondent's sex" | sex | 1252 | 2 | 0 | Male:631 Female:621 |
 | storage_time | "D6. Hours since water was collected" | storage | 774 | 15 | 1 | :78 :74 :73 More than 72 hours:70 :67 |
-| storage_time_cat | "D6. Hours since water was collected, 12-hour groups" | storage_cat | 774 | 6 | 0 | 0-12 hours:384 13-24 hours:126 49-60 hours:73 More than 72 hours:72 37-48 hours:63 |
+| storage_time_cat | "Time since water was collected" | storage_cat | 774 | 6 | 0 | 0-12 hours:384 12-24 hours:126 48-60 hours:73 More than 72 hours:72 36-48 hours:63 |
 | stored_chlorine | "D7. Chlorine added before storing" | yesno | 772 | 2 | 0 | No:536 Yes:236 |
 | stored_clean | "D5. Container washed with soap, past 7 days" | yesno | 772 | 2 | 0 | Yes:435 No:337 |
 | stored_container | "D2. Storage container type" | container | 774 | 4 | 0 | Bucket:260 Clay pot:241 Jerry can:232 Other:41 |
 | stored_covered | "D4. Storage container covered" | yesno | 772 | 2 | 0 | Yes:576 No:196 |
 | stored_yn | "D1. Drinking water stored now" | yesno | 1097 | 2 | 0 | Yes:767 No:330 |
-| treat_chlorine_any | "E1. Chlorine added on at least 1 of the past 7 days" | yesno | 1245 | 2 | 0 | Yes:864 No:381 |
+| treat_boil_any | "Boiled drinking water on at least 1 of the past 7 days" | yesno | 1245 | 2 | 0 | Yes:938 No:307 |
+| treat_chlorine_any | "Treated water with chlorine on at least 1 of the past 7 days" | yesno | 1245 | 2 | 0 | Yes:864 No:381 |
 | treat_notablets | "E3. Ran out of chlorine tablets, past 30 days" | yesno | 1246 | 2 | 0 | No:833 Yes:413 |
 | water_safety | "F1. Perceived safety of drinking water" | safety | 1248 | 3 | 0 | Somewhat safe:521 Not safe:473 Very safe:254 |
 | water_satisfaction | "F2. Satisfaction with water quality" | satisfaction | 1247 | 3 | 0 | Somewhat satisfied:489 Not satisfied:478 Very satisfied:280 |
