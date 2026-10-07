@@ -2,10 +2,9 @@
 title: "Water treatment: first look at the endline data · SOLUTION"
 author: "DIL Data Team (facilitators)"
 date: "`r format(Sys.Date(), '%d %B %Y')`"
-output: html_document
-# STEP 5
-params:
-  last_week_only: false
+output:
+  rmdformats::robobook:
+    code_folding: hide
 ---
 
 <!--
@@ -16,26 +15,20 @@ params:
  The code is already written. Your job is to find the right VARIABLES and put
  their names where you see ___ . The variables are listed just below.
 
- STEP 1  Click Knit. The template renders as is: the code shows, but no table
-         or figure yet, and "NA%" in the sentence. If it doesn't render, fix
-         that first.
+ STEP 1  Click Knit. The template renders as is: no table or figure yet, and
+         "NA%" in the sentence. Code is folded in the rendered report: click
+         "Code" to see it. If it doesn't render, fix that first.
  STEP 2  "descriptives" chunk: replace each ___ with a variable name, then
          change eval = FALSE to eval = TRUE in the chunk header. Knit.
  STEP 3  "figure" chunk: same thing. Knit.
  STEP 4  Summary: replace the ___ in the inline code with the variable for
          "chlorinated on 1+ of the past 7 days". Knit: "NA%" becomes a number.
- STEP 5  The switch: uncomment the two params lines in the header (top of this
-         file) and the line marked STEP 5 in the setup chunk, then fill its ___.
-         Knit again with the switch on, from the console:
-           rmarkdown::render("report.Rmd", params = list(last_week_only = TRUE))
-         Check: did the sentence change, without you typing a number?
 
  Rule: never type a number into the text. Every number is code.
  Stuck on syntax? Ask your AI assistant, as you would at work, then read what
  it wrote and check the output.
 
- Check yourself: all days = 1,254 households, 69.3% chlorinated;
-                 last week only = 445 households, 69.9%.
+ Check yourself: all days = 1,254 households, 69.3% chlorinated
 ==============================================================================
 
  THE VARIABLES (data frame hh, read from household_water_clean.csv,
@@ -48,7 +41,6 @@ params:
    piped          1 = main drinking water source is piped, 0 = any other source (C7)
    village_id     village (A2)
    survey_date    date of the interview
-   last_week      1 = interviewed in the last 7 days of fieldwork
 ==============================================================================
 -->
 
@@ -58,12 +50,8 @@ library(dplyr)
 library(ggplot2)
 
 # The clean data. This solution lives in exercises/facilitator/, next to the
-# exercise folder.
+# session folders.
 hh <- read.csv(file.path("..", "session4", "exercise2", "household_water_clean.csv"))
-
-# STEP 5: remove the # and fill the ___ (the variable for "interviewed in the
-# last 7 days of fieldwork")
-if (params$last_week_only) hh <- filter(hh, last_week == 1)
 ```
 
 ## Summary
@@ -79,10 +67,10 @@ This report covers **`r format(nrow(hh), big.mark = ",")` households**. **`r rou
 ```{r descriptives, eval = TRUE}
 # STEP 2: replace each ___ with a variable name, then set eval = TRUE above
 hh %>%
-  group_by(piped) %>%                                      # water source: piped or not
+  group_by(piped) %>%                                    # water source: piped or not
   summarise(N               = n(),
             chlorinated_pct = 100 * mean(chlorine_any, na.rm = TRUE),  # chlorinated, 1+ of past 7 days
-            chlorine_days   = mean(chlorine_days, na.rm = TRUE),        # days chlorinated
+            chlorine_days   = mean(chlorine_days, na.rm = TRUE),  # days chlorinated
             boiled_pct      = 100 * mean(boil_any, na.rm = TRUE),  # boiled, 1+ of past 7 days
             stored_pct      = 100 * mean(stored_now, na.rm = TRUE),  # has water stored now
             very_safe_pct   = 100 * mean(safe_very, na.rm = TRUE)) %>%  # rates water very safe
@@ -94,9 +82,9 @@ hh %>%
 ```{r figure, eval = TRUE, fig.height = 3.5}
 # STEP 3: replace each ___ with a variable name, then set eval = TRUE above
 hh %>%
-  group_by(village_id) %>%                                       # village
+  group_by(village_id) %>%                                # village
   summarise(chlorinated_pct = 100 * mean(chlorine_any, na.rm = TRUE)) %>%  # chlorinated, 1+ of past 7 days
-  ggplot(aes(factor(village_id), chlorinated_pct)) +             # village again
+  ggplot(aes(factor(village_id), chlorinated_pct)) +      # village again
   geom_col() +
   labs(x = "Village", y = "Chlorinated, past 7 days (%)")
 ```

@@ -1,6 +1,8 @@
 ---
-title: "Hello"
-output: html_document
+title: "Setup check"
+output:
+  rmdformats::robobook:
+    code_folding: hide
 ---
 
 Pre-work check for Session 4. If you can read the sentence below with a number in it, R Markdown works on your computer.
@@ -8,8 +10,9 @@ Pre-work check for Session 4. If you can read the sentence below with a number i
 This file was rendered on `r format(Sys.Date(), "%d %B %Y")`, and 2 + 2 = `r 2 + 2`.
 
 ```{r packages}
-# These are the packages Exercise 2 uses. If this chunk fails, run:
-# install.packages(c("dplyr", "ggplot2", "rmarkdown"))
+# These are the packages Exercise 2 uses. If this file doesn't knit, run:
+# install.packages(c("dplyr", "ggplot2", "rmarkdown", "rmdformats"))
 library(dplyr)
 library(ggplot2)
+library(rmdformats)
 ```
