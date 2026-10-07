@@ -14,7 +14,7 @@ Slide types, from the "## Slide N — <title> · <timing>" headings:
   Title, Section divider        special layouts
   EXERCISE ... / SPOT THE ...   gold background (participants work)
   DEMO ...                      light-gold background (facilitator on screen,
-                                e.g. slide 19c, the GitHub -> Overleaf demo)
+                                no slide uses it at the moment)
   ... solved / ... revealed     solution slide: "SOLUTION" tag, compact code
                                 and tables (e.g. 13 Five bugs, revealed;
                                 19b Exercise 2, solved)

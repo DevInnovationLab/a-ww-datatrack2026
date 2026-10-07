@@ -119,17 +119,17 @@ Hands-on exercises live in [exercises/](exercises), in one folder per session (`
 ### [Session 4 · exercise2](exercises/session4/exercise2)
 - **Session:** 4, Exercise 2 (syntax on slide 19a, solution on slide 19b). Self-contained, four files, no paths to set. Solution: `exercises/facilitator/session4_exercise2_solution.Rmd`.
 - **Input:** `exercises/session4/exercise2/household_water_clean.csv` (id: `key`) — one row per consenting household, built by `exercises/facilitator/make_exercise_data.R` from the Session 2 export (with `exercises/facilitator/prep-standin.R`), the same construction as the Session 5 Overleaf exercise's data, so the numbers match the Session 5 Overleaf report. Rerun that script (from `exercises/facilitator/`) if the construction changes.
-- **Task:** `report.Rmd` has the instructions and the variable list at the top, and the code written with `___` where variable names go: descriptives by water source, a figure, an inline-code sentence, and a `last_week_only` parameter. `hello.Rmd` is the pre-work check.
+- **Task:** `report.Rmd` has the instructions and the variable list at the top, and the code written with `___` where variable names go: descriptives by water source, a figure, and an inline-code sentence. Renders with `rmdformats::robobook` (code folded). `setup.Rmd` is the pre-work check.
 - **Output:** the knitted `report.html` (not tracked in git).
 
 ### [Session 5 · exercise1b](exercises/session5/exercise1b)
-- **Session:** 5 (demoed in Session 4, slide 19c). Self-contained: shared with participants as is. Facilitator notes: `exercises/facilitator/session5_exercise1b_notes.md`.
+- **Session:** 5 (introduced on Session 4's slide 19c, no demo). Self-contained: shared with participants as is. Facilitator notes: `exercises/facilitator/session5_exercise1b_notes.md`.
 - **Input:** `exercises/session5/exercise1b/data/households_clean.csv` (id: `key`; one row per household visited, including non-consenting ones) and `data/children_clean.csv` (id: `key child_index`). Clean data only: built by `exercises/facilitator/make_exercise_data.R` from the Session 2 export of the same survey (kept in `exercises/facilitator/raw/`; see [Known inconsistencies](#known-inconsistencies)). Participants get no raw data or prep code.
 - **Task:** two equivalent versions that write identical outputs:
   - Stata — `stata/main.do` runs `stata/code/2-export-outputs.do`; `ieboilstart` (with `iesave`/`ietoolkit`) is copied into `stata/ado/` from `code/ado/i`.
-  - R — `R/main.R` runs `R/2-export-outputs.R` (same logic; can optionally commit and push the outputs to GitHub).
-  Participants upload `overleaf.zip` to Overleaf, sync it to a GitHub repository, point the code at their local clone, run, push and pull, then flip `last_week_only` and rerun.
-- **Output:** in the participant's Overleaf clone (or `overleaf/` here): `tables/numbers.tex` (one LaTeX command per number quoted in `main.tex`), `tables/tab1-water-practices.tex`, `figures/fig1-chlorination-village.png`.
+  - R — `R/main.R` runs `R/2-export-outputs.R` (same logic, same outputs).
+  The folder is published as its own GitHub repository (github.com/nanditag2548/ww-datatrack-gitoverleaf) with code, data and `main.tex` together. Participants fork it, import the fork into Overleaf, clone it, set one path (their clone), run, push and pull, then flip `last_week_only` and rerun.
+- **Output:** in the same repository (participants' clone of their fork): `tables/numbers.tex` (one LaTeX command per number quoted in `main.tex`), `tables/tab1-water-practices.tex`, `figures/fig1-chlorination-village.png`.
 
 ## Known inconsistencies
 

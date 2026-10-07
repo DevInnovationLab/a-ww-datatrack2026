@@ -1,6 +1,6 @@
 # Data Session 4 — Data analysis: construction & exploration
 
-**Slide content, 75-minute session** (slides add up to 76 minutes, including the 3-minute Overleaf demo on slide 19c) · follows `session4_session5_split_plan.md`
+**Slide content, 75-minute session** (slides add up to 74 minutes) · follows `session4_session5_split_plan.md`
 
 - **Header on every slide:** DATA ANALYSIS: CONSTRUCTION & EXPLORATION
 - **Footer:** Development Innovation Lab / University of Chicago · Data analysis: Construction & Exploration
@@ -12,8 +12,6 @@
 - [ ] **Add an example of exploratory analysis results previously shared with MK.** A real, anonymized update would fit the "Before you share it" slide or the Slack examples in section 04.
 - [ ] Write the silent-bug story for "Why this session" (placeholder)
 - [ ] **Check presenter notes that don't match the expected time.** At about 130 spoken words a minute, these notes are too long for their slide: 14 Best practices (278 words, 1 min), 11 Creating lags (318, 2 min), 10 Aggregating values (361, 2.5 min), 21–22 Common errors (about 330 each, 2.5 min), 15 Automating best practices (132, 1 min), 9 Changing units of observation (277, 2.5 min), 17 Some opinionated advice (225, 2 min). Trim the notes or give the slides more time.
-- [ ] **Prepare the Overleaf demo (slide 19c):** your own Overleaf project created from `exercises/session5/exercise1b/overleaf.zip`, synced with GitHub and cloned; set your paths in `stata/main.do` and run it once with each value of `last_week_only` before the session; record a 60–90 second screen capture as a fallback (keep it on Box/Drive, not in the repository).
-- [ ] **Fit to time:** slide 19c adds 3 minutes (76 for a 75-minute session).
 - [x] **Review the draft agents file** ([`session4_AGENTS.md`](session4_AGENTS.md)) for "Automating best practices" (slide 15). Decide whether to pre-fill "About this project" for the course data, and put a copy in the exercise folders.
 - [x] **Review the "Imputation and outlier treatment" rules** in [`session4_AGENTS.md`](session4_AGENTS.md). Check that the documentation and distribution-comparison steps are what we want RAs to hand the PIs, and decide whether this point also belongs on a slide (e.g. "Best practices" or the aggregating slide, where trimming comes up).
 - [x] **Review the new "Combining rounds and datasets" and "state what you expect from every variable" rules** in [`session4_AGENTS.md`](session4_AGENTS.md), and the matching speaker notes on slides 10 and 21. Decide whether either point should go on the slides themselves (e.g. a row in the slide 10 table, or a line on "Best practices").
@@ -321,7 +319,7 @@ Your AI assistant wrote this script. It runs without errors. **It is wrong in fi
 ## Slide 16 — Section divider
 
 **02 · Exploratory analysis with literate programming**
-~18 minutes, including Exercise 2 and the Overleaf demo
+~16 minutes, including Exercise 2
 
 ---
 
@@ -374,12 +372,12 @@ Your AI assistant wrote this script. It runs without errors. **It is wrong in fi
 2. **Describe:** fill the `___` in the `descriptives` chunk (by water source), set `eval = TRUE`
 3. **Look:** same in the `figure` chunk
 4. **Say it:** fill the `___` in the inline code of the summary sentence
-5. **Switch it:** turn on `last_week_only`, re-render, check the sentence changed
 
 **Your job is to find the right variables:** they are listed, with what each means, at the top of `report.Rmd`.
 
 > **Notes:**
-> - **The folder** (`exercises/session4/exercise2/`, four files, no subfolders): `report.Rmd` (instructions at the top, a list of variables with their meaning, and code with `___` where the variable names go), `household_water_clean.csv` (the clean data, one row per consenting household, read from the same folder so there are no paths to set), `hello.Rmd` (pre-work check) and a `README.txt` with the same steps.
+> - **The folder** (`exercises/session4/exercise2/`, four files, no subfolders): `report.Rmd` (instructions at the top, a list of variables with their meaning, and code with `___` where the variable names go), `household_water_clean.csv` (the clean data, one row per consenting household, read from the same folder so there are no paths to set), `setup.Rmd` (pre-work check) and a `README.txt` with the same steps.
+> - The report uses the `rmdformats::robobook` format with `code_folding: hide`: a clean page with the code folded away (a "Code" button shows it). Participants need the `rmdformats` package.
 > - **Why blanks instead of an empty chunk:** not everyone knows R. The skill this exercise practises is mapping a question ("what share chlorinated their water?") to the right variable, and seeing every number computed in the document, not writing dplyr from scratch. The next slide explains what each line of code does.
 > - The template renders as is: the chunks with blanks are `eval = FALSE`, and the sentence shows "NA%" until its blank is filled. If it doesn't render, fix that first.
 > - **Same data as Session 5:** `household_water_clean.csv` is built by `exercises/facilitator/make_exercise_data.R` together with the Session 5 Overleaf exercise's clean data, from the same construction, so these numbers are the ones that end up in the PI's Overleaf report.
@@ -396,8 +394,6 @@ Your AI assistant wrote this script. It runs without errors. **It is wrong in fi
 | `100 * mean(___, na.rm = TRUE)` | A share in %. `na.rm = TRUE` skips missing values |
 | `ggplot(aes(factor(___), pct)) + geom_col()` | A bar chart, one bar per group |
 | `` `r nrow(hh)` `` | A number computed inside the text |
-| `filter(hh, ___ == 1)` | Keep some rows |
-| `params$last_week_only` | The switch, set in the header |
 | `eval = FALSE` → `eval = TRUE` | Turns a chunk on |
 
 **Not sure of the syntax? Ask your AI assistant to explain or write the code, as you would at work. Then read it, and check the output. AI writes the code, never the numbers.**
@@ -430,23 +426,16 @@ hh %>% group_by(village_id) %>%
 
 **Step 4 · say it:** `` `r round(100 * mean(hh[["chlorine_any"]], na.rm = TRUE), 1)` ``
 
-**Step 5 · switch it:** header `params: last_week_only: false` · setup chunk `if (params$last_week_only) hh <- filter(hh, last_week == 1)`
-
-| | All days | Last week |
-|---|---|---|
-| Households | 1,254 | 445 |
-| Chlorinated, past 7 days | 69.3% | 69.9% |
+**Check:** 1,254 households · 69.3% chlorinated in the past 7 days
 
 > **Notes:**
-> - Show this after taking one pair's file on the projector. The full solution is `exercises/facilitator/session4_exercise2_solution.Rmd` (renders both ways).
-> - **The point of step 5:** the sentence changed and nobody retyped it. A typed "1,254" would now be wrong, silently. That is the bridge to the Overleaf demo on the next slide.
-> - Common slips: grouping by `hh_watersource` (five codes, incl. -666 "Other") instead of `piped`; `chlorine_days` where the share (`chlorine_any`) was asked for; filling the blanks but leaving `eval = FALSE`; uncommenting `params` but not the filter line (the switch exists but nothing changes).
+> - Show this after taking one pair's file on the projector. The full solution is `exercises/facilitator/session4_exercise2_solution.Rmd` .
+> - **The point:** every number in the report is computed when it renders. If the data changes, the report changes and nobody retypes anything; a typed "1,254" would silently go stale. The next slide shows where this goes next: the same outputs feeding an Overleaf report, which they'll try in Session 5.
+> - Common slips: grouping by `hh_watersource` (five codes, incl. -666 "Other") instead of `piped`; `chlorine_days` where the share (`chlorine_any`) was asked for; filling the blanks but leaving `eval = FALSE`.
 
 ---
 
-## Slide 19c — DEMO · Outputs that update themselves · 3 min **(new)**
-
-*Facilitator on screen*
+## Slide 19c — Outputs that update themselves: GitHub → Overleaf · 1 min **(new)**
 
 **Code → files → GitHub → Overleaf: the document only points at your outputs**
 
@@ -461,11 +450,10 @@ What you can keep up to date this way:
 **We'll try this integration as a short exercise in Data Session 5.**
 
 > **Notes:**
-> - **The demo:** run the Session 5 exercise's Stata file live (`exercises/session5/exercise1b/stata/main.do`, with your two paths set): run, push in GitHub Desktop, then in Overleaf *Menu → Sync → GitHub → Pull GitHub changes into Overleaf* and recompile. Set `global last_week_only 1`, run, push, pull, recompile. Point at the dates and household counts in the PDF before (1,293 visited) and after (452). Open `tables/numbers.tex` for a second: one `\newcommand` per number.
+> - **No demo today:** just name the idea. Code writes the files, GitHub carries them, and the Overleaf document only points at them, so every table, graph and number updates when the code reruns. Participants set it up themselves in Session 5 (Exercise 1b).
 > - **The index file** (e.g. `exhibits.tex` in the paper's Overleaf project): one section per table and figure, each with the `\input`/`\includegraphics` line, a caption, notes, and the script and line that produces it. It doubles as a menu for the PIs while they write and as a checklist for the replication package: every exhibit in the paper should appear there, and every entry should trace back to code.
 > - **Slides and memos:** the same files work in a Beamer deck or a 2-page memo, so a team meeting deck and the paper never show different numbers.
-> - Have a pre-recorded fallback (screen recording or screenshots) in case the network or Overleaf's sync is slow on the day.
-> - Bridge: "In Session 5 you'll connect your own Overleaf project and run this yourselves, in Stata or R."
+> - Bridge: "In Session 5 you'll fork a repository, connect it to your own Overleaf project and run this yourselves, in Stata or R."
 
 ---
 
@@ -657,8 +645,8 @@ Judge the number, check the exhibit, then communicate
 
 ## Appendix — Pre-work email (send 2–3 days before)
 
-1. Install R and RStudio, then run `install.packages(c("dplyr", "ggplot2", "rmarkdown", "haven", "here", "fixest", "assertthat"))`
-2. Download and unzip `exercise2/`, open `hello.Rmd` in RStudio and click **Knit**
+1. Install R and RStudio, then run `install.packages(c("dplyr", "ggplot2", "rmarkdown", "rmdformats", "haven", "here", "fixest", "assertthat"))`
+2. Download and unzip `exercise2/`, open `setup.Rmd` in RStudio and click **Knit**
 3. Sign in to the AI assistant you'll use during the exercises (e.g., Claude Desktop), and check that it can open files in the exercise folder.
 4. Reply with a screenshot of your rendered test file, or tell us what broke.
 
