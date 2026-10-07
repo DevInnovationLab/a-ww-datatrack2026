@@ -1,0 +1,18 @@
+---
+title: "Setup check"
+output:
+  rmdformats::robobook:
+    code_folding: show
+---
+
+Pre-work check for Session 4. If you can read the sentence below with a number in it, R Markdown works on your computer.
+
+This file was rendered on `r format(Sys.Date(), "%d %B %Y")`, and 2 + 2 = `r 2 + 2`.
+
+```{r packages}
+# These are the packages Exercise 2 uses. If this file doesn't knit, run:
+# install.packages(c("dplyr", "ggplot2", "rmarkdown", "rmdformats"))
+library(dplyr)
+library(ggplot2)
+library(rmdformats)
+```

@@ -42,6 +42,9 @@
 	isid key
 	//isid hh_id
 
+*   Expected: one row per clean household submission, kept through the end
+	local n_households = _N
+
 **------------------------------------------------------------------------------
 **# 2 Indicators
 **------------------------------------------------------------------------------
@@ -65,7 +68,7 @@
 						2 "12-24 hours" ///
 						3 "24-36 hours" ///
 	                    4 "36-48 hours" ///
-						5 "48-60 hours" ///
+						5 "48-72 hours" ///
 	                    6 "More than 72 hours" ///
 	                    .d "Don't know" ///
 						.r "Declined to answer"
@@ -74,7 +77,7 @@
 **## 2.2 Chlorine in the past 7 days
 	
 	gen 	treat_chlorine_any 	= treat_chlorine > 0 if !missing(treat_chlorine)
-	gen 	treat_boil_any 		= treat_boil 	 > 0 if !missing(treat_chlorine)
+	gen 	treat_boil_any 		= treat_boil 	 > 0 if !missing(treat_boil)
 
 	lab val *_any 	 yesno
 
@@ -86,6 +89,9 @@
 	lab var treat_chlorine_any 	"Treated water with chlorine on at least 1 of the past 7 days"
 	lab var treat_boil_any 		"Boiled drinking water on at least 1 of the past 7 days"
 	
+	isid key
+	assert _N == `n_households'
+
 	ds, not(varlabel)
 	if "`r(varlist)'" != "" {
 		di as error "Variables without a label: `r(varlist)'"

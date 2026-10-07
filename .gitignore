@@ -88,6 +88,7 @@
 !*.csv
 !*.xlsx
 !*.md
+!*.txt
 
 #######################
 # Exercise outputs that Overleaf needs from GitHub: the figure the Session 5

@@ -1,12 +1,12 @@
 This report was created by the Stata command iesave (version 7.5). Read more about this command and the purpose of this report on https://dimewiki.worldbank.org/iesave
 
 - **Number of observations:** 1585
-- **Number of variables:** 5
+- **Number of variables:** 6
 - **ID variable(s):** key child_index
 - **.dta version used:** 14
-- **Data signature:** 1585:5(62089):2388646566:1665158859
+- **Data signature:** 1585:6(28377):2719402099:1681952259
 - **Last saved by:** User info withheld, see option userinfo in command iesave.
-- **Last saved at:** 03:07:56 7 Oct 2026
+- **Last saved at:** 00:18:28 8 Oct 2026
 
 ## Variable type: String
 
@@ -20,6 +20,7 @@ This report was created by the Stata command iesave (version 7.5). Read more abo
 |---|---|---|---|---|---|---|---|---|---|---|
 | child_age | "G2. Child's age (months)" | int | 1585 | 30.14 | 21.08 | 0 | 14 | 30 | 45 | 480 |
 | child_index | "Child number in the roster (G)" | byte | 1585 | 1.508 | .6705 | 1 | 1 | 1 | 2 | 3 |
+| hh_id | "A2. Household ID" | long | 1585 | 1296906 | 81254 | 1201001 | 1203106 | 1302086 | 1401076 | 1404105 |
 
 ## Variable type: Categorical
 

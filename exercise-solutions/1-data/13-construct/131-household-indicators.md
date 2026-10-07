@@ -4,9 +4,9 @@ This report was created by the Stata command iesave (version 7.5). Read more abo
 - **Number of variables:** 34
 - **ID variable(s):** key
 - **.dta version used:** 14
-- **Data signature:** 1254:34(62176):3887482450:15397993
+- **Data signature:** 1254:34(62176):3498908969:3046545164
 - **Last saved by:** User info withheld, see option userinfo in command iesave.
-- **Last saved at:** 14:47:54 7 Oct 2026
+- **Last saved at:** 16:21:37 7 Oct 2026
 
 ## Variable type: String
 
@@ -50,13 +50,13 @@ This report was created by the Stata command iesave (version 7.5). Read more abo
 | resp_hh_head | "C3. Respondent is household head" | yesno | 1246 | 2 | 0 | Yes:629 No:617 |
 | resp_sex | "C2. Respondent's sex" | sex | 1252 | 2 | 0 | Male:631 Female:621 |
 | storage_time | "D6. Hours since water was collected" | storage | 774 | 15 | 1 | :78 :74 :73 More than 72 hours:70 :67 |
-| storage_time_cat | "Time since water was collected" | storage_cat | 774 | 6 | 0 | 0-12 hours:384 12-24 hours:126 48-60 hours:73 More than 72 hours:72 36-48 hours:63 |
+| storage_time_cat | "Time since water was collected" | storage_cat | 774 | 6 | 0 | 0-12 hours:384 12-24 hours:126 48-72 hours:73 More than 72 hours:72 36-48 hours:63 |
 | stored_chlorine | "D7. Chlorine added before storing" | yesno | 772 | 2 | 0 | No:536 Yes:236 |
 | stored_clean | "D5. Container washed with soap, past 7 days" | yesno | 772 | 2 | 0 | Yes:435 No:337 |
 | stored_container | "D2. Storage container type" | container | 774 | 4 | 0 | Bucket:260 Clay pot:241 Jerry can:232 Other:41 |
 | stored_covered | "D4. Storage container covered" | yesno | 772 | 2 | 0 | Yes:576 No:196 |
 | stored_yn | "D1. Drinking water stored now" | yesno | 1097 | 2 | 0 | Yes:767 No:330 |
-| treat_boil_any | "Boiled drinking water on at least 1 of the past 7 days" | yesno | 1245 | 2 | 0 | Yes:938 No:307 |
+| treat_boil_any | "Boiled drinking water on at least 1 of the past 7 days" | yesno | 1246 | 2 | 0 | Yes:938 No:308 |
 | treat_chlorine_any | "Treated water with chlorine on at least 1 of the past 7 days" | yesno | 1245 | 2 | 0 | Yes:864 No:381 |
 | treat_notablets | "E3. Ran out of chlorine tablets, past 30 days" | yesno | 1246 | 2 | 0 | No:833 Yes:413 |
 | water_safety | "F1. Perceived safety of drinking water" | safety | 1248 | 3 | 0 | Somewhat safe:521 Not safe:473 Very safe:254 |

@@ -32,7 +32,8 @@ A teaching pipeline (DIL Welcome Week session) that ingests a messy raw househol
 ## Labeling conventions
 
 - Use `lab var` (not `label variable`) to label variables.
-- Where a variable comes from a specific question in `documentation/Household Water Questionnaire - V1.xlsx` (the SurveyCTO form), put that question's code at the **front** of the label, e.g. `lab var hh_id "(A1) Household ID"` — not `"Household ID (A1)"`. Metadata variables that aren't survey questions (`key`, `child_index`, `submissiondate`, ...) get no code.
+- Only a variable that corresponds exactly to a question in `documentation/Household Water Questionnaire - V1.xlsx` (the SurveyCTO form) — the survey's own column, changed in format only — gets that question's code, at the **front** of the label, e.g. `lab var hh_id "(A1) Household ID"` — not `"Household ID (A1)"`.
+- Variables derived from a question (indicators, groupings, counts, shares, any new variable built from one or more questions, e.g. `treat_chlorine_any` from E1 or `storage_time_cat` from D6) get **no** code: they are not the question itself. Record the question(s) they come from in the data dictionary instead. Metadata variables that aren't survey questions (`key`, `child_index`, `submissiondate`, ...) get no code either.
 - Question codes are `<section letter><question number within that section>` (e.g. `C6` is the 6th question in Section C), derived from the form's `survey` sheet, not copied from any older/stale label text already in a script.
 - Group `lab var` calls into subsections that mirror the questionnaire's lettered sections (e.g. `**## 6.4 Section C: Respondent & household roster`), plus one subsection for non-survey metadata.
 - Keep every label at or under Stata's 80-character `label variable` limit — check with a quick script when adding a batch of labels.

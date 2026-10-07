@@ -11,7 +11,7 @@
 		local expected = r(sum)
 
 		* YOUR TURN 1
-		keep 	key `child_vars'
+		keep 	key hh_id `child_vars'
 		reshape long child_age_ diarrhea_2d_ diarrhea_7d_, i(key) j(child_index)
 		rename 	*_ *
 

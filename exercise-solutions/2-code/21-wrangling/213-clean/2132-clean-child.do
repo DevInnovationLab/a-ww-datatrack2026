@@ -4,7 +4,7 @@
   Authors:  DIL Data Team
             David Torres Leon (dtorresleon@uchicago.edu)
             Luiza Andrade (luizaandrade@uchicago.edu)
-  Updated:  6 October 2026
+  Updated:  8 October 2026
 
   Inputs:   ${data_box}/11-tidy/112-tidy-child.dta
             ${data_box}/12-clean/121-household-clean.dta  (run 2131 first)
@@ -21,9 +21,10 @@
 
   Notes:    - -999 (Don't know) -> .d and -888 (Declined) -> .r, same as the
               household table.
-            - The child table keeps only key from the household: household
-              variables (hh_id, village_id, ...) come from the household
-              table by merging on key.
+            - The child table keeps key and hh_id from the household. hh_id
+              is not unique (some households have two submissions), so merge
+              on key; other household variables (village_id, ...) come from
+              the household table that way.
             - Variable labels and question codes come from
               4-documentation/Household_Water_Questionnaire.md.
             - Children are kept only if their submission is in the clean
@@ -78,6 +79,7 @@
 *     Metadata variables that are not survey questions get no code:
 
 	lab var key              	"SurveyCTO submission ID (unique row ID)"
+	lab var hh_id              	"A2. Household ID"
 	lab var child_index         "Child number in the roster (G)"
 	lab var child_age        	"G2. Child's age (months)"
 	lab var diarrhea_2d      	"G3. Diarrhoea in the past 48 hours"
@@ -97,6 +99,8 @@
 		di as error "Variables without a label: `r(varlist)'"
 		exit 459
 	}
+
+	order key child_index hh_id
 
 	local file "12-clean/122-child-clean"
 	iesave "${data_box}/`file'.dta", ///

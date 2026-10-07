@@ -13,22 +13,23 @@
             ${data_box}/13-construct/139-household-analysis.dta
             ${data_git}/13-construct/139-household-analysis.md  (iesave report)
 
-  Summary:  Merges the child indicators onto the household indicators, sets
-            the child counts of households without children under 5 to 0,
-            and saves two datasets, one row per consenting submission
-            (ID: key): the constructed data with every variable, and the
-            analysis data with the analysis variables only. Every variable is
-            described in
+            ${github}/4-documentation/41-data/412-data-dictionaries/139-household-analysis.txt
+              (iecodebook plaintext codebook)
+
+  Summary:  Merges the child indicators onto the household indicators and
+            saves two datasets, one row per consenting submission (ID: key):
+            the constructed data with every variable, and the analysis data
+            with the analysis variables only. Writes a plaintext codebook of
+            the analysis data next to its data dictionary,
             4-documentation/41-data/412-data-dictionaries/139-household-analysis.md.
 
-  Notes:    - Households with no roster get 0 children only when C6 = 0
-              (Section G was skipped because there were none). Otherwise
-              their child variables stay missing. Shares and any-child
-              indicators stay missing: there is no child to have diarrhoea.
+  Notes:    - Households with no roster have missing child variables.
+            - Setting their counts to 0 when C6 = 0 (Section G was skipped
+              because there were no children) and checking the roster count
+              against C6 are commented out until the HFC corrections are
+              applied: the raw data has roster/C6 mismatches.
             - Number of children under 5 = C6 (hh_children). The roster count
               is only used to check it.
-            - Roster/C6 mismatches are kept as they are, for the HFC session.
-              Their counts are asserted, so a new case stops the code.
 *******************************************************************************/
 
 **------------------------------------------------------------------------------
@@ -36,18 +37,16 @@
 **------------------------------------------------------------------------------
 
 	use "${data_box}/13-construct/131-household-indicators.dta", clear
-	isid key
 
-*   1:1 on key.
-*   Expected: 938 households with a roster, 316 without, and no roster
-*   without a household.
+*   1:1 on key. Expected: every household in the child file matches one
+*   household here, and no household is added -- meaning only _merge codes 1 and 3.
 
 	merge 1:1 key using "${data_box}/13-construct/132-child-indicators.dta", ///
 		assert(1 3)
 		
-	* Should be fixed during HFCs
+	* To be included after the HFC corrections
 	// assert hh_children == 0 if _merge == 1
-	// drop 					   _merge
+	// drop 					  _merge
 		
 	// assert n_children_roster == hh_children
 	// drop   n_children_roster
@@ -89,5 +88,15 @@
 		idvars(key) version(15) ///
 		report(path("${data_git}/`file'.md") replace) ///
 		replace
+
+**------------------------------------------------------------------------------
+**# 4 Codebook of the analysis data
+**------------------------------------------------------------------------------
+
+*   Written next to the data dictionary, so it changes whenever the data do.
+*   The .xlsx path is only used to name the file: noexcel writes the .txt only.
+
+	iecodebook export using "${github}/4-documentation/41-data/412-data-dictionaries/139-household-analysis.xlsx", ///
+		plaintext(detailed) noexcel replace
 
 ***************************************************************** End of do-file

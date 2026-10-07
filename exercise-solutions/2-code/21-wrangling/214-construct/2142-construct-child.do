@@ -16,9 +16,8 @@
             any child). One row per household with a roster (ID: key).
 
   Notes:    - G4 is only asked if G3 = No, so a child with diarrhoea in the
-              past 48 hours had it in the past 7 days: diarrhea_7d_all fills
-              G4 from G3 for those children. "Don't know" (.d) and
-              "Declined" (.r) are not filled.
+              past 48 hours had it in the past 7 days: diarrhea_week is 1
+              when G3 = Yes and G4 is missing, and G4 otherwise.
             - Households without a roster are not in this file. Whether their
               counts are 0 or missing is decided in 2149-construct-combine.do,
               where C6 is available.
@@ -37,24 +36,40 @@
 	isid key child_index
 	// isid hh_id child_index
 
+*   Expected after the collapse: one row per household in the roster, and
+*   every child counted once
+	local n_children = _N
+	unique key
+	local n_households = r(unique)
+
 **------------------------------------------------------------------------------
 **# 2 Diarrhea events in the last week
 **------------------------------------------------------------------------------
 
-	gen diarrhea_week = diarrhea_7d | diarrhea_2d
+*   G4 (past 7 days) is skipped when G3 (past 48 hours) = Yes
+
+	gen 	diarrhea_week = diarrhea_7d
+	replace diarrhea_week = 1 if diarrhea_2d == 1 & missing(diarrhea_7d)
 
 **------------------------------------------------------------------------------
-**# 2 Aggregate to the household
+**# 3 Aggregate to the household
 **------------------------------------------------------------------------------
 
 	collapse (count) n_children_roster   = child_index    ///
-	         (sum)   diarrhea_2d_total   = diarrhea_2d    ///
+	         (max)   diarrhea_2d_any     = diarrhea_2d    ///
+	                 diarrhea_week_any   = diarrhea_week  ///
+			 (sum)   diarrhea_2d_total   = diarrhea_2d    ///
 	                 diarrhea_week_total = diarrhea_week  ///
+			 (mean)  diarrhea_2d_share   = diarrhea_2d    ///
+	                 diarrhea_week_share = diarrhea_week  ///
 	         (count) diarrhea_2d_count   = diarrhea_2d    ///
 	                 diarrhea_week_count = diarrhea_week, ///
 	         by(key)
 
 	isid key
+	assert _N == `n_households'
+	sum n_children_roster
+	assert r(sum) == `n_children'
 	
 	* Check that there there are no missing values to be implicitly handled
 	assert 	diarrhea_2d_count > 0 &  diarrhea_week_count > 0
@@ -62,32 +77,25 @@
 	assert 	!missing(diarrhea_2d_count) & !missing(diarrhea_week_count)
 	drop 	*count
 
-**## 2.1 Diarrhoea indicators
-
-	foreach period in 2d week {
-		gen	diarrhea_`period'_any 	= diarrhea_`period'_total > 0
-		gen	diarrhea_`period'_share = diarrhea_`period'_total / n_children_roster
-	}
-
 	lab def yesno 1 "Yes" 0 "No", replace
 	lab val *any yesno
 
 **------------------------------------------------------------------------------
-**# 3 Labels
+**# 4 Labels
 **------------------------------------------------------------------------------
 
-**## 3.1 Section G: Children
+**## 4.1 Section G: Children
 
 	lab var n_children_roster 	"Children under 5 in the roster"
-	lab var diarrhea_2d_total   "Number of children under 5 with diarrhea in the last 2 last"
-	lab var diarrhea_week_total "Number of children under 5 with diarrhea in the last 7 days"
-	lab var diarrhea_2d_share 	"Share of children under 5 with diarrhea in the last 2 last"
-	lab var diarrhea_week_share "Share of children under 5 with diarrhea in the last 7 days"
-	lab var diarrhea_2d_any   	"At least one child under 5 with diarrhea in the last 2 last"
-	lab var diarrhea_week_any   "At least one child under 5 with diarrhea in the last 7 days"
+	lab var diarrhea_2d_total   "Number of children under 5 with diarrhea in the past 2 days"
+	lab var diarrhea_week_total "Number of children under 5 with diarrhea in the past 7 days"
+	lab var diarrhea_2d_share 	"Share of children under 5 with diarrhea in the past 2 days"
+	lab var diarrhea_week_share "Share of children under 5 with diarrhea in the past 7 days"
+	lab var diarrhea_2d_any   	"At least one child under 5 with diarrhea in the past 2 days"
+	lab var diarrhea_week_any   "At least one child under 5 with diarrhea in the past 7 days"
 
 **------------------------------------------------------------------------------
-**# 4 Save
+**# 5 Save
 **------------------------------------------------------------------------------
 
 	label data "Child indicators by household: 1 row = 1 submission with a roster. ID: key"
@@ -105,3 +113,5 @@
 		idvars(key) version(15) ///
 		report(path("${data_git}/`file'.md") replace) ///
 		replace
+
+***************************************************************** End of do-file

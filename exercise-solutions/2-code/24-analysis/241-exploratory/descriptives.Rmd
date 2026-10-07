@@ -1,0 +1,132 @@
+---
+title: "Water treatment: first look at the endline data"
+author: "Your names"
+date: "`r format(Sys.Date(), '%d %B %Y')`"
+output: html_document
+---
+
+<!--
+==============================================================================
+ EXERCISE 2 · Descriptives in a literate report       (in pairs, 10 minutes)
+==============================================================================
+
+ The code is already written. Your job is to find the right VARIABLES and put
+ their names where you see ___ . The variables are listed just below, and
+ described in full in 139-household-analysis-dictionary.md.
+
+ STEP 1  Click Knit. The template renders as is: the code shows, but no table
+         or figure yet, and "NA%" in the sentence. If it doesn't render, fix
+         that first.
+ STEP 2  Read the "expectations" chunk. It checks every variable this report
+         uses against the data dictionary, and stops the report if the data
+         don't match. Which variables have answers the questionnaire says are
+         impossible? Are they in the means you're about to report?
+ STEP 3  Open settings.R and fill its first two ___ (the groups and the main
+         outcome). Knit: "NA%" becomes a number.
+ STEP 4  "descriptives" and "figure" chunks: replace each ___ with a variable
+         name, then change eval = FALSE to eval = TRUE in each chunk header.
+         Knit.
+
+ Rule: never type a number into the text. Every number is code.
+ Stuck on syntax? Ask your AI assistant, as you would at work, then read what
+ it wrote and check the output.
+
+ Check yourself: see README.txt.
+==============================================================================
+
+ THE VARIABLES (data frame hh, read from 139-household-analysis.dta,
+                one row per consenting household, ID: key)
+   key                 submission ID, one per row
+   village_id          village (A3), 12 villages
+   hh_watersource      main drinking water source (C7): Piped, Protected
+                       well, River or stream, Trucked, Other
+   treat_chlorine_any  1 = chlorine added to drinking water on 1+ of the
+                       past 7 days (E1 > 0)
+   treat_chlorine      days chlorine was added, past 7 days (E1)
+   treat_boil          days drinking water was boiled, past 7 days (E2)
+==============================================================================
+-->
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+library(haven)
+library(dplyr)
+library(ggplot2)
+
+# The data file, groups and main outcome are set in settings.R.
+# The files sit next to this report, so there is no path to set.
+source("settings.R")
+hh <- read_dta(data_file)
+```
+
+## What we expect from the data
+
+```{r expectations}
+# Every variable this report uses, checked against the data dictionary
+# (139-household-analysis-dictionary.md) before we use it. If the data don't
+# match, the report stops here instead of showing wrong numbers.
+
+# Unit of observation: one consenting household submission. ID: key.
+stopifnot(nrow(hh) == 1254,
+          !anyNA(hh$key), !anyDuplicated(hh$key))
+
+# village_id (A3): village code, 12 villages, never missing
+stopifnot(!anyNA(hh$village_id),
+          n_distinct(hh$village_id) == 12)
+
+# hh_watersource (C7): a category, not a number. 1 Piped, 2 Protected well,
+# 3 River or stream, 4 Trucked, -666 Other. 8 missing (don't know/declined).
+stopifnot(all(hh$hh_watersource %in% c(1:4, -666, NA)),
+          sum(is.na(hh$hh_watersource)) == 8)
+
+# treat_chlorine (E1): days in the past 7, so 0-7. 9 missing (don't
+# know/declined). 3 answers above 7 (up to 12) are impossible, but they are
+# kept in the data for the HFC session.
+stopifnot(sum(is.na(hh$treat_chlorine)) == 9,
+          min(hh$treat_chlorine, na.rm = TRUE) == 0,
+          max(hh$treat_chlorine, na.rm = TRUE) == 12,
+          sum(hh$treat_chlorine > 7, na.rm = TRUE) == 3)
+
+# treat_chlorine_any: 1 if E1 > 0, 0 if E1 = 0. Missing exactly when E1 is.
+stopifnot(all(hh$treat_chlorine_any %in% c(0, 1, NA)),
+          all(is.na(hh$treat_chlorine_any) == is.na(hh$treat_chlorine)))
+
+# treat_boil (E2): days in the past 7, so 0-7. 8 missing (don't
+# know/declined). 2 answers above 7 (up to 10) are kept, as for E1.
+stopifnot(sum(is.na(hh$treat_boil)) == 8,
+          min(hh$treat_boil, na.rm = TRUE) == 0,
+          max(hh$treat_boil, na.rm = TRUE) == 10,
+          sum(hh$treat_boil > 7, na.rm = TRUE) == 2)
+```
+
+## Summary
+
+This report covers **`r format(nrow(hh), big.mark = ",")` households**. Of the `r format(sum(!is.na(hh[[main_outcome]])), big.mark = ",")` that answered E1, **`r sprintf("%.1f", 100 * mean(hh[[main_outcome]], na.rm = TRUE))`%** added chlorine to their drinking water on at least one day in the past week.
+
+## Descriptives by water source
+
+```{r descriptives, eval = FALSE}
+# STEP 4: replace each ___ with a variable name, then set eval = TRUE above.
+# The water source is a category: as_factor() shows its labels, not its codes.
+hh %>%
+  group_by(water_source = as_factor(.data[[group_var]])) %>%
+  summarise(households      = n(),
+            answered_E1     = sum(!is.na(.data[[main_outcome]])),
+            chlorinated_pct = 100 * mean(.data[[main_outcome]], na.rm = TRUE),
+            chlorine_days   = mean(___, na.rm = TRUE),    # days chlorine added
+            boil_days       = mean(___, na.rm = TRUE)) %>% # days water boiled
+  knitr::kable(digits = 1)
+```
+
+## Main outcome by village
+
+```{r figure, eval = FALSE, fig.height = 3.5}
+# STEP 4: replace the ___ with a variable name, then set eval = TRUE above.
+# The village is a code, not a number: factor() makes one bar per village.
+hh %>%
+  group_by(village = factor(___)) %>%                     # village
+  summarise(chlorinated_pct = 100 * mean(.data[[main_outcome]], na.rm = TRUE)) %>%
+  ggplot(aes(village, chlorinated_pct)) +
+  geom_col() +
+  labs(x = "Village", y = "Chlorinated, past 7 days (%)")
+```
