@@ -1,25 +1,32 @@
 # Facilitator notes · Session 5 Overleaf exercise
 
-*Not part of the folder participants get. The exercise itself is `exercises/session5/exercise1b/`; share that folder as is.*
+*Not part of what participants get. The exercise is `exercises/session5/exercise1b/`, published as its own GitHub repository (github.com/nanditag2548/ww-datatrack-gitoverleaf): that folder is the repository's root. Participants fork it.*
 
 ## What participants do (~20 min)
 
 | Min | Step |
 |---|---|
-| 2 | Upload `overleaf.zip` to Overleaf, recompile |
-| 2 | Overleaf: Menu → Sync → GitHub → Create a GitHub repository |
-| 2 | Clone it with GitHub Desktop |
-| 6 | Set their two paths in `stata/main.do` or `R/main.R`, run, push, pull in Overleaf |
+| 1 | Fork the exercise repository on GitHub |
+| 2 | Overleaf: New Project → Import from GitHub → their fork; recompile |
+| 2 | Clone their fork with GitHub Desktop |
+| 6 | Set their one path in `stata/main.do` or `R/main.R`, run, push, pull in Overleaf |
 | 4 | Change `last_week_only`, run, push, pull, recompile |
 | 4 | Buffer and debrief |
 
-Nothing to pre-create per pair: each participant makes their own Overleaf project and repository in steps 1–2.
+Nothing to pre-create per participant: each forks the repository and imports the fork into Overleaf.
+
+## Publishing the repository
+
+- The repository's root is the content of `exercises/session5/exercise1b/` (`main.tex`, `tables/`, `figures/`, `data/`, `stata/`, `R/`, `README.txt`). Overleaf syncs only the default branch, so the exercise must be on `main`.
+- Keep it public (forks of a private repository need access granted one by one), and keep `tables/` and `figures/` at the flag-off version so every fork starts the same.
+- After changing anything in `exercises/session5/exercise1b/`, copy it to the repository and push.
 
 ## Before the session
 
-- **Run both versions once**, with the flag off and on, and check against the numbers below. Already checked: the R scripts (both settings, plus a push to a test repository) and the Stata do-files (run on 5 October, before the folder was reorganized: run `stata/main.do` once from `exercise1b/` to confirm the paths).
+- **Run both versions once**, with the flag off and on, and check against the numbers below. Already checked: the R scripts (both settings, plus a push to a test repository) and the Stata do-files (run on 5 October, before the folder was reorganized into one repository with one path: run `stata/main.do` once from your clone to confirm).
 - **Overleaf licence:** GitHub sync is premium. Confirm every participant's account has it. Without it, the README's fallback (upload the three files by hand) still works.
-- **Pre-work email:** GitHub account, GitHub Desktop installed, Overleaf account, Stata 15+ or R with `dplyr`, `tidyr`, `ggplot2`, and the folder downloaded.
+- **Overleaf ↔ GitHub link:** participants must link GitHub in Overleaf (Account Settings → Integrations → GitHub) before they can import their fork.
+- **Pre-work email:** GitHub account, GitHub Desktop installed, Overleaf account linked to GitHub, Stata 15+ or R with `dplyr`, `tidyr`, `ggplot2`; ideally README steps 1–3 done before the session.
 
 ## Expected numbers
 
@@ -43,7 +50,7 @@ Table 1, households (piped / other / all): 567 / 679 / 1,254 off; 204 / 239 / 44
 - **Wrong path:** the most common problem. In GitHub Desktop, *Repository → Show in Finder* gives the clone's real path.
 - **Pulling without pushing**, or **pushing without committing**: GitHub Desktop should show *No local changes* afterwards.
 - **Editing `tables/` or `figures/` in Overleaf** causes merge conflicts on the next pull: keep the GitHub version.
-- **R's optional push** (`push_to_github <- TRUE`) only runs from the clone itself and only commits the three outputs. If git has no GitHub login, it says so: push from GitHub Desktop.
+- **Push rejected** in GitHub Desktop: Overleaf pushed first (an edit to `main.tex`). Fetch, Pull, push again.
 
 ## Data
 

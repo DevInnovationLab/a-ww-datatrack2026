@@ -6,14 +6,15 @@
 #
 #  Input:     data/households_clean.csv  one row per household visited (id: key)
 #             data/children_clean.csv    one row per child under 5 (id: key, child_index)
-#             last_week_only, exercise_dir, overleaf_dir, push_to_github
+#             last_week_only, repo_dir
 #             (set in main.R)
-#  Output:    in overleaf_dir (your Overleaf project's local GitHub clone):
+#  Output:    in repo_dir (your clone of the exercise repository, synced
+#             with your Overleaf project):
 #               tables/numbers.tex               one LaTeX command per number
 #               tables/tab1-water-practices.tex  Table 1, body only
 #               figures/fig1-chlorination-village.png
 #
-#  Summary:   The report in overleaf/main.tex never contains a typed result:
+#  Summary:   The report (main.tex) never contains a typed result:
 #             it \input's these files. Rerun, push, pull in Overleaf,
 #             recompile, and every number moves. Same output as the Stata
 #             version (stata/code/2-export-outputs.do). Participants do not
@@ -24,8 +25,8 @@ library(dplyr)
 library(ggplot2)
 
 # ---- 1 Load the clean data and define the sample (once) ----------------------
-hh       <- read.csv(file.path(exercise_dir, "data", "households_clean.csv"))
-children <- read.csv(file.path(exercise_dir, "data", "children_clean.csv"))
+hh       <- read.csv(file.path(repo_dir, "data", "households_clean.csv"))
+children <- read.csv(file.path(repo_dir, "data", "children_clean.csv"))
 hh$survey_date <- as.Date(hh$survey_date)
 
 # Consenting households; only the last 7 days of fieldwork if last_week_only
@@ -37,8 +38,8 @@ n_visited <- nrow(hh)
 hh        <- filter(hh, consented == 1)
 children  <- filter(children, consented == 1)
 
-dir.create(file.path(overleaf_dir, "tables"),  showWarnings = FALSE)
-dir.create(file.path(overleaf_dir, "figures"), showWarnings = FALSE)
+dir.create(file.path(repo_dir, "tables"),  showWarnings = FALSE)
+dir.create(file.path(repo_dir, "figures"), showWarnings = FALSE)
 
 # ---- 2 Formatting helpers (same rounding as the Stata version) ---------------
 pct      <- function(x) sprintf("%.1f", 100 * mean(x, na.rm = TRUE))
@@ -66,7 +67,7 @@ numbers <- c(
 )
 
 writeLines(c(stamp, latex_command(names(numbers), numbers)),
-           file.path(overleaf_dir, "tables", "numbers.tex"))
+           file.path(repo_dir, "tables", "numbers.tex"))
 
 # ---- 4 Table 1: water practices by water source --------------------------------
 rows <- c(
@@ -91,7 +92,7 @@ households <- paste("Households &",
 writeLines(c(stamp, "\\begin{tabular}{lccc}", "\\toprule",
              " & Piped & Other sources & All \\\\", "\\midrule",
              body, "\\midrule", households, "\\bottomrule", "\\end{tabular}"),
-           file.path(overleaf_dir, "tables", "tab1-water-practices.tex"))
+           file.path(repo_dir, "tables", "tab1-water-practices.tex"))
 
 # ---- 5 Figure 1: chlorination by village ---------------------------------------
 by_village <- hh %>%
@@ -106,44 +107,8 @@ fig1 <- ggplot(by_village, aes(village_id, chlorine_pct)) +
   labs(x = NULL, y = "Households that chlorinated, past 7 days (%)") +
   theme_classic(base_size = 11)
 
-ggsave(file.path(overleaf_dir, "figures", "fig1-chlorination-village.png"),
+ggsave(file.path(repo_dir, "figures", "fig1-chlorination-village.png"),
        fig1, width = 8, height = 4.5, dpi = 250)
 
-message("Wrote numbers.tex, Table 1 and Figure 1 to ", normalizePath(overleaf_dir),
-        " (last_week_only = ", last_week_only, ")")
-
-# ---- 6 Optional: push to GitHub from R ------------------------------------------
-# Same as committing and pushing in GitHub Desktop. Only runs if
-# push_to_github is TRUE in main.R, only from the Overleaf clone itself, and
-# only for the three output files (never main.tex).
-if (push_to_github) {
-  outputs <- c("tables/numbers.tex", "tables/tab1-water-practices.tex",
-               "figures/fig1-chlorination-village.png")
-  git <- function(...) {
-    out <- suppressWarnings(system2("git", c("-C", shQuote(overleaf_dir), ...),
-                                    stdout = TRUE, stderr = TRUE))
-    status <- attr(out, "status")
-    list(ok = is.null(status) || status == 0, out = out)
-  }
-  top <- if (nzchar(Sys.which("git"))) git("rev-parse", "--show-toplevel") else list(ok = FALSE)
-  if (!top$ok || normalizePath(top$out[1], mustWork = FALSE) !=
-      normalizePath(overleaf_dir, mustWork = FALSE)) {
-    message("Not pushed: git isn't available, or overleaf_dir isn't your clone. ",
-            "Push with GitHub Desktop.")
-  } else if (length(git("status", "--porcelain", "--", outputs)$out) == 0) {
-    message("Nothing changed since the last commit: GitHub is already up to date.")
-  } else {
-    msg <- sprintf("Update outputs (last_week_only = %s)", last_week_only)
-    steps <- list(add    = git("add", "--", outputs),
-                  commit = git("commit", "-m", shQuote(msg), "--", outputs),
-                  pull   = git("pull", "--rebase", "--autostash"),
-                  push   = git("push"))
-    failed <- names(steps)[!sapply(steps, `[[`, "ok")]
-    if (length(failed)) {
-      message("git ", failed[1], " failed: ", paste(steps[[failed[1]]]$out, collapse = " "),
-              "\nPush with GitHub Desktop instead (the commit may already be there).")
-    } else {
-      message("Pushed. In Overleaf: Menu > GitHub > Pull GitHub changes into Overleaf, then Recompile.")
-    }
-  }
-}
+message("Wrote numbers.tex, Table 1 and Figure 1 to ", normalizePath(repo_dir),
+        " (last_week_only = ", last_week_only, ").\nNow commit and push in GitHub Desktop, then pull in Overleaf.")

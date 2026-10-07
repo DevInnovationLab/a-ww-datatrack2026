@@ -11,13 +11,15 @@
   Version:   Stata 15
 
   Summary:   Stata version of the Session 5 Overleaf exercise (the R version
-             is R/main.R). Reads the clean data in data/ and writes every
-             result the PI update in overleaf/ quotes -- a table (.tex), a figure (.png) and the numbers in the
-             text (numbers.tex) -- into your Overleaf project's local GitHub
-             clone. Push, pull in Overleaf, recompile: nobody retypes a
-             number. Instructions are in README.txt in the exercise folder.
+             is R/main.R). Everything lives in ONE GitHub
+             repository (your fork): the code, the data and the PI update
+             (main.tex). This file reads data/ and writes every result
+             main.tex quotes -- a table (.tex), a figure (.png) and the
+             numbers in the text (tables/numbers.tex) -- into the same
+             repository. Push, pull in Overleaf, recompile: nobody retypes a
+             number. Instructions: README.txt.
 
-             Set the two paths in section 2 and run. The user-written
+             Set your one path in section 2 and run. The user-written
              command it needs (ieboilstart) is in stata/ado/.
 
   Outline:   1. Select parts of the code to run
@@ -41,41 +43,31 @@
 **# 2 Set file paths
 **------------------------------------------------------------------------------
 
-* Your two paths ----------------------------------------------------------------
+* Your one path ------------------------------------------------------------------
 
+	* repo: your local clone of YOUR FORK of the exercise repository (the
+	*       folder with main.tex, data/, stata/ and R/). GitHub Desktop shows
+	*       it: Repository > Show in Finder / Show in Explorer.
 	* Type 'di c(username)' to see the name of your machine.
-	*   ex           : this exercise folder (exercise1b/), wherever you saved it
-	*   report_clone : your local clone of the GitHub repository synced with
-	*                  your Overleaf project. Leave it empty to write to the
-	*                  overleaf/ folder in the exercise folder.
-
-	global report_clone ""
 
 	// Nandita
 	if "`c(username)'" == "admin" {
-		global ex           "/Users/admin/Desktop/DIL/a-ww-datatrack2026/exercises/session5/exercise1b"
-		global report_clone "/Users/admin/Desktop/DIL/ww-datatrack-gitoverleaf"
+		global repo "/Users/admin/Desktop/DIL/ww-datatrack-gitoverleaf"
 	}
 
-	// YOU
+	// YOU: copy the two lines above, with your username and your path
 	else if "`c(username)'" == "" {
-		global ex           ""
-		global report_clone ""
+		global repo ""
 	}
 
-* Subfolders -------------------------------------------------------------------
+* Everything else follows from it ----------------------------------------------
 
-	global ex_code     "${ex}/stata/code"
-	global ex_data     "${ex}/data"
+	global ex          "${repo}"
+	global ex_code     "${repo}/stata/code"
+	global ex_data     "${repo}/data"
+	global report      "${repo}"          // main.tex, tables/ and figures/ are here
 
-* The Overleaf report -----------------------------------------------------------
-
-	* Where the exported files land: your Overleaf clone if you set one
-	* above, otherwise the overleaf/ folder in the exercise folder
-	global report      "${ex}/overleaf"
-	if "${report_clone}" != "" global report "${report_clone}"
-
-	confirm file "${report}/main.tex"
+	confirm file "${repo}/main.tex"
 
 **------------------------------------------------------------------------------
 **# 3 Initial settings

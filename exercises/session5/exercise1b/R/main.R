@@ -3,20 +3,21 @@
 #             EXERCISE · Results that update themselves in Overleaf
 #                                   main.R
 # ------------------------------------------------------------------------------
-#  Author(s): DIL Data Team · Nandita Gupta (nanditag@uchicago.edu)
+#  Author(s): DIL Data Team 
 #  Updated:   October 2026
 #
 #  Summary:   R version of the Session 5 Overleaf exercise (the Stata version
-#             is stata/main.do; both write the same files). Reads the clean
-#             data in data/ and writes every result the PI update quotes -- a table (.tex), a figure (.png)
-#             and the numbers in the text (numbers.tex) -- into your Overleaf
-#             project's local GitHub clone. Instructions: README.txt in the
-#             exercise folder.
+#             is stata/main.do; both write the same files). Everything lives in
+#             ONE GitHub repository (your fork): the code, the data and the
+#             PI update (main.tex). This file reads data/ and writes every
+#             result main.tex quotes -- a table (.tex), a figure (.png) and
+#             the numbers in the text (tables/numbers.tex) -- into the same
+#             repository. Instructions: README.txt.
 #
 #  You need:  install.packages(c("dplyr", "tidyr", "ggplot2"))
 #
 #  Outline:   1. Settings: the switch
-#             2. Your two paths
+#             2. Your one path
 #             3. Run: 2-export-outputs.R
 # ==============================================================================
 
@@ -26,34 +27,27 @@
 # Run once with FALSE, then change it to TRUE (step 5 of README.txt).
 last_week_only <- FALSE
 
-# Optional: TRUE commits and pushes the three output files to GitHub from R.
-# Leave FALSE to push with GitHub Desktop.
-push_to_github <- FALSE
-
-# ---- 2 Your two paths -----------------------------------------------------------
-#   exercise_dir : this exercise folder (exercise1b/), wherever you saved it
-#   overleaf_dir : your local clone of the GitHub repository synced with your
-#                  Overleaf project
+# ---- 2 Your one path ------------------------------------------------------------
+#   repo_dir : your local clone of YOUR FORK of the exercise repository (the
+#              folder with main.tex, data/, stata/ and R/). GitHub Desktop
+#              shows it: Repository > Show in Finder / Show in Explorer.
 # Sys.info()[["user"]] shows your username. Copy Nandita's block for yourself.
 
 user <- Sys.info()[["user"]]
 
 if (user == "admin") {                                   # Nandita
-  exercise_dir <- "/Users/admin/Desktop/DIL/a-ww-datatrack2026/exercises/session5/exercise1b"
-  overleaf_dir <- "/Users/admin/Desktop/DIL/ww-datatrack-gitoverleaf"
+  repo_dir <- "/Users/admin/Desktop/DIL/ww-datatrack-gitoverleaf"
 } else if (user == "") {                                 # YOU
-  exercise_dir <- ""
-  overleaf_dir <- ""
+  repo_dir <- ""
 } else {
   stop("Add a block for your username (", user, ") in section 2 of main.R")
 }
 
 stopifnot(
-  "exercise_dir is wrong: it must be the folder that contains R/, stata/ and data/" =
-    file.exists(file.path(exercise_dir, "data", "households_clean.csv")),
-  "overleaf_dir is wrong: it must be your Overleaf clone (the folder with main.tex)" =
-    file.exists(file.path(overleaf_dir, "main.tex"))
+  "repo_dir is wrong: it must be your clone of the exercise repository (the folder with main.tex, data/ and R/)" =
+    file.exists(file.path(repo_dir, "main.tex")) &&
+    file.exists(file.path(repo_dir, "data", "households_clean.csv"))
 )
 
 # ---- 3 Run ----------------------------------------------------------------------
-source(file.path(exercise_dir, "R", "2-export-outputs.R")) # writes the 3 files
+source(file.path(repo_dir, "R", "2-export-outputs.R"))     # writes the 3 files

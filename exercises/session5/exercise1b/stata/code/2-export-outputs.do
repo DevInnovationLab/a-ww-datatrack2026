@@ -17,7 +17,7 @@
               ${report}/figures/fig1-chlorination-village.png
                 - Figure 1
 
-  Summary:    The report in report/main.tex never contains a typed result.
+  Summary:    The report (main.tex) never contains a typed result.
               It \input's the table, includes the figure, and quotes numbers
               through commands such as \shareChlorine, all written here. When
               the data or a decision changes, rerun this file, push, pull in

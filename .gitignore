@@ -90,11 +90,9 @@
 !*.md
 
 #######################
-# Exercise outputs that Overleaf needs from GitHub: the figures written into
-# the Session 5 Overleaf folder (no data is ever stored there)
-!exercises/**/overleaf/figures/*.png
-# ...and the zipped Overleaf project participants upload
-!exercises/**/overleaf.zip
+# Exercise outputs that Overleaf needs from GitHub: the figure the Session 5
+# exercise writes (no data is ever stored there)
+!exercises/session5/exercise1b/figures/*.png
 # ...and the zipped exercise packages shared with participants
 !exercises/session*/exercise*.zip
 # ...and the plain-text instructions shipped with each exercise
