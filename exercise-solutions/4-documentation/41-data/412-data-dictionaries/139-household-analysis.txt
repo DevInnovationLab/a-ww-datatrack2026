@@ -372,3 +372,33 @@ diarrhea_week_share                    Share of children under 5 with
                            25  .66666669
                           143  1
                           316  .
+
+---------------------------------------------------------------------------
+treatment                               Village assigned to chlorine access
+---------------------------------------------------------------------------
+
+                  Type: Numeric (byte)
+                 Label: treatment
+
+                 Range: [0,1]                         Units: 1
+         Unique values: 2                         Missing .: 0/1,254
+
+            Tabulation: Freq.   Numeric  Label
+                          658         0  Control
+                          596         1  Treatment
+
+---------------------------------------------------------------------------
+main_sample                            In main analysis sample: children
+                                       under 5, no missing
+                                       outcomes/controls
+---------------------------------------------------------------------------
+
+                  Type: Numeric (byte)
+                 Label: yesno
+
+                 Range: [0,1]                         Units: 1
+         Unique values: 2                         Missing .: 0/1,254
+
+            Tabulation: Freq.   Numeric  Label
+                          324         0  No
+                          930         1  Yes

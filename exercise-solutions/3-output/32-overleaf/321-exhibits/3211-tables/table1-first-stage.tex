@@ -1,0 +1,22 @@
+{
+\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
+\begin{tabular}{l*{2}{c}}
+\toprule
+                    &\multicolumn{2}{c}{Treated water with chlorine on at least 1 of the past 7 days}\\\cmidrule(lr){2-3}
+                    &\multicolumn{1}{c}{(1)}         &\multicolumn{1}{c}{(2)}         \\
+\midrule
+Village assigned to chlorine access&       0.056\sym{**} &       0.053\sym{*}  \\
+                    &     (0.024)         &     (0.025)         \\
+\midrule
+Controls            &          No         &         Yes         \\
+Control mean        &       0.669         &       0.669         \\
+Observations        &         930         &         930         \\
+Villages            &          12         &          12         \\
+\bottomrule
+\multicolumn{3}{l}{\footnotesize Sample includes households with at least one child under 5.}\\
+\multicolumn{3}{l}{\footnotesize Treatment assigned at the village level.}\\
+\multicolumn{3}{l}{\footnotesize Standard errors clustered by village in parentheses; with 12 clusters they may understate uncertainty.}\\
+\multicolumn{3}{l}{\footnotesize Models control for household size, respondent age and respondent sex.}\\
+\multicolumn{3}{l}{\footnotesize * p<0.10, ** p<0.05, *** p<0.01.}\\
+\end{tabular}
+}

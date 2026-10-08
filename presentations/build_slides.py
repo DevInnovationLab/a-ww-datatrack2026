@@ -1,7 +1,8 @@
-"""Render session4_slide_content.md as a reveal.js deck for review.
+"""Render sessionN_slide_content.md as a reveal.js deck for review.
 
-Usage:  python3 presentations/build_session4_slides.py
-Output: presentations/session4_slides.html
+Usage:  python3 presentations/build_slides.py 4    (or 5)
+        add --todos to append the draft to-dos as a last slide
+Output: presentations/session4_slides.html         (or session5_slides.html)
 
 Style follows the DIL reveal.js theme used in
 github.com/DevInnovationLab/trainings-public/tree/main/rp-workshop
@@ -19,6 +20,9 @@ Slide types, from the "## Slide N — <title> · <timing>" headings:
                                 and tables (e.g. 13 Five bugs, revealed;
                                 19b Exercise 2, solved)
   anything else                 regular content slide
+Heading parts after the title that only say where a slide came from
+(an italic source tag such as *S5 v2 13*, or **NEW**) are shown as flags in
+the review panel, not on the slide.
 Slide labels can carry a letter suffix (e.g. "Slide 19a") for slides
 inserted between existing ones.
 
@@ -33,16 +37,22 @@ read as plain text.
 import base64
 import html
 import re
+import sys
 from pathlib import Path
 
 HERE = Path(__file__).parent
-SRC = HERE / "session4_slide_content.md"
-OUT = HERE / "session4_slides.html"
 LOGO = HERE / "img" / "DIL_logo.svg"
 
-HEADER = "DATA ANALYSIS: CONSTRUCTION &amp; EXPLORATION"
-FOOTER = ("Development Innovation Lab / University of Chicago · "
-          "Data analysis: Construction &amp; Exploration")
+# Per session: header and footer text on every slide, and the session length
+# in minutes (the review panel compares the planned clock against it).
+SESSIONS = {
+    4: dict(header="DATA ANALYSIS: CONSTRUCTION &amp; EXPLORATION",
+            footer="Data analysis: Construction &amp; Exploration",
+            length=75),
+    5: dict(header="PUBLICATION: REPORTS &amp; REPLICABILITY",
+            footer="Publication: Reports &amp; Replicability",
+            length=90),
+}
 
 
 def split_slides(text):
@@ -77,7 +87,9 @@ def parse_heading(heading):
     parts = [p.strip() for p in rest.split(" · ")]
     title_parts, timing_parts = [], []
     for p in parts:
-        if timing_parts or re.match(r"^(\d+(\.\d+)? min|\*\(part of)", p):
+        if p == "**NEW**" or re.match(r"^\*[^*(].*\*$", p):
+            flags.append(p.strip("*"))
+        elif timing_parts or re.match(r"^(\d+(\.\d+)? min|\*\()", p):
             timing_parts.append(p)
         else:
             title_parts.append(p)
@@ -87,7 +99,8 @@ def parse_heading(heading):
 
 
 def minutes(timing):
-    if timing.startswith("(part of"):
+    # "(part of the 12 min)", "3 min (part of the debrief)": already counted
+    if "part of" in timing:
         return 0.0
     return sum(float(m) for m in re.findall(r"(\d+(?:\.\d+)?) min", timing))
 
@@ -138,8 +151,11 @@ def columns(md):
     return md.replace("<!-- end columns -->", "\n</div></div>")
 
 
-def build():
-    todos, slides = split_slides(SRC.read_text())
+def build(session, todos_slide=False):
+    cfg = SESSIONS[session]
+    src = HERE / f"session{session}_slide_content.md"
+    out = HERE / f"session{session}_slides.html"
+    todos, slides = split_slides(src.read_text())
     if LOGO.exists():
         logo_html = ('<img class="logo" src="data:image/svg+xml;base64,'
                      f'{base64.b64encode(LOGO.read_bytes()).decode()}" alt="DIL logo">')
@@ -198,16 +214,21 @@ def build():
             sections.append(md_section(md, notes, cls + attrs))
 
     todo_md = "## Draft to-dos\n\n" + "\n".join(todos).strip()
-    sections.append(md_section(
-        todo_md, "", ' class="appendix todos" data-label="To-dos"'
-        ' data-title="Draft to-dos" data-timing="" data-flags=""'
-        f' data-start="{clock:g}"'))
+    if todos_slide:
+        sections.append(md_section(
+            todo_md, "", ' class="appendix todos" data-label="To-dos"'
+            ' data-title="Draft to-dos" data-timing="" data-flags=""'
+            f' data-start="{clock:g}"'))
 
     page = TEMPLATE.replace("{{SLIDES}}", "\n".join(sections))
-    page = page.replace("{{HEADER}}", HEADER).replace("{{FOOTER}}", FOOTER)
+    footer = ("Development Innovation Lab / University of Chicago · "
+              + cfg["footer"])
+    page = page.replace("{{HEADER}}", cfg["header"]).replace("{{FOOTER}}", footer)
     page = page.replace("{{TOTAL}}", f"{clock:g}")
-    OUT.write_text(page)
-    print(f"Wrote {OUT} ({len(sections)} slides, {clock:g} min)")
+    page = page.replace("{{SESSION}}", str(session))
+    page = page.replace("{{LENGTH}}", str(cfg["length"]))
+    out.write_text(page)
+    print(f"Wrote {out} ({len(sections)} slides, {clock:g} min)")
 
 
 CDN = "https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0"
@@ -217,7 +238,7 @@ TEMPLATE = """<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Session 4 slides</title>
+<title>Session {{SESSION}} slides</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:700|Open+Sans:400,700,400italic,700italic&display=swap">
 <link rel="stylesheet" href="CDN/reset.min.css">
 <link rel="stylesheet" href="CDN/reveal.min.css">
@@ -407,7 +428,7 @@ function renderPanel(section) {
 	}
 	const start = parseFloat(d.start || '0');
 	document.getElementById('p-clock').textContent =
-		'Starts at minute ' + start + ' of ' + TOTAL + ' planned (session is 75).';
+		'Starts at minute ' + start + ' of ' + TOTAL + ' planned (session is {{LENGTH}}).';
 	document.querySelector('.reveal').classList.toggle('hide-chrome',
 		section.classList.contains('title-slide') || section.classList.contains('divider'));
 }
@@ -432,4 +453,8 @@ toggle.addEventListener('click', () => {
 
 
 if __name__ == "__main__":
-    build()
+    args = [a for a in sys.argv[1:] if a != "--todos"]
+    session = int(args[0]) if args else 4
+    if session not in SESSIONS:
+        sys.exit(f"No settings for session {session}; add it to SESSIONS.")
+    build(session, todos_slide="--todos" in sys.argv)

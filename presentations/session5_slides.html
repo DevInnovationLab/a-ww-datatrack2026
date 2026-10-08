@@ -1,0 +1,688 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Session 5 slides</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:700|Open+Sans:400,700,400italic,700italic&display=swap">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reset.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reveal.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/highlight/monokai.min.css">
+<style>
+/* ---- DIL theme (from rp-workshop/dist/theme/dil.css) ---- */
+:root {
+	--r-background-color: #eee;
+	--r-main-font: "Open Sans", sans-serif;
+	--r-main-font-size: 30px;
+	--r-main-color: #4D4D4D;
+	--r-block-margin: 20px;
+	--r-heading-margin: 0 0 20px 0;
+	--r-heading-font: Montserrat, Impact, sans-serif;
+	--r-heading-color: #80001E;
+	--r-heading-line-height: 1.2;
+	--r-heading-letter-spacing: -0.03em;
+	--r-code-font: monospace;
+	--r-link-color: #004161;
+	--r-link-color-hover: #6a90a3;
+	--r-control-color: #faa319;
+	--r-selection-background-color: #faa319;
+	--r-selection-color: #fff;
+	--panel-bg: #fff;
+	--panel-text: #333;
+	--panel-muted: #777;
+	--panel-border: #ddd;
+}
+html, body { margin: 0; height: 100%; background: #d9d9d9; }
+.reveal-viewport { background-color: var(--r-background-color); }
+.reveal { font-family: var(--r-main-font); font-size: var(--r-main-font-size); color: var(--r-main-color); }
+.reveal ::selection { color: var(--r-selection-color); background: var(--r-selection-background-color); }
+.reveal .slides section { line-height: 1.3; text-align: left; }
+.reveal h1, .reveal h2, .reveal h3, .reveal h4 {
+	margin: var(--r-heading-margin); color: var(--r-heading-color);
+	font-family: var(--r-heading-font); font-weight: normal;
+	line-height: var(--r-heading-line-height); letter-spacing: var(--r-heading-letter-spacing);
+	text-transform: none; text-shadow: none; word-wrap: break-word;
+}
+.reveal h1 { font-size: 2.4em; }
+.reveal h2 { font-size: 1.45em; }
+.reveal p { margin: 14px 0; line-height: 1.3; }
+.reveal strong, .reveal b { font-weight: bold; }
+.reveal em { font-style: italic; }
+.reveal ol, .reveal ul { display: inline-block; text-align: left; margin: 0 0 0 1em; }
+.reveal ul ul, .reveal ol ul { display: block; margin-left: 40px; }
+.reveal li { margin: 4px 0; }
+.reveal pre { width: 100%; margin: 14px 0; font-size: 0.62em; line-height: 1.25em; box-shadow: 0 5px 15px rgba(0,0,0,.15); }
+.reveal pre code { max-height: 460px; padding: 10px 14px; }
+.reveal code { font-family: var(--r-code-font); }
+.reveal :not(pre) > code { background: rgba(0,0,0,.06); padding: 0 .2em; border-radius: 3px; font-size: .9em; }
+.reveal table { margin: 10px 0; border-collapse: collapse; font-size: .82em; }
+.reveal table th, .reveal table td { text-align: left; padding: .3em .6em; border-bottom: 1px solid; }
+.reveal table tbody tr:last-child td { border-bottom: none; }
+.reveal a { color: var(--r-link-color); text-decoration: none; }
+.reveal .controls { color: var(--r-control-color); }
+.reveal .progress { color: var(--r-control-color); }
+.highlight { color: var(--r-control-color); }
+
+/* ---- slide chrome ---- */
+.chrome { position: absolute; left: 40px; right: 40px; font-size: 13px; color: #888; letter-spacing: .06em; pointer-events: none; z-index: 5; font-family: var(--r-main-font); }
+.chrome.top { top: 14px; font-weight: 700; }
+.chrome.bottom { bottom: 12px; }
+.hide-chrome .chrome { display: none; }
+.reveal .slides section.title-slide { text-align: left; }
+.title-slide .logo { width: 300px; margin: 0 0 30px; }
+.title-slide .logo-text { font-family: var(--r-heading-font); color: #80001E; font-size: .7em; margin: 0 0 30px; }
+.title-slide .kicker { font-size: .5em; letter-spacing: .08em; color: #80001E; }
+.title-slide .subtitle { font-size: .8em; }
+.title-slide .byline { font-size: .55em; margin: 4px 0; }
+.divider .section-num { color: #faa319; font-family: var(--r-heading-font); font-size: 1.1em; margin: 0; }
+.reveal .divider h2 { color: #fff; font-size: 2em; }
+.divider .divider-sub { color: #fff; font-size: .8em; margin: 6px 0; opacity: .9; }
+.reveal .exercise h2 { color: #222; }
+.reveal .demo h2 { color: #80001E; }
+.reveal .solution h2::after { content: "SOLUTION"; margin-left: .6em; vertical-align: middle; font: 700 .32em "Open Sans", sans-serif; letter-spacing: .1em; color: #fff; background: #2e7d32; padding: .25em .6em; border-radius: 3px; }
+.reveal .solution p { margin: 8px 0 4px; }
+.reveal .solution pre { font-size: .5em; margin: 4px 0 10px; }
+.reveal .solution pre code { max-height: none; padding: 6px 12px; }
+.reveal .solution table { font-size: .68em; }
+.reveal .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: start; }
+.reveal .cols p { margin: 8px 0; }
+.reveal .cols pre { font-size: .62em; margin: 6px 0; }
+.reveal .cols pre code { max-height: none; }
+.reveal .demo p:first-of-type em { color: #80001E; font-weight: 700; font-style: normal; letter-spacing: .02em; }
+.reveal .exercise, .reveal .exercise table th, .reveal .exercise table td { color: #222; }
+.reveal .todos { font-size: .6em; }
+.reveal .todos ul { list-style: none; margin: 0; }
+.reveal .todos input { margin-right: .5em; }
+.reveal .appendix h2 { color: #555; }
+.reveal .slides section .notes { display: none; }
+
+/* ---- review layout ---- */
+#app { display: flex; height: 100vh; }
+#deck { flex: 1 1 auto; position: relative; min-width: 0; }
+#deck .reveal { width: 100%; height: 100%; }
+#panel { flex: 0 0 34%; max-width: 560px; background: var(--panel-bg); color: var(--panel-text); border-left: 1px solid var(--panel-border); overflow-y: auto; padding: 20px 24px 40px; box-sizing: border-box; font: 15px/1.5 "Open Sans", sans-serif; }
+#panel.hidden { display: none; }
+#panel .label { font: 700 12px Montserrat, sans-serif; letter-spacing: .08em; text-transform: uppercase; color: #80001E; margin: 0; }
+#panel h3 { font: 700 18px/1.3 Montserrat, sans-serif; margin: 4px 0 8px; color: #222; }
+#panel .meta { color: var(--panel-muted); font-size: 13px; margin-bottom: 12px; }
+#panel .flag { display: inline-block; background: #80001E; color: #fff; font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 3px; margin: 0 6px 6px 0; }
+#panel .notes-body ul { padding-left: 1.2em; margin: 0; }
+#panel .notes-body li { margin: 0 0 8px; }
+#panel .notes-body p { margin: 0 0 10px; }
+#panel .notes-body code { background: #f2f2f2; padding: 0 .25em; border-radius: 3px; font-size: .9em; }
+#panel .notes-body pre { background: #f6f6f6; padding: 8px; overflow-x: auto; font-size: 12px; }
+#panel .notes-body pre code, #panel .notes-body pre code * { color: inherit !important; background: none !important; }
+#panel .empty { color: var(--panel-muted); font-style: italic; }
+#panel .clock { margin-top: 18px; padding-top: 10px; border-top: 1px solid var(--panel-border); color: var(--panel-muted); font-size: 12px; }
+#toggle { position: fixed; right: 12px; bottom: 12px; z-index: 30; font: 700 12px Montserrat, sans-serif; background: #80001E; color: #fff; border: 0; border-radius: 4px; padding: 7px 12px; cursor: pointer; }
+@media (max-width: 800px) {
+	#app { flex-direction: column; }
+	#deck { flex: 0 0 56vh; }
+	#panel { flex: 1 1 auto; max-width: none; border-left: 0; border-top: 1px solid var(--panel-border); }
+}
+@media (prefers-color-scheme: dark) {
+	:root:not([data-theme="light"]) { --panel-bg: #1e1e1e; --panel-text: #ddd; --panel-muted: #999; --panel-border: #333; }
+	:root:not([data-theme="light"]) body { background: #111; }
+	:root:not([data-theme="light"]) #panel h3 { color: #eee; }
+	:root:not([data-theme="light"]) #panel .label { color: #faa319; }
+	:root:not([data-theme="light"]) #panel .notes-body code, :root:not([data-theme="light"]) #panel .notes-body pre { background: #2a2a2a; }
+}
+:root[data-theme="dark"] { --panel-bg: #1e1e1e; --panel-text: #ddd; --panel-muted: #999; --panel-border: #333; }
+</style>
+</head>
+<body>
+<div id="app">
+	<div id="deck">
+		<div class="reveal">
+			<div class="chrome top">PUBLICATION: REPORTS &amp; REPLICABILITY</div>
+			<div class="chrome bottom">Development Innovation Lab / University of Chicago · Publication: Reports &amp; Replicability</div>
+			<div class="slides">
+<section class="title-slide" data-label="Slide 1" data-title="Title" data-timing="0.5 min" data-start="0" data-flags="S5 v2 1"><img class="logo" src="data:image/svg+xml;base64,PHN2ZyBpZD0iTGF5ZXJfMSIgZGF0YS1uYW1lPSJMYXllciAxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2aWV3Qm94PSIwIDAgMzAwIDE0MCI+PGRlZnM+PHN0eWxlPi5jbHMtMXtmaWxsOiNmYWE2MWE7fS5jbHMtMntmaWxsOm5vbmU7fS5jbHMtM3tjbGlwLXBhdGg6dXJsKCNjbGlwLXBhdGgpO30uY2xzLTR7b3BhY2l0eTowLjg7fS5jbHMtNXtmaWxsOnVybCgjcmFkaWFsLWdyYWRpZW50KTt9LmNscy02e2ZpbGw6dXJsKCNyYWRpYWwtZ3JhZGllbnQtMik7fS5jbHMtN3tmaWxsOnVybCgjcmFkaWFsLWdyYWRpZW50LTMpO30uY2xzLTh7ZmlsbDp1cmwoI3JhZGlhbC1ncmFkaWVudC00KTt9LmNscy05e2NsaXAtcGF0aDp1cmwoI2NsaXAtcGF0aC0yKTt9LmNscy0xMHtmaWxsOiM4YjAwMjE7fS5jbHMtMTF7ZmlsbDojOTM5NTk4O30uY2xzLTEye2ZpbGw6IzMwMzU0MDt9PC9zdHlsZT48Y2xpcFBhdGggaWQ9ImNsaXAtcGF0aCI+PHBhdGggY2xhc3M9ImNscy0xIiBkPSJNNjMuNTEsMzIuMTdBNDIuNjYsNDIuNjYsMCwwLDAsNDEuNjksMjZsMCwyMy40M2ExOS41MiwxOS41MiwwLDAsMS0uMDcsMzlsMCwyMy40NGE0Myw0MywwLDAsMCwyMi03OS43NloiLz48L2NsaXBQYXRoPjxyYWRpYWxHcmFkaWVudCBpZD0icmFkaWFsLWdyYWRpZW50IiBjeD0iLTc2NS41IiBjeT0iNTIuMzEiIHI9Ijc3LjAyIiBncmFkaWVudFRyYW5zZm9ybT0idHJhbnNsYXRlKDgwNy44OSAxNDEuNzYpIHJvdGF0ZSg5LjAyKSIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2ZhYTYxYSIvPjxzdG9wIG9mZnNldD0iMC45OSIgc3RvcC1jb2xvcj0iIzhiMDAyMSIvPjwvcmFkaWFsR3JhZGllbnQ+PHJhZGlhbEdyYWRpZW50IGlkPSJyYWRpYWwtZ3JhZGllbnQtMiIgY3g9Ii03NjUuMTMiIGN5PSI1Mi42MiIgcj0iNzYuNTQiIHhsaW5rOmhyZWY9IiNyYWRpYWwtZ3JhZGllbnQiLz48cmFkaWFsR3JhZGllbnQgaWQ9InJhZGlhbC1ncmFkaWVudC0zIiBjeD0iLTc2NS4wOCIgY3k9IjUzLjg5IiByPSI3Ny45MiIgeGxpbms6aHJlZj0iI3JhZGlhbC1ncmFkaWVudCIvPjxyYWRpYWxHcmFkaWVudCBpZD0icmFkaWFsLWdyYWRpZW50LTQiIGN4PSItNzY1LjE0IiBjeT0iNTMuODkiIHI9Ijc3LjU3IiB4bGluazpocmVmPSIjcmFkaWFsLWdyYWRpZW50Ii8+PGNsaXBQYXRoIGlkPSJjbGlwLXBhdGgtMiI+PHBvbHlnb24gY2xhc3M9ImNscy0yIiBwb2ludHM9IjQxLjUzIDEwOC4yNCA0MS42OCAzMC4xNCAxNi43MyA2MC43MiAxNi44MyA3OS4wNiA0MS41MyAxMDguMjQiLz48L2NsaXBQYXRoPjwvZGVmcz48cGF0aCBjbGFzcz0iY2xzLTEiIGQ9Ik02My41MSwzMi4xN0E0Mi42Niw0Mi42NiwwLDAsMCw0MS42OSwyNmwwLDIzLjQzYTE5LjUyLDE5LjUyLDAsMCwxLS4wNywzOWwwLDIzLjQ0YTQzLDQzLDAsMCwwLDIyLTc5Ljc2WiIvPjxnIGNsYXNzPSJjbHMtMyI+PGcgY2xhc3M9ImNscy00Ij48cGF0aCBjbGFzcz0iY2xzLTUiIGQ9Ik0xMCw3NC40Yy00LjY1LS43NC04LTIuNjMtOS4zNi01LjctMy43OC04LjQyLDcuOS0yMCwyNy44Ny0yOWgwYzIwLTksMzguNTctOS4zNyw0Mi4zNS0xcy04LjksMjItMjguODcsMzFBNTUuOTMsNTUuOTMsMCwwLDEsMTAsNzQuNFpNMjkuMTYsNDEuMTJDMTAuNjMsNDkuNDQtMS4yNCw2MC42OSwyLjA3LDY4LjA3czIwLjc2LDguNTcsMzkuMjkuMjZTNzIuNzUsNDYuNzYsNjkuNDUsMzkuMzlzLTIxLjc2LTYuNTgtNDAuMjksMS43M1oiLz48cGF0aCBjbGFzcz0iY2xzLTYiIGQ9Ik0xMy41NSw5MC44QzguNDUsOTAsNC44LDg3LjkyLDMuMyw4NC41N2MtMi00LjUyLjI1LTEwLjU4LDYuNC0xNyw2LTYuMywxNC0xMC4zMywyNC4zNC0xNWgwYzEwLjM1LTQuNjQsMjAuODQtNy4zNiwyOS41My03LjY0LDguOTMtLjI5LDE1LDIsMTcsNi41NXMtLjI1LDEwLjU3LTYuNCwxN2MtNiw2LjMtMTUsMTIuMzMtMjUuMzQsMTdDMzQuODQsOTEuNzUsMjIuNDgsOTIuMjIsMTMuNTUsOTAuOFptNTYuNTItNDRhMzMuNjEsMzMuNjEsMCwwLDAtNi40NS0uMzVjLTguNDkuMjctMTguNzcsMi45NC0yOC45NCw3LjVoMGMtMTAuMTcsNC41Ny0xOCw4LjQ3LTIzLjg1LDE0LjYzQzUuMjIsNzQuNDksMyw4MC4wOCw0LjcyLDgzLjkzYzMuNzIsOC4yOSwyMi42Nyw5LjQ1LDQzLjQ2LjEzLDEwLjE3LTQuNTcsMTktMTAuNDcsMjQuODUtMTYuNjMsNS42LTUuOSw3LjgzLTExLjQ5LDYuMTEtMTUuMzRDNzcuOTEsNDkuMzcsNzQuNzIsNDcuNTQsNzAuMDcsNDYuODFaIi8+PHBhdGggY2xhc3M9ImNscy03IiBkPSJNMzAuNDksMTAwLjY1Yy0zLjcyLS41OS02LjI0LTIuMDktNy4yNy00LjQxLTEuNTEtMy4zNi4zMy03LjksNS4xOC0xMi44QzMzLjA4LDc4LjcyLDQwLjA1LDc0LjE1LDQ4LDcwLjU3czE2LTUuNzQsMjIuNjUtNi4xYzYuODktLjM2LDExLjUxLDEuMjksMTMsNC42NFM4My4zNSw3Nyw3OC40OSw4MS45MmMtNC42Nyw0LjcyLTExLjY0LDkuMjktMTkuNjEsMTIuODdzLTE2LDUuNzQtMjIuNjUsNi4wOUEyNi45NCwyNi45NCwwLDAsMSwzMC40OSwxMDAuNjVabTQ1LjY2LTM0LjRhMjUuNywyNS43LDAsMCwwLTUuNC0uMjJjLTYuNDUuMzUtMTQuMywyLjQ2LTIyLjEsNmgwYy03LjgsMy41LTE0LjU5LDgtMTkuMTQsMTIuNTQtNC4zLDQuMzUtNi4wOCw4LjM4LTQuODcsMTEuMDhzNS40LDQsMTEuNTEsMy43MmM2LjQ1LS4zNSwxNC4yOS0yLjQ2LDIyLjA5LTZzMTQuNi04LDE5LjE1LTEyLjU1YzQuMy00LjM0LDYuMDgtOC4zOCw0Ljg3LTExLjA3QzgxLjQ1LDY4LDc5LjMxLDY2Ljc1LDc2LjE1LDY2LjI1WiIvPjxwYXRoIGNsYXNzPSJjbHMtOCIgZD0iTTUwLjk0LDEwOS40QzQwLjU3LDEwNy43NiwyOS4zMiw5MywyMi4wNyw3NSwxNiw2MCwxNC43Myw0NC43MiwxOC44MSwzNS4yNGMxLjY5LTQsMy4zLTQuNzIsNi41NS02QzM2LjksMjQuNjksNTQsMzguOTIsNjIuNiw2MC4zMWgwYzUuODgsMTQuNTMsNi45NSwzMC4yNCwyLjc1LDQwLTEuODEsNC4yLTQuNTIsNy4xMi03Ljg1LDguNDNBMTIuMzksMTIuMzksMCwwLDEsNTAuOTQsMTA5LjRaTTMyLjI0LDMwLjFhMTEuOTQsMTEuOTQsMCwwLDAtNi4zMS41OWMtMi44OSwxLjE0LTQuMTQsMS41NS01LjY5LDUuMTYtMy45Miw5LjEyLTMuNjYsMjUuOTEsMi4yOCw0MC42LDguNTQsMjEuMTQsMjQsMzUsMzQuNDEsMzAuODgsMi45My0xLjE2LDUuMzUtMy43OCw3LTcuNTksNC4wNi05LjQ0LDMtMjQuNjktMi43NS0zOC44NWgwQzU0LjM0LDQ0LDQyLjI5LDMxLjcsMzIuMjQsMzAuMVoiLz48L2c+PC9nPjxnIGNsYXNzPSJjbHMtOSI+PHBhdGggY2xhc3M9ImNscy0xMCIgZD0iTTU5Ljc2LDc3LjE0bDEuNDctNC42NGEuNy43LDAsMCwwLS40My0uODlsLTMuNTYtMS42OGExNS44MSwxNS44MSwwLDAsMC0uMTYtMy4zN2wzLjQtMmEuNy43LDAsMCwwLC4zNS0uOTNsLTEuODktNC40OGEuNzEuNzEsMCwwLDAtLjkxLS40bC0zLjgyLDFhMTMuNywxMy43LDAsMCwwLTEuNDItMS42M2wxLjU5LTMuNjRhLjcxLjcxLDAsMCwwLS4yNy0xTDUwLDUxLjA2YS43LjcsMCwwLDAtMSwuMjFsLTIuNSwzLjExYTE1LjI1LDE1LjI1LDAsMCwwLTMuMjYtLjYybC0xLjE3LTMuODJhLjcxLjcxLDAsMCwwLS44Mi0uNTZsLTQuOC43OWEuNzEuNzEsMCwwLDAtLjYuNzlMMzYsNTVhMTUuNywxNS43LDAsMCwwLTIuODcsMS42M0wyOS43LDU0LjQ1YS43MS43MSwwLDAsMC0xLC4xMWwtMy4xNCwzLjcyYS43Mi43MiwwLDAsMCwuMDYsMWwyLjcxLDNoMGExNS42LDE1LjYsMCwwLDAtMS4xMywzLjFsLTQsLjU2YS43LjcsMCwwLDAtLjY4LjcybDAsNC44NmEuNzIuNzIsMCwwLDAsLjY5LjcybDQsLjUxYTE2LjIsMTYuMiwwLDAsMCwxLjE2LDMuMDlsLTIuNjUsM2EuNy43LDAsMCwwLS4wNSwxbDMuMTgsMy42OGEuNy43LDAsMCwwLDEsLjFsMy4zNC0yLjE4Yy4zLjIxLjYuNDEuOTIuNjFhMTYuMTgsMTYuMTgsMCwwLDAsMiwxbC0uMDcsNGEuNy43LDAsMCwwLC42MS43OGw0LjgxLjczYS42OS42OSwwLDAsMCwuODEtLjU2bDEuMTEtMy44YTE1LjM3LDE1LjM3LDAsMCwwLDMuMjktLjY3bDIuNTIsM2EuNzEuNzEsMCwwLDAsMSwuMmw0LjEzLTIuNTdhLjcxLjcxLDAsMCwwLC4yNS0xTDUyLjk0LDc5LjZBMTUuMzcsMTUuMzcsMCwwLDAsNTUsNzYuOTNsMy44Ny42OUEuNzEuNzEsMCwwLDAsNTkuNzYsNzcuMTRaIi8+PC9nPjxwYXRoIGNsYXNzPSJjbHMtMTEiIGQ9Ik0xNTQuMiw4OS44NnYwYzAtMS4xMy44NS0xLjY0LDIuMDgtMS42NGEzLjU3LDMuNTcsMCwwLDEsMS4yNi4yMXYtLjA5YzAtLjYxLS4zOC0uOTQtMS4xMS0uOTRhMy42MywzLjYzLDAsMCwwLTEuNDIuMjhsLS4zNy0xLjEyYTQuNTcsNC41NywwLDAsMSwyLS40MiwyLjQzLDIuNDMsMCwwLDEsMS43NS41OCwyLjI5LDIuMjksMCwwLDEsLjU1LDEuNjV2M2gtMS40MXYtLjU1YTIsMiwwLDAsMS0xLjU2LjY1QTEuNiwxLjYsMCwwLDEsMTU0LjIsODkuODZabTMuMzYtLjM0di0uMjZhMi4zOCwyLjM4LDAsMCwwLS45NC0uMTljLS42MiwwLTEsLjI1LTEsLjcxdjBjMCwuNC4zMy42My44LjYzQzE1Ny4wOSw5MC40MywxNTcuNTYsOTAuMDUsMTU3LjU2LDg5LjUyWiIvPjxwYXRoIGNsYXNzPSJjbHMtMTEiIGQ9Ik0xNjAuMzYsODkuODhWODcuNDNoLS42MlY4Ni4xOGguNjJWODQuODZoMS40NnYxLjMySDE2M3YxLjI1aC0xLjIxdjIuMjFjMCwuMzQuMTUuNS40Ny41QTEuNTQsMS41NCwwLDAsMCwxNjMsOTB2MS4xN2EyLjE1LDIuMTUsMCwwLDEtMS4xNS4zQzE2MSw5MS40MywxNjAuMzYsOTEuMDcsMTYwLjM2LDg5Ljg4WiIvPjxwYXRoIGNsYXNzPSJjbHMtMTEiIGQ9Ik0xNjcuMDUsODguNDZWODQuNmgxLjQ4djMuODJjMCwxLjA5LjU1LDEuNjYsMS40NSwxLjY2czEuNDYtLjU1LDEuNDYtMS42MlY4NC42aDEuNDh2My44MWEyLjcxLDIuNzEsMCwwLDEtMywzQTIuNjcsMi42NywwLDAsMSwxNjcuMDUsODguNDZaIi8+PHBhdGggY2xhc3M9ImNscy0xMSIgZD0iTTE3NC4yOCw4Ni4xOGgxLjQ2di43M2ExLjgzLDEuODMsMCwwLDEsMS41MS0uODJBMS42OSwxLjY5LDAsMCwxLDE3OSw4OHYzLjM0aC0xLjQ2Vjg4LjQ2YzAtLjY5LS4zMy0xLS44OS0xcy0uOTEuMzUtLjkxLDF2Mi44OGgtMS40NloiLz48cGF0aCBjbGFzcz0iY2xzLTExIiBkPSJNMTgwLjMsODQuMzFoMS41NHYxLjNIMTgwLjNabTAsMS44N2gxLjQ2djUuMTZoLTEuNDZaIi8+PHBhdGggY2xhc3M9ImNscy0xMSIgZD0iTTE4Mi43Miw4Ni4xOGgxLjU1bDEuMTUsMy40NiwxLjE3LTMuNDZoMS41MmwtMiw1LjJoLTEuMzNaIi8+PHBhdGggY2xhc3M9ImNscy0xMSIgZD0iTTE4OC40NCw4OC43OXYwQTIuNTcsMi41NywwLDAsMSwxOTEsODYuMDlhMi41MSwyLjUxLDAsMCwxLDIuNTEsMi44YzAsLjExLDAsLjI1LDAsLjM4aC0zLjU5YTEuMiwxLjIsMCwwLDAsMS4yNiwxLDEuNjcsMS42NywwLDAsMCwxLjI1LS41M2wuODQuNzVhMi43MiwyLjcyLDAsMCwxLTQuOC0xLjcxWm0zLjY0LS40M2ExLjExLDEuMTEsMCwwLDAtMS4wOS0xLjFjLS42MSwwLTEsLjQzLTEuMTIsMS4xWiIvPjxwYXRoIGNsYXNzPSJjbHMtMTEiIGQ9Ik0xOTQuNTcsODYuMThIMTk2djFhMS41OSwxLjU5LDAsMCwxLDEuNjUtMS4xM3YxLjUzaC0uMDhjLTEsMC0xLjU3LjU4LTEuNTcsMS44MnYxLjloLTEuNDZaIi8+PHBhdGggY2xhc3M9ImNscy0xMSIgZD0iTTE5OC4xOSw5MC42NmwuNjItMWEzLDMsMCwwLDAsMS42My42MWMuNDIsMCwuNjItLjE1LjYyLS4zOHYwYzAtLjMyLS41LS40Mi0xLjA3LS42LS43Mi0uMjEtMS41NC0uNTUtMS41NC0xLjU1djBhMS42OCwxLjY4LDAsMCwxLDEuODgtMS42MywzLjYyLDMuNjIsMCwwLDEsMS45My41OWwtLjU2LDFhMy4xNiwzLjE2LDAsMCwwLTEuMzktLjQ4Yy0uMzYsMC0uNTQuMTYtLjU0LjM2djBjMCwuMjkuNDkuNDIsMSwuNjEuNzIuMjQsMS41Ni41OSwxLjU2LDEuNTN2MGMwLDEuMTUtLjg2LDEuNjctMiwxLjY3QTMuNTksMy41OSwwLDAsMSwxOTguMTksOTAuNjZaIi8+PHBhdGggY2xhc3M9ImNscy0xMSIgZD0iTTIwMy40NSw4NC4zMUgyMDV2MS4zaC0xLjU0Wm0wLDEuODdIMjA1djUuMTZoLTEuNDdaIi8+PHBhdGggY2xhc3M9ImNscy0xMSIgZD0iTTIwNi41Nyw4OS44OFY4Ny40M0gyMDZWODYuMThoLjYxVjg0Ljg2SDIwOHYxLjMyaDEuMjF2MS4yNUgyMDh2Mi4yMWMwLC4zNC4xNC41LjQ3LjVhMS41NCwxLjU0LDAsMCwwLC43Mi0uMTh2MS4xN2EyLjE4LDIuMTgsMCwwLDEtMS4xNi4zQzIwNy4xOCw5MS40MywyMDYuNTcsOTEuMDcsMjA2LjU3LDg5Ljg4WiIvPjxwYXRoIGNsYXNzPSJjbHMtMTEiIGQ9Ik0yMTMuNzIsODYuMThoMS41MmwtMiw1LjI5Yy0uMzksMS0uODIsMS40NC0xLjY5LDEuNDRhMi40MiwyLjQyLDAsMCwxLTEuMy0uMzVsLjQ5LTEuMDZhMS4zNywxLjM3LDAsMCwwLC42My4yLjQ5LjQ5LDAsMCwwLC41MS0uMzRsLTItNS4xOGgxLjU1bDEuMTgsMy41MloiLz48cGF0aCBjbGFzcz0iY2xzLTExIiBkPSJNMTU0LjI1LDk4LjkzdjBhMi43MiwyLjcyLDAsMCwxLDIuODEtMi42OSwyLjY5LDIuNjksMCwwLDEsMi43OCwyLjY3djBhMi44LDIuOCwwLDAsMS01LjU5LDBabTQuMTQsMHYwQTEuMzcsMS4zNywwLDAsMCwxNTcsOTcuNDhhMS4zMywxLjMzLDAsMCwwLTEuMzQsMS40MXYwYTEuMzcsMS4zNywwLDAsMCwxLjM2LDEuNDJBMS4zMiwxLjMyLDAsMCwwLDE1OC4zOSw5OC45M1oiLz48cGF0aCBjbGFzcz0iY2xzLTExIiBkPSJNMTYxLjA5LDk3LjU3aC0uNjF2LTEuMmguNjFWOTZhMS42OSwxLjY5LDAsMCwxLC40MS0xLjI1LDEuNjIsMS42MiwwLDAsMSwxLjE5LS40MSwzLjE0LDMuMTQsMCwwLDEsMSwuMTV2MS4yMWEyLDIsMCwwLDAtLjY3LS4xMmMtLjMzLDAtLjUzLjE3LS41My41NnYuMmgxLjE5djEuMTloLTEuMTd2My45MWgtMS40NloiLz48cGF0aCBjbGFzcz0iY2xzLTExIiBkPSJNMTY3LjI2LDk4LjEzdjBhMy40MywzLjQzLDAsMCwxLDMuNTEtMy40OSwzLjQ3LDMuNDcsMCwwLDEsMi42NiwxbC0uOTQsMS4wOGEyLjUsMi41LDAsMCwwLTEuNzMtLjc2LDIsMiwwLDAsMC0xLjk1LDIuMXYwYTIsMiwwLDAsMCwxLjk1LDIuMTIsMi40NiwyLjQ2LDAsMCwwLDEuNzgtLjc5bC45NCwxYTMuNDQsMy40NCwwLDAsMS0yLjc2LDEuMjFBMy40LDMuNCwwLDAsMSwxNjcuMjYsOTguMTNaIi8+PHBhdGggY2xhc3M9ImNscy0xMSIgZD0iTTE3NC41MSw5NC40NUgxNzZ2Mi42YTEuODQsMS44NCwwLDAsMSwxLjUxLS44MywxLjcsMS43LDAsMCwxLDEuNzYsMS45MnYzLjM0aC0xLjQ3Vjk4LjZjMC0uNjktLjMzLTEtLjg4LTFzLS45Mi4zNi0uOTIsMXYyLjg4aC0xLjQ2WiIvPjxwYXRoIGNsYXNzPSJjbHMtMTEiIGQ9Ik0xODAuNTMsOTQuNDVoMS41NHYxLjNoLTEuNTRabTAsMS44N0gxODJ2NS4xNmgtMS40N1oiLz48cGF0aCBjbGFzcz0iY2xzLTExIiBkPSJNMTgzLjA4LDk4LjkzdjBhMi42NiwyLjY2LDAsMCwxLDIuNzEtMi42OSwyLjU0LDIuNTQsMCwwLDEsMi4wNi44N2wtLjksMWExLjUxLDEuNTEsMCwwLDAtMS4xNy0uNTcsMS4zMiwxLjMyLDAsMCwwLTEuMjUsMS40MXYwYTEuMzIsMS4zMiwwLDAsMCwxLjMxLDEuNDIsMS42MywxLjYzLDAsMCwwLDEuMTgtLjU0bC44Ni44NmEyLjYsMi42LDAsMCwxLTIuMTEuOTVBMi42NCwyLjY0LDAsMCwxLDE4My4wOCw5OC45M1oiLz48cGF0aCBjbGFzcz0iY2xzLTExIiBkPSJNMTg4LjUyLDEwMHYwYzAtMS4xMy44Ni0xLjY1LDIuMDgtMS42NWEzLjc2LDMuNzYsMCwwLDEsMS4yNi4yMXYtLjA4YzAtLjYxLS4zNy0uOTUtMS4xLS45NWEzLjg4LDMuODgsMCwwLDAtMS40My4yOEwxODksOTYuNjhhNC41LDQuNSwwLDAsMSwyLS40MiwyLjM1LDIuMzUsMCwwLDEsMS43NC41OCwyLjIyLDIuMjIsMCwwLDEsLjU2LDEuNjV2M2gtMS40MnYtLjU2YTIsMiwwLDAsMS0xLjU2LjY2QTEuNiwxLjYsMCwwLDEsMTg4LjUyLDEwMFptMy4zNi0uMzRWOTkuNGEyLjMzLDIuMzMsMCwwLDAtLjkzLS4xOWMtLjYzLDAtMSwuMjUtMSwuNzF2MGMwLC4zOS4zMy42My44LjYzQzE5MS40MiwxMDAuNTcsMTkxLjg4LDEwMC4xOSwxOTEuODgsOTkuNjZaIi8+PHBhdGggY2xhc3M9ImNscy0xMSIgZD0iTTE5NC40OCwxMDIuNWwuNS0xLjFhMy4zNiwzLjM2LDAsMCwwLDEuNzQuNDhjMSwwLDEuNDgtLjQ5LDEuNDgtMS40MXYtLjI1YTIsMiwwLDAsMS0xLjY5Ljg0LDIuMjcsMi4yNywwLDAsMS0yLjI5LTIuNDF2MGEyLjI4LDIuMjgsMCwwLDEsMi4yOS0yLjQxLDIuMTEsMi4xMSwwLDAsMSwxLjY3Ljc3di0uNjdoMS40NnY0YTIuOCwyLjgsMCwwLDEtLjY1LDIsMywzLDAsMCwxLTIuMjMuNjlBNC44OSw0Ljg5LDAsMCwxLDE5NC40OCwxMDIuNVptMy43Mi0zLjg1djBhMS4xOSwxLjE5LDAsMCwwLTEuMjYtMS4xOSwxLjE4LDEuMTgsMCwwLDAtMS4yNSwxLjE5djBhMS4xNywxLjE3LDAsMCwwLDEuMjUsMS4xOUExLjE5LDEuMTksMCwwLDAsMTk4LjIsOTguNjVaIi8+PHBhdGggY2xhc3M9ImNscy0xMSIgZD0iTTIwMC42OCw5OC45M3YwYTIuOCwyLjgsMCwwLDEsNS41OSwwdjBhMi43MiwyLjcyLDAsMCwxLTIuODEsMi42OUEyLjY5LDIuNjksMCwwLDEsMjAwLjY4LDk4LjkzWm00LjE0LDB2MGExLjM4LDEuMzgsMCwwLDAtMS4zNi0xLjQzLDEuMzMsMS4zMywwLDAsMC0xLjM0LDEuNDF2MGExLjM3LDEuMzcsMCwwLDAsMS4zNiwxLjQyQTEuMzIsMS4zMiwwLDAsMCwyMDQuODIsOTguOTNaIi8+PHBhdGggY2xhc3M9ImNscy0xMiIgZD0iTTEwNi4zMiwzNC41NGg2LjQyYzUuMTcsMCw4Ljc0LDMuNTUsOC43NCw4LjE4di4wNWMwLDQuNjMtMy41Nyw4LjIyLTguNzQsOC4yMmgtNi40MlptMy42MiwzLjI3djkuOTJoMi44YTQuNjgsNC42OCwwLDAsMCw1LTQuOTJ2MGE0LjcyLDQuNzIsMCwwLDAtNS01WiIvPjxwYXRoIGNsYXNzPSJjbHMtMTIiIGQ9Ik0xMjMuNDEsNDQuNzd2LS4wNWE2LjI3LDYuMjcsMCwwLDEsNi4yMi02LjU2YzQuMjEsMCw2LjE0LDMuMjcsNi4xNCw2Ljg0LDAsLjI4LDAsLjYxLS4wNS45NEgxMjdBMi45MywyLjkzLDAsMCwwLDEzMCw0OC40MWE0LjE2LDQuMTYsMCwwLDAsMy4wNi0xLjI5bDIsMS44YTYuNjUsNi42NSwwLDAsMS0xMS43Mi00LjE1Wm04Ljg4LTEuMDZjLS4yMS0xLjYtMS4xNS0yLjY4LTIuNjYtMi42OHMtMi40NCwxLjA2LTIuNzIsMi42OFoiLz48cGF0aCBjbGFzcz0iY2xzLTEyIiBkPSJNMTM2LjYsMzguNGgzLjc5bDIuODIsOC40MywyLjg0LTguNDNoMy43MWwtNSwxMi42OWgtMy4yNFoiLz48cGF0aCBjbGFzcz0iY2xzLTEyIiBkPSJNMTUwLjYxLDQ0Ljc3di0uMDVhNi4yNyw2LjI3LDAsMCwxLDYuMjMtNi41NmM0LjIsMCw2LjEzLDMuMjcsNi4xMyw2Ljg0LDAsLjI4LDAsLjYxLS4wNS45NGgtOC43NmEyLjkyLDIuOTIsMCwwLDAsMy4wOCwyLjQ3LDQuMTYsNC4xNiwwLDAsMCwzLTEuMjlsMiwxLjhhNi42NSw2LjY1LDAsMCwxLTExLjcyLTQuMTVabTguODgtMS4wNmMtLjIxLTEuNi0xLjE1LTIuNjgtMi42NS0yLjY4cy0yLjQ1LDEuMDYtMi43MywyLjY4WiIvPjxwYXRoIGNsYXNzPSJjbHMtMTIiIGQ9Ik0xNjUuNDQsMzMuODRIMTY5VjUxaC0zLjU3WiIvPjxwYXRoIGNsYXNzPSJjbHMtMTIiIGQ9Ik0xNzEuNDEsNDQuNzd2LS4wNWE2LjgyLDYuODIsMCwwLDEsMTMuNjMsMHYwYTYuODIsNi44MiwwLDAsMS0xMy42My4wNVptMTAuMSwwdi0uMDVhMy4zNSwzLjM1LDAsMCwwLTMuMzEtMy40OCwzLjIyLDMuMjIsMCwwLDAtMy4yNywzLjQzdjBhMy4zNSwzLjM1LDAsMCwwLDMuMzEsMy40OEEzLjIzLDMuMjMsMCwwLDAsMTgxLjUxLDQ0Ljc3WiIvPjxwYXRoIGNsYXNzPSJjbHMtMTIiIGQ9Ik0xODcuNDYsMzguNEgxOTF2MS44MUE0LjYyLDQuNjIsMCwwLDEsMTk1LDM4LjE2YzIuOTQsMCw1Ljc0LDIuMyw1Ljc0LDYuNTF2MGMwLDQuMi0yLjc1LDYuNTEtNS43NCw2LjUxQTQuODMsNC44MywwLDAsMSwxOTEsNDkuMzV2NS40aC0zLjU3Wm05LjY1LDYuMzJ2MGEzLjA5LDMuMDksMCwxLDAtNi4xMywwdjBhMy4wOSwzLjA5LDAsMSwwLDYuMTMsMFoiLz48cGF0aCBjbGFzcz0iY2xzLTEyIiBkPSJNMjAzLjExLDM4LjRoMy41N3YxLjc4YTQuNTEsNC41MSwwLDAsMSwzLjcxLTIsMy43NywzLjc3LDAsMCwxLDMuNTUsMiw1LjE5LDUuMTksMCwwLDEsNC4xNC0yYzIuNjUsMCw0LjI1LDEuNiw0LjI1LDQuNjNWNTFoLTMuNTdWNDRjMC0xLjctLjc2LTIuNTctMi4wOS0yLjU3cy0yLjE3Ljg3LTIuMTcsMi41N3Y3aC0zLjU3VjQ0YzAtMS43LS43NS0yLjU3LTIuMDktMi41N3MtMi4xNi44Ny0yLjE2LDIuNTd2N2gtMy41N1oiLz48cGF0aCBjbGFzcz0iY2xzLTEyIiBkPSJNMjI0LjQ0LDQ0Ljc3di0uMDVhNi4yOCw2LjI4LDAsMCwxLDYuMjMtNi41NmM0LjIxLDAsNi4xMywzLjI3LDYuMTMsNi44NCwwLC4yOCwwLC42MSwwLC45NEgyMjhhMi45MywyLjkzLDAsMCwwLDMuMDgsMi40Nyw0LjE2LDQuMTYsMCwwLDAsMy4wNi0xLjI5bDIsMS44YTYuNjYsNi42NiwwLDAsMS0xMS43My00LjE1Wm04Ljg5LTEuMDZjLS4yMS0xLjYtMS4xNS0yLjY4LTIuNjYtMi42OHMtMi40NCwxLjA2LTIuNzIsMi42OFoiLz48cGF0aCBjbGFzcz0iY2xzLTEyIiBkPSJNMjM4Ljg3LDM4LjRoMy41OHYxLjc4YTQuNDcsNC40NywwLDAsMSwzLjY4LTJjMi43MSwwLDQuMjgsMS43OSw0LjI4LDQuNjhWNTFoLTMuNTdWNDRjMC0xLjctLjgtMi41Ny0yLjE2LTIuNTdzLTIuMjMuODctMi4yMywyLjU3djdoLTMuNThaIi8+PHBhdGggY2xhc3M9ImNscy0xMiIgZD0iTTI1NCw0Ny40MnYtNmgtMS41VjM4LjRIMjU0VjM1LjE4aDMuNThWMzguNGgzdjMuMDVoLTN2NS4zOGMwLC44My4zNSwxLjIyLDEuMTUsMS4yMmEzLjY3LDMuNjcsMCwwLDAsMS43Ni0uNDR2Mi44N2E1LjMyLDUuMzIsMCwwLDEtMi44Mi43MkMyNTUuNDYsNTEuMiwyNTQsNTAuMzMsMjU0LDQ3LjQyWiIvPjxwYXRoIGNsYXNzPSJjbHMtMTIiIGQ9Ik0xMDYuNDksNTkuNzloMy42MVY3Ni4yNGgtMy42MVoiLz48cGF0aCBjbGFzcz0iY2xzLTEyIiBkPSJNMTEzLjg0LDYzLjY1aDMuNTd2MS43OGE0LjQ4LDQuNDgsMCwwLDEsMy42OS0yYzIuNywwLDQuMjgsMS43OSw0LjI4LDQuNjh2OC4xNWgtMy41N3YtN2MwLTEuNy0uOC0yLjU3LTIuMTYtMi41N3MtMi4yNC44Ny0yLjI0LDIuNTd2N2gtMy41N1oiLz48cGF0aCBjbGFzcz0iY2xzLTEyIiBkPSJNMTI4LjYsNjMuNjVoMy41N3YxLjc4YTQuNDcsNC40NywwLDAsMSwzLjY5LTJjMi43LDAsNC4yNywxLjc5LDQuMjcsNC42OHY4LjE1aC0zLjU3di03YzAtMS43LS44LTIuNTctMi4xNi0yLjU3cy0yLjIzLjg3LTIuMjMsMi41N3Y3SDEyOC42WiIvPjxwYXRoIGNsYXNzPSJjbHMtMTIiIGQ9Ik0xNDIuMTgsNzB2MGE2LjgyLDYuODIsMCwwLDEsMTMuNjMsMHYwYTYuODIsNi44MiwwLDAsMS0xMy42MywwWm0xMC4xLDB2MEEzLjM1LDMuMzUsMCwwLDAsMTQ5LDY2LjQ5YTMuMjMsMy4yMywwLDAsMC0zLjI3LDMuNDN2MEEzLjM1LDMuMzUsMCwwLDAsMTQ5LDczLjQ1LDMuMjMsMy4yMywwLDAsMCwxNTIuMjgsNzBaIi8+PHBhdGggY2xhc3M9ImNscy0xMiIgZD0iTTE1Ni42MSw2My42NWgzLjc4bDIuODIsOC40MywyLjg1LTguNDNoMy43MWwtNSwxMi42OWgtMy4yNFoiLz48cGF0aCBjbGFzcz0iY2xzLTEyIiBkPSJNMTcwLjY5LDcyLjYydjBjMC0yLjc1LDIuMDktNCw1LjA3LTRhOC44Myw4LjgzLDAsMCwxLDMuMDguNTJ2LS4yMmMwLTEuNDgtLjkxLTIuMy0yLjctMi4zYTkuMzQsOS4zNCwwLDAsMC0zLjQ4LjY4bC0uODktMi43MmExMS4xNCwxMS4xNCwwLDAsMSw0Ljg5LTEsNS43Nyw1Ljc3LDAsMCwxLDQuMjUsMS40MSw1LjQ3LDUuNDcsMCwwLDEsMS4zNiw0djcuMzFoLTMuNDVWNzQuODhhNC44Niw0Ljg2LDAsMCwxLTMuODEsMS42QzE3Mi42NCw3Ni40OCwxNzAuNjksNzUuMTEsMTcwLjY5LDcyLjYyWm04LjItLjgydi0uNjNhNS40MSw1LjQxLDAsMCwwLTIuMjgtLjQ3Yy0xLjUzLDAtMi40Ny42MS0yLjQ3LDEuNzR2MGMwLDEsLjgsMS41MywyLDEuNTNDMTc3Ljc2LDc0LDE3OC44OSw3My4wOSwxNzguODksNzEuOFoiLz48cGF0aCBjbGFzcz0iY2xzLTEyIiBkPSJNMTg1Ljg3LDcyLjY3di02aC0xLjUxVjYzLjY1aDEuNTFWNjAuNDNoMy41N3YzLjIyaDNWNjYuN2gtM3Y1LjM4YzAsLjgzLjM1LDEuMjIsMS4xNSwxLjIyYTMuNjQsMy42NCwwLDAsMCwxLjc2LS40NHYyLjg2YTUuMjMsNS4yMywwLDAsMS0yLjgyLjczQzE4Ny4zNSw3Ni40NSwxODUuODcsNzUuNTgsMTg1Ljg3LDcyLjY3WiIvPjxwYXRoIGNsYXNzPSJjbHMtMTIiIGQ9Ik0xOTUuMTYsNTkuMDloMy43NnYzLjE3aC0zLjc2Wm0uMDksNC41NmgzLjU3Vjc2LjI0aC0zLjU3WiIvPjxwYXRoIGNsYXNzPSJjbHMtMTIiIGQ9Ik0yMDEuMjUsNzB2MGE2LjgyLDYuODIsMCwwLDEsMTMuNjIsMHYwYTYuODIsNi44MiwwLDAsMS0xMy42MiwwWm0xMC4xLDB2MEEzLjM1LDMuMzUsMCwwLDAsMjA4LDY2LjQ5YTMuMjIsMy4yMiwwLDAsMC0zLjI3LDMuNDN2MGEzLjM1LDMuMzUsMCwwLDAsMy4zMSwzLjQ4QTMuMjMsMy4yMywwLDAsMCwyMTEuMzUsNzBaIi8+PHBhdGggY2xhc3M9ImNscy0xMiIgZD0iTTIxNy40NCw2My42NUgyMjF2MS43OGE0LjQ3LDQuNDcsMCwwLDEsMy42OS0yYzIuNywwLDQuMjcsMS43OSw0LjI3LDQuNjh2OC4xNUgyMjUuNHYtN2MwLTEuNy0uOC0yLjU3LTIuMTYtMi41N3MtMi4yMy44Ny0yLjIzLDIuNTd2N2gtMy41N1oiLz48cGF0aCBjbGFzcz0iY2xzLTEyIiBkPSJNMTA2LjMyLDg1aDMuNjJWOTguMmg4LjJ2My4yOUgxMDYuMzJaIi8+PHBhdGggY2xhc3M9ImNscy0xMiIgZD0iTTExOS45Myw5Ny44N3YwYzAtMi43NSwyLjA5LTQsNS4wNy00YTguODMsOC44MywwLDAsMSwzLjA4LjUydi0uMjJjMC0xLjQ4LS45MS0yLjMtMi43LTIuM2E5LjM0LDkuMzQsMCwwLDAtMy40OC42OEwxMjEsODkuNzdhMTEuMTQsMTEuMTQsMCwwLDEsNC44OS0xLDUuNzcsNS43NywwLDAsMSw0LjI1LDEuNDEsNS40Nyw1LjQ3LDAsMCwxLDEuMzYsNHY3LjMxaC0zLjQ1di0xLjM2YTQuODYsNC44NiwwLDAsMS0zLjgxLDEuNkMxMjEuODgsMTAxLjczLDExOS45MywxMDAuMzYsMTE5LjkzLDk3Ljg3Wm04LjItLjgydi0uNjNhNS40MSw1LjQxLDAsMCwwLTIuMjgtLjQ3Yy0xLjUzLDAtMi40Ny42MS0yLjQ3LDEuNzR2MGMwLDEsLjgsMS41MywyLDEuNTNDMTI3LDk5LjI2LDEyOC4xMyw5OC4zNCwxMjguMTMsOTcuMDVaIi8+PHBhdGggY2xhc3M9ImNscy0xMiIgZD0iTTEzNy43NCw5OS44NXYxLjY0aC0zLjU3Vjg0LjM0aDMuNTd2Ni4zN2E0LjYyLDQuNjIsMCwwLDEsMy45Mi0yYzIuOTQsMCw1Ljc0LDIuMyw1Ljc0LDYuNTF2MGMwLDQuMi0yLjc1LDYuNTEtNS43NCw2LjUxQTQuODQsNC44NCwwLDAsMSwxMzcuNzQsOTkuODVabTYuMDktNC42M3YwYTMuMDksMy4wOSwwLDEsMC02LjE0LDB2MGEzLjA5LDMuMDksMCwxLDAsNi4xNCwwWiIvPjwvc3ZnPg==" alt="DIL logo"><p class="kicker"><b>DATA SESSION 5 · WELCOME WEEK INDIA 2026 · THURSDAY, OCTOBER 8 · 2:00 – 3:30 PM</b></p><h1>From analysis to publication</h1><p class="subtitle"><em>The output of a study is not just a paper, it's a verifiable set of findings.</em></p><p class="byline">Sneha Nimmaggada – Lead Researcher · David Torres – Data Manager · Luiza Andrade – Data Analytics Lead </p><p class="byline">Development Innovation Lab · Welcome Week India 2026</p><aside class="notes" data-markdown-notes></aside></section>
+<section data-markdown data-separator="^=====NOSPLIT=====$" data-separator-notes="^Note:" data-label="Slide 1b" data-title="Why we&#x27;re here" data-timing="1 min" data-start="0.5" data-flags="NEW"><textarea data-template>
+## Why we're here
+
+**Horror stories**
+
+- The text said one thing. The table said another.
+
+Note:
+- **Luiza tells her own story (R&amp;R):** while revising a paper for a revise-and-resubmit, she updated the results in the text but didn't update the table. The two didn't match in the version sent to the journal. She had to write to the editors, retract the new draft, and send a corrected version.
+- The point: nothing was wrong with the analysis. The numbers were typed by hand in two places, and only one of them got updated. Part 04 is about making that impossible: every number in the paper comes from the code.
+</textarea></section>
+<section data-markdown data-separator="^=====NOSPLIT=====$" data-separator-notes="^Note:" data-label="Slide 2" data-title="By the end of this session, you&#x27;ll be able to…" data-timing="0.5 min" data-start="1.5" data-flags="S5 v2 2, adapted"><textarea data-template>
+## By the end of this session, you'll be able to…
+
+- Write analysis scripts a stranger can read and rerun
+- Polish tables and figures into exhibits that stand on their own
+- Name where replicability breaks, and prevent it
+- Turn results into a report where no number is typed
+- Build a replication package a stranger can run with one command
+- Check a paper against its PAP
+
+**Every claim in a paper is a citation or an exhibit. Every exhibit is produced by code.**
+
+Note:
+- Frame the arc: write → polish → protect → automate → package → submit.
+- The last objective is the one to say slowly: this session doesn't walk through the checklist, it makes them run it.
+- Plant the rule at the bottom here; it comes back in Part 06.
+</textarea></section>
+<section data-markdown data-separator="^=====NOSPLIT=====$" data-separator-notes="^Note:" data-background="#faa319" class="exercise" data-label="Slide 2b" data-title="SPOT THE ISSUES · The analysis script" data-timing="5 min" data-start="2" data-flags="new"><textarea data-template>
+## SPOT THE ISSUES · The analysis script
+
+*Individually · read only, don't run it*
+
+1. **Open** the analysis script: `exercises/2-code/analysis.do`
+   on GitHub: github.com/DevInnovationLab/a-ww-datatrack2026 → `exercises` → `2-code` → `analysis.do`
+2. **Vote** in the poll: will it run on your computer? Will it give the same result every time?
+3. **List** every issue you find, with its line number
+
+Note:
+- This is the warm-up: they read the script before any of the content, so the list is their own; Part 01 (slides 4–6) and Part 03 then give names to what they found. For example: a `cd` to a folder on Luiza's computer, an unseeded `bootstrap`, numbers in `numbers.tex` copied from the log, and a table edited by hand in Overleaf. They come back to the same script on slides 11 and 12.
+- Poll in Mentimeter (to be created): two yes/no votes first, then an open list of "issue + line number". Read the votes out before the list: most people say yes to both, and the list is the answer.
+- Read only: nobody needs to run anything. Anyone with the repository cloned can open it locally instead.
+</textarea></section>
+<section class="divider" data-background="#80001E" data-label="Slide 3" data-title="Section divider" data-timing="" data-start="7" data-flags="NEW"><p class="section-num">01</p><h2>Analysis code</h2><p class="divider-sub">Scripts your reader, and your future self, will thank you for</p></section>
+<section data-markdown data-separator="^=====NOSPLIT=====$" data-separator-notes="^Note:" data-label="Slide 4" data-title="What a good analysis script looks like" data-timing="1.5 min" data-start="7" data-flags=""><textarea data-template>
+## What a good analysis script looks like
+
+- **Starts fresh:** clean workspace, loads the analysis data
+- **Does one thing:** one table or one figure
+- **Decisions at the top:** outcomes, controls, samples
+- **Defined once, used everywhere (DRY)**
+- **Easy to change:** one edit, rerun, everything follows
+
+Note:
+- When it comes to coding, analysis is usually the easy part. Keep it that way.
+- **Starts fresh:** nothing depends on whatever you ran an hour ago.
+- **Does one thing:** runs a regression, builds a table, draws a graph, then exports the result. One script per output beats one 2,000-line monster (modularity).
+- **Decisions at the top:** research choices sit in plain sight, not buried in line 400. Simple code lets the reader focus on the economics, not the plumbing.
+- **DRY:** every piece of knowledge has one authoritative home. This is the fix for "No single source of truth" from Session 4: define outcomes, controls and samples once, and retrieve them everywhere.
+- **The payoff:** when the outcome list changes, you change one line, and every table, figure and appendix follows.
+</textarea></section>
+<section data-markdown data-separator="^=====NOSPLIT=====$" data-separator-notes="^Note:" data-label="Slide 5" data-title="In practice" data-timing="1 min" data-start="8.5" data-flags=""><textarea data-template>
+## In practice
+
+- **Inputs in one place:** a settings file every script loads
+- **Functions for the boring parts:** themes, table formats
+- **Names that connect:** script ↔ exhibit
+
+Note:
+- **Inputs in one place:** outcomes, controls and samples defined once, at the top or in their own file (`00_settings.R`, a globals `.do` file), and retrieved when needed.
+- **Functions for the boring parts:** graphics themes and table formatting standardized once, so the research code stays short. This is also where the exhibit style lives (Part 02).
+- **Names that connect:** file names and outlines map each script to the exact table or figure it produces (`03_table2_chlorine.R` → `table2_chlorine.tex`).
+</textarea></section>
+<section data-markdown data-separator="^=====NOSPLIT=====$" data-separator-notes="^Note:" data-label="Slide 6" data-title="Don&#x27;t reinvent the wheel" data-timing="1 min" data-start="9.5" data-flags=""><textarea data-template>
+## Don't reinvent the wheel
+
+- **Canned beats custom**
+- **Write from scratch only when there's no other way**
+- **Not sure? Test it against another implementation**
+
+Note:
+- Established packages are reviewed, tested, and handle errors you haven't thought of yet.
+- This matters more with AI: assistants happily write a custom estimator or standard-error correction from scratch. Ask for the established package instead, and check the result against a second implementation if you're not sure.
+- If you are not sure whether a function does something right, check the output against another sotware (or your own code)
+</textarea></section>
+<section data-markdown data-separator="^=====NOSPLIT=====$" data-separator-notes="^Note:" data-background="#faa319" class="exercise" data-label="Slide 7" data-title="EXERCISE · Improve the analysis script" data-timing="8 min" data-start="10.5" data-flags="new"><textarea data-template>
+## EXERCISE · Improve the analysis script
+
+*Individually or in pairs · `exercises/2-code/analysis.do`, the script from slide 2b*
+
+1. **Start from your list** of issues from the poll
+2. **Restructure:** a header, decisions at the top, one section per output
+3. **Make it stop loudly:** add assertions where you rely on an assumption
+4. **Swap with your neighbour:** can they tell what it makes and change one setting?
+
+**Don't change any results yet: only how the script is organized.**
+
+Note:
+- This is where slides 4–6 turn into practice. Point at them: starts fresh, does one thing, decisions at the top, defined once (DRY), easy to change; settings in one place, functions for the boring parts, names that connect, assumptions as assertions.
+- Good candidates in `analysis.do`: the hardcoded `cd`; the sample restriction commented out mid-script and the `keep if hh_children &gt; 0` buried between the two tables; outcomes and controls retyped in every regression; the winsorizing loop that changes the data silently; `numbers.tex` written from typed values.
+- Assertions to suggest: the merge with treatment matches every household, `village_id` takes 12 values, `treatment` is 0/1.
+- "Don't change results" is the rule from this repository too: restructuring shouldn't move any number. If it does, they've found a bug, which is worth saying out loud.
+- AI is fine here for the restructuring. They check that the outputs are unchanged.
+</textarea></section>
+<section class="divider" data-background="#80001E" data-label="Slide 8" data-title="Section divider" data-timing="" data-start="18.5" data-flags=""><p class="section-num">02</p><h2>Polishing tables &amp; graphs</h2><p class="divider-sub">Publication polish, once the story is stable</p><p class="divider-sub">~10 minutes</p></section>
+<section data-markdown data-separator="^=====NOSPLIT=====$" data-separator-notes="^Note:" data-label="Slide 9" data-title="Formatting and standardizing outputs" data-timing="1.5 min" data-start="18.5" data-flags=""><textarea data-template>
+## Formatting and standardizing outputs
+
+- **Self-explanatory:** readable without the paper
+- **Master one command:** one for tables, one for graphs
+- **Common formats, intentional sizes**
+- **Track changes to outputs**
+- **Code writes the outputs**
+
+Note:
+- **Self-explanatory:** if it's going to a PI or into a report, it has to be readable on its own, including long notes on sample, clustering, weighting and specification. An exhibit has to survive being ripped out of the paper.
+- **Master one command:** learn one graph command and one table command properly. It doesn't matter which.
+- **Formats and sizing:** export to tex, csv, png, pdf, jpg, html or svg. Set graph dimensions on purpose rather than inheriting your display window.
+- **Track changes:** every version of every table and graph is under version control, so you can see when a number changed and why.
+- **Code writes the outputs:** a copy-pasted number is a bug. `esttab` / `outreg2` / `putdocx` and `graph export` in Stata; `modelsummary` / `kableExtra` / `gt` and `ggsave` in R. This line carries into the closing exercise.
+- The test to say out loud: delete every output, run one script, everything reappears
+</textarea></section>
+<section data-markdown data-separator="^=====NOSPLIT=====$" data-separator-notes="^Note:" data-label="Slide 10" data-title="What a self-standing exhibit has" data-timing="1 min" data-start="20" data-flags=""><textarea data-template>
+## What a self-standing exhibit has
+
+**The numbers**
+- Estimates and SEs, consistently formatted
+- Stars defined · N per column · units
+
+**The context**
+- Sample and exclusions · clustering and weights
+- Specification in words · control mean
+
+**The plumbing**
+- A caption that says what to conclude
+- Exported by a script, never edited by hand
+
+**Test: hand it to someone who hasn't read the paper.**
+
+Note:
+- This is the concrete version of "self-standing": people nod at the principle and then ship tables with no N.
+- If they have to ask what the sample is, it isn't finished.
+- Say at the end: they'll use this list on a script in the closing exercise, theirs or ours.
+- Do it live if you can: pull up a recent DIL table and run the three groups over it.
+- **With AI:** this is the part AI makes cheap. Once the content is settled, an assistant can apply this checklist to your export code in minutes. The content decisions (which sample, which specification, what the caption concludes) stay yours.
+</textarea></section>
+<section data-markdown data-separator="^=====NOSPLIT=====$" data-separator-notes="^Note:" data-background="#faa319" class="exercise" data-label="Slide 11" data-title="EXERCISE · Run the analysis script" data-timing="5 min" data-start="21" data-flags="new"><textarea data-template>
+## EXERCISE · Run the analysis script
+
+*Individually · `exercises/2-code/analysis.do`, the script from slide 2b*
+
+1. **Fix the bug** that stops the code from running on your computer, if you haven't yet
+2. **Run it**
+3. **Check the outputs:** which files did it create, and where?
+4. **Interpret them:** what does each table and figure say?
+
+**Can you tell what the results mean from the outputs alone?**
+
+Note:
+- The first thing that breaks is the `cd` to a folder on Luiza's computer. Most people flagged it in the poll on slide 2b; now they fix it.
+- Expect the answer to step 4 to be "not really": `esttab` with default settings, no labels, no notes, no control mean, a figure that's only shown on screen and never saved, and numbers in `numbers.tex` typed from the log. That's the point: compare what they got with the self-standing checklist on slide 10.
+- The toolkit, if anyone asks which commands to use: Stata `esttab` / `outreg2` / `putdocx`, `graph export` and one style `.do` file; R `modelsummary` / `kableExtra` / `gt`, `ggplot2` + `ggsave` and one `theme_project()`. One style file per project, used by every script.
+</textarea></section>
+<section data-markdown data-separator="^=====NOSPLIT=====$" data-separator-notes="^Note:" data-background="#faa319" class="exercise" data-label="Slide 12" data-title="EXERCISE · Improve it with the exhibit skill" data-timing="5 min" data-start="26" data-flags="new"><textarea data-template>
+## EXERCISE · Improve it with the exhibit skill
+
+*Same script · the exhibit skill in Claude*
+
+1. **Use the skill** to improve the tables and figures in `analysis.do`
+2. **Run it again**
+3. **Explain the results:** what does each exhibit mean now?
+
+**What changed: the code, or how easy it is to read the result?**
+
+Note:
+- The skill returns export code in the DIL house style, Stata or R, and enforces the self-standing checklist (slide 10). It's versioned in one place, so a new RA inherits it on day one.
+- Why a skill and not a snippet: a snippet gets copied and drifts; a skill is versioned in one place, carries the standard, and is reviewable (the style is a file, not a habit). Same logic as the SurveyCTO skill from Monday, and the checklist skill at the end of Part 06.
+- Debrief in one question: was the second round easier to explain than the first? The analysis is the same; only the exhibits changed.
+- Check: the AI formats, it doesn't decide. Which sample, which specification and what the caption concludes stay theirs.
+</textarea></section>
+<section class="divider" data-background="#80001E" data-label="Slide 13" data-title="Section divider" data-timing="" data-start="31" data-flags=""><p class="section-num">03</p><h2>Dangerous steps</h2><p class="divider-sub">Your code runs. Will it give the same answer twice, on someone else's machine?</p><p class="divider-sub">~9 minutes</p></section>
+<section data-markdown data-separator="^=====NOSPLIT=====$" data-separator-notes="^Note:" data-label="Slide 14" data-title="The replicability checklist (1/2)" data-timing="1 min" data-start="31" data-flags=""><textarea data-template>
+## The replicability checklist (1/2)
+
+**Randomness**
+- No seed
+- Unstable sort
+- Software version changes the draws
+
+**Environment**
+- Hardcoded paths
+- Uninstalled or unpinned packages
+
+Note:
+- These two travel badly between machines.
+- **No seed:** bootstraps, simulations, random assignment. Pin every draw with `set seed` / `set.seed()`.
+- **Unstable sort:** ties are broken differently each run; add a unique tie-breaker to every sort.
+- **RNG version:** same seed, different draws across software versions. Set the version explicitly.
+- **Hardcoded paths:** machine-specific paths scattered through the code. Use one global (Stata) or `here()` (R), set in one place.
+- **Dependencies:** packages the script never installs, or whose versions are unpinned, so a clean machine dies or, worse, a machine that has them gives different numbers.
+- Read the headers, not the sentences. Optional opener if the room is quiet: ask two people for a result they couldn't reproduce and what caused it.
+</textarea></section>
+<section data-markdown data-separator="^=====NOSPLIT=====$" data-separator-notes="^Note:" data-label="Slide 15" data-title="The replicability checklist (2/2)" data-timing="1 min" data-start="32" data-flags=""><textarea data-template>
+## The replicability checklist (2/2)
+
+**Hidden state**
+- Manual edits
+- Run-order dependence
+- Untracked outputs
+
+**Data &amp; locale**
+- Encoding, dates, decimal separators
+- Duplicate keys in merges
+
+Note:
+- These two travel badly through time.
+- **Manual edits:** fixes made by hand in the data or in an output, never in code. The most common and the most invisible. Slow down on this one: people don't think of it as a bug.
+- **Run order:** code that only works top to bottom, on whatever happens to be left in memory.
+- **Untracked outputs:** tables not under version control, so you can't see when a number changed.
+- **Parsing:** encoding, date formats and decimal separators that depend on machine settings.
+- **Merges:** duplicate keys, or an `m:m` merge that silently mismatches rows. Covered in Session 4; name it and move on.
+</textarea></section>
+<section data-markdown data-separator="^=====NOSPLIT=====$" data-separator-notes="^Note:" data-label="Slide 16" data-title="A reproducibility checklist: Stata and R" data-timing="2 min" data-start="33" data-flags=""><textarea data-template>
+## A reproducibility checklist: Stata and R
+
+&lt;div class="cols"&gt;&lt;div class="col"&gt;
+
+
+**Stata**
+
+- [ ] `version` set once, in the main script
+- [ ] `set seed` before anything random
+- [ ] One root path global, set in one place
+- [ ] User-written commands in a project `ado` folder
+- [ ] `isid` before every sort; no ties
+- [ ] Code and outputs tracked in Git
+
+
+&lt;/div&gt;&lt;div class="col"&gt;
+
+
+**R**
+
+- [ ] Package versions pinned with `renv`
+- [ ] `set.seed()` before anything random
+- [ ] Paths from the project root with `here()`
+- [ ] `sessionInfo()` saved with the outputs
+- [ ] Unique key checked before every sort
+- [ ] Code and outputs tracked in Git
+
+
+&lt;/div&gt;&lt;/div&gt;
+
+**The test: rerun everything, and Git shows no changes.**
+
+Note:
+- The checklist on slides 14–15 is the diagnosis; this is the prescription. Most of it is a short header at the top of the main script.
+- **Stata:** `version` pins the random-number generator and the syntax; `set seed` pins every draw (`bootstrap`, `sample`, randomization); one root global, so only one line changes between computers; user-written commands (`reghdfe`, `estout`, `ietoolkit`) installed into a project `ado` folder added to the `adopath`, so everyone runs the same version (`ieboilstart` does `version` and the memory settings in one line); `isid` confirms the sort key is unique, so ties can't reorder between runs.
+- **R:** `renv::snapshot()` records package versions in `renv.lock`, and `renv::restore()` installs them on a new computer; `set.seed()`; `here()` builds paths from the project root, so no `setwd()`; `sessionInfo()` (or `writeLines(capture.output(sessionInfo()), "session-info.txt")`) records the R and package versions next to the outputs; check the key is unique before `arrange()`.
+- **Git, in both:** commit the code and the outputs it writes (`.tex` tables, figures, `numbers.tex`), not just the code. Rerun from scratch: if `git diff` shows any output changed, something isn't stable, and Git tells you exactly which number moved. That's the test at the bottom of the slide, and it's how they answer the poll's second question on slide 2b.
+- Honest caveat: `renv` and version pinning feel like overhead until the first time a package update moves a coefficient.
+- In the closing exercise, this list is the first thing to check in the script they pick.
+</textarea></section>
+<section class="divider" data-background="#80001E" data-label="Slide 19" data-title="Section divider" data-timing="" data-start="35" data-flags=""><p class="section-num">04</p><h2>From results to outputs</h2><p class="divider-sub">One source, one output your code writes for you</p></section>
+<section data-markdown data-separator="^=====NOSPLIT=====$" data-separator-notes="^Note:" data-label="Slide 20" data-title="One source, two outputs, then a report" data-timing="1 min" data-start="35" data-flags="S5 v2 19"><textarea data-template>
+## One source, two outputs, then a report
+
+**One model → one table and one figure → one report**
+
+- The estimation lives in exactly one place
+- The table and the figure read the same fitted object
+- The report runs the same code; you add the prose
+
+**Drop a control: one edit, and both exhibits and the text move together.**
+
+Note:
+- From David's comment: "use the same source for the table &amp; graph, and then we recycle the same source for this exercise. We turn this code into a report."
+- One duplicated estimation is one place where the table and the figure can drift apart. With one source, they can never disagree, because there's nothing to keep in sync.
+- Link to Session 4: this morning's report already had inline numbers. Today the same idea goes into a LaTeX report (slide 23), and they wire it up themselves in the Overleaf exercise (slide 23b).
+</textarea></section>
+<section data-markdown data-separator="^=====NOSPLIT=====$" data-separator-notes="^Note:" data-label="Slide 23" data-title="Outputs that update themselves" data-timing="2.5 min" data-start="36" data-flags="moved from Session 4"><textarea data-template>
+## Outputs that update themselves
+
+**Code → files → GitHub → Overleaf**
+
+1. Your script exports tables (`.tex`), figures (`.png`) and key numbers
+2. You push them to GitHub
+3. Overleaf pulls them, and your short report to the PI recompiles with the new results
+
+**Nobody retypes a number. Nobody re-pastes a table.**
+
+Note:
+- Same principle as inline code in R Markdown (Session 4), applied to a short LaTeX report: the kind of 2–3 page exploratory update a PI reads and comments on in Overleaf. The report is not a paper: a few exhibits, short notes, open questions. As with R Markdown, the document only *references* outputs, it never contains typed results. Tables come in with `\input{tables/desc.tex}`, figures with `\includegraphics{figures/outcome.png}`, and numbers in the text with macros written by the code (e.g., `\Nhh`), so the text updates too.
+- When the data or a decision changes: rerun the script, push, pull in Overleaf, recompile. Every exhibit and every number in the text moves together.
+- **With AI:** AI can write the LaTeX around your outputs (the document skeleton, table formatting, the `\input` lines). It never types a result. Same rule as Session 4: AI writes the code, never the output.
+- **How the link works:** an Overleaf project is linked to a GitHub repository (Overleaf menu → GitHub → sync, or create the project via *Import from GitHub*). Changes come in with *Pull GitHub changes into Overleaf*; edits made in Overleaf go back with *Push Overleaf changes to GitHub*.
+- **Access:** GitHub sync is an Overleaf premium feature; it's covered by the licence participants use. If someone's account isn't linked on the day, they can follow along on the facilitator's project on screen.
+- Why Overleaf for this: it's where many PIs already read and comment, and a shared project means they always see the latest results without you emailing PDFs.
+- Session 4 only mentioned this on one slide (its slide 19c), without a demo. Here participants do it themselves in the exercise that follows (slide 23b), with their own Overleaf project.
+</textarea></section>
+<section data-markdown data-separator="^=====NOSPLIT=====$" data-separator-notes="^Note:" data-background="#faa319" class="exercise" data-label="Slide 23b" data-title="EXERCISE 1b · Results that update themselves in Overleaf" data-timing="12 min (paths and first run 6 · flag 4 · debrief 2)" data-start="38.5" data-flags="new"><textarea data-template>
+## EXERCISE 1b · Results that update themselves in Overleaf
+
+*Individually or in pairs · `exercise1b/` · Stata (`stata/main.do`) or R (`R/main.R`)*
+
+*Before the session: fork the exercise repository on GitHub, open your fork in Overleaf (New Project → Import from GitHub) and clone it with GitHub Desktop (README steps 1–3)*
+
+1. **Set your one path:** your clone of your fork (next slide)
+2. **Run, push, pull** in Overleaf, recompile
+3. **Change the flag:** `last_week_only` on. Run, push, pull, recompile
+
+**Every number in the PDF changes. Nobody typed one.**
+
+Note:
+- **One repository holds everything:** code, data and the report. Participants fork Nandita's repository (github.com/nanditag2548/ww-datatrack-gitoverleaf, the GitHub copy of `exercises/session5/exercise1b/`), import their fork into Overleaf and clone it, so there is only one path to set and the code and the report always travel together. Overleaf only compiles `main.tex` and ignores the code and data.
+- What's in it: `README.txt` (all steps, both languages), `main.tex` (the PI update, which only `\input`s `tables/numbers.tex`, Table 1 and Figure 1), `data/` (the clean household and child data: no raw data or prep code), `stata/` and `R/` (same logic, identical output files).
+- With the flag off the report covers 1,293 households visited and 1,254 interviewed; on, 452 and 445, from 14 to 20 July. Full expected numbers: `exercises/facilitator/session5_exercise1b_notes.md`.
+- Most common problem: a wrong path to the clone. GitHub Desktop → *Repository → Show in Finder* gives the real one.
+- Without GitHub sync on their Overleaf account, participants download the repository as a ZIP from GitHub, run it there and upload the files to Overleaf by hand (README, "If you get stuck").
+- If GitHub Desktop refuses to push ("rejected"), Overleaf pushed something first (e.g. an edit to `main.tex`): Fetch, Pull, then push again.
+</textarea></section>
+<section data-markdown data-separator="^=====NOSPLIT=====$" data-separator-notes="^Note:" data-label="Slide 23c" data-title="The lines you change: Stata or R" data-timing="(part of the 12 min)" data-start="50.5" data-flags="new"><textarea data-template>
+## The lines you change: Stata or R
+
+&lt;div class="cols"&gt;&lt;div class="col"&gt;
+
+
+**Stata · `stata/main.do`**
+
+```stata
+* Section 1: the switch (0 first, then 1)
+global last_week_only 0
+
+* Section 2: copy Nandita's block for yourself
+else if "`c(username)'" == "yourname" {
+    global repo "/path/to/your/clone"
+}
+```
+
+Run: **Do** (Ctrl/Cmd+D) on the whole file
+
+
+&lt;/div&gt;&lt;div class="col"&gt;
+
+
+**R · `R/main.R`**
+
+```r
+# Section 1: the switch (FALSE first, then TRUE)
+last_week_only &lt;- FALSE
+
+# Section 2: copy Nandita's block for yourself
+} else if (user == "yourname") {
+  repo_dir &lt;- "/path/to/your/clone"
+}
+```
+
+Run: **Source** (Ctrl/Cmd+Shift+S) on the whole file
+
+
+&lt;/div&gt;&lt;/div&gt;
+
+**Your username:** `di c(username)` in Stata · `Sys.info()[["user"]]` in R · **Your clone's path:** GitHub Desktop → *Repository → Show in Finder*
+
+Note:
+- Leave this up while people work: it is the only code anyone edits. Both versions write the same three files, so the rest of the exercise (push, pull, recompile) is identical.
+- Nobody needs to read or change `2-export-outputs`. If someone asks what it does: it reads the clean data in `data/` and writes `numbers.tex`, Table 1 and Figure 1 into `tables/` and `figures/` of the same repository.
+- Windows paths: use forward slashes (`C:/Users/...`) in both Stata and R.
+</textarea></section>
+<section class="divider" data-background="#80001E" data-label="Slide 24" data-title="Section divider" data-timing="" data-start="50.5" data-flags="S5 v2 23"><p class="section-num">05</p><h2>Replication package &amp; data publication</h2><p class="divider-sub">One click, one stranger, one clean machine</p></section>
+<section data-markdown data-separator="^=====NOSPLIT=====$" data-separator-notes="^Note:" data-label="Slide 25" data-title="What the package looks like" data-timing="1 min" data-start="50.5" data-flags="S5 v2 24"><textarea data-template>
+## What the package looks like
+
+```text
+paper-replication/
+├── README.md
+├── MASTER.do / main.R   &lt;- the one command
+├── 1-data/             raw (or a DOI), clean
+├── 2-code/             00-setup, 01-construct, 02-analysis, 03-exhibits
+├── 3-output/           tables, figures
+└── 4-documentation/    questionnaire, PAP, data dictionaries
+```
+
+**The README says:** what software, how to run it, how long it takes, which script makes which exhibit, where the data comes from.
+
+Note:
+- The bar: a stranger on a clean machine reproduces every exhibit with one command.
+- People agree with "write a README" and then write four lines. The full specification: what the paper is, and which version; what software and which versions, exactly; how to run it (the one command, and from where); how long a full run takes, and what it needs; which script produces which numbered exhibit; where the data comes from, and its licence; what a user must supply themselves (restricted data, a key); who to contact, and how to cite.
+- The exhibit-to-script mapping is the item reviewers use most and the one most often missing.
+- `01_documentation/` holds the PAP: that's the handoff into Part 06.
+</textarea></section>
+<section data-markdown data-separator="^=====NOSPLIT=====$" data-separator-notes="^Note:" data-label="Slide 26" data-title="Publishing the data itself" data-timing="1 min" data-start="51.5" data-flags="S5 v2 25"><textarea data-template>
+## Publishing the data itself
+
+- **De-identify, again**
+- **A real repository, with a DOI**
+- **A licence, and a citation**
+
+**At DIL: talk to the data team before a release, not after.**
+
+Note:
+- The data in the package is a publication too. Treat it like one.
+- **De-identify again:** what was fine internally may still re-identify people once it's public. Review before release, with fresh eyes. "Again" is the word that matters: de-identification for publication is a different bar from de-identification for internal analysis, and much harder to undo once the file is public.
+- **Repository:** a trusted archive with a DOI, not a personal Dropbox link that dies with the project.
+- **Licence and cite:** say what others may do with it, and make it citable. Your data is part of your contribution.
+</textarea></section>
+<section data-markdown data-separator="^=====NOSPLIT=====$" data-separator-notes="^Note:" data-label="Slide 27" data-title="Past replication packages: let&#x27;s open real ones" data-timing="2.5 min" data-start="52.5" data-flags="S5 v2 26"><textarea data-template>
+## Past replication packages: let's open real ones
+
+- `github.com/DevInnovationLab/i-h2o-meta`
+- `github.com/DevInnovationLab/deworming`
+
+**While you scroll:** Where's the one command? Is the data in the repo or behind a DOI? Do outputs map to exhibits? Is there a deviations table?
+
+Note:
+- Open one live and scroll: two minutes of a real repository beats twenty of principles. Walk the folder structure and the master script of the first; compare the README of the second against slide 25.
+- Also ask: what would you still need to ask the authors for?
+- The deviations-table question is the deliberate handoff into Part 06. Ask it out loud: "does this package tell you what changed between the plan and the paper?"
+- Prep: swap these two for whatever is most relevant to the India cohort's projects, and check both URLs the morning of.
+</textarea></section>
+<section class="divider" data-background="#80001E" data-label="Slide 28" data-title="Section divider" data-timing="" data-start="55" data-flags="S5 v2 27"><p class="section-num">06</p><h2>Paper-submission checklist &amp; the PAP</h2><p class="divider-sub">You already know most of the list. So we stop reading it and start running it.</p></section>
+<section data-markdown data-separator="^=====NOSPLIT=====$" data-separator-notes="^Note:" data-label="Slide 29" data-title="One rule, before the checklist" data-timing="1 min" data-start="55" data-flags="S5 v2 28"><textarea data-template>
+## One rule, before the checklist
+
+**Every claim in the paper is either a citation or an exhibit.**
+
+- "Take-up was high": compared to what, shown where?
+- A magnitude in the abstract that's in no table
+- A robustness claim with no robustness exhibit
+
+Note:
+- Nothing in between. If a sentence asserts something about the world and points at neither a reference nor a table, figure or reported statistic, it isn't yet a claim you can defend. Another example: a mechanism asserted in the discussion and never tested.
+- How to run it: read the paper marking every factual sentence; write the exhibit number or citation beside each one; anything with a blank margin is cut, softened, or given an exhibit. Do this before the co-author read, not after.
+- From David's comment: "every result (exhibit), every claim should be a citation or an exhibit."
+- Slow down here. This rule is mechanical, which is exactly why a model is good at checking it.
+</textarea></section>
+<section data-markdown data-separator="^=====NOSPLIT=====$" data-separator-notes="^Note:" data-label="Slide 30" data-title="The DIL paper-submission checklist" data-timing="1.5 min" data-start="56" data-flags="S5 v2 29"><textarea data-template>
+## The DIL paper-submission checklist
+
+1. Proof-read the text
+2. Journal guidelines
+3. Results and summary tables
+4. Graphs and figures
+5. Authors, numbering, bibliography
+6. **NEW: Compare the results to the pre-analysis plan**
+
+Note:
+- Name the seven, point at the guide, and move: sections 1–7 are already published and most of the room has met them. Full list: `packet/03_checklist.md` · devinnovationlab.github.io/guides/templates/paper-submission.html
+- Detail for reference: (1) results in the text appear in exhibits, values match, terminology is consistent, no comments left in; (2) word limits, citation style, required disclosures (CONSORT, IRB, data deposit); (3) labels, N, R², control means, SEs not t-stats, notes that define everything; (4) axes and units, readable in black and white, self-contained notes; (5–7) affiliations current, exhibits cited in order, every citation resolves both ways.
+- Land on section 8: it's the new material.
+- Action still open: section 8 was sent to Witold on 25 Aug ("that all sounds sensible"); it still has to be folded into the published guide. Owner: David.
+</textarea></section>
+<section data-markdown data-separator="^=====NOSPLIT=====$" data-separator-notes="^Note:" data-label="Slide 31" data-title="Compare your results to the pre-analysis plan" data-timing="1.5 min" data-start="57.5" data-flags="S5 v2 30"><textarea data-template>
+## Compare your results to the pre-analysis plan
+
+- Map each hypothesis to an exhibit
+- Report every registered outcome, nulls included
+- Match the specification
+- Label exploratory analyses as exploratory
+- Explain every deviation, in one place
+
+**Enumerate from the plan, never from the paper.**
+
+Note:
+- Most DIL papers have a PAP, so the comparison is a step in the process, not an optional extra. From David's comment: "Most papers from Michael have PAP. Report the registered outcomes, and have an appendix that lists the deviation from this PAP."
+- **Registered outcomes, nulls included:** a pre-specified outcome missing from the paper is the most damaging thing a referee can find. Worth a beat: it's the one people quietly skip under submission pressure.
+- **Specification:** estimator, controls, clustering level, sample restrictions, and any pre-specified multiple-hypothesis correction.
+- **Exploratory:** analyses decided after seeing the data are labelled exploratory, in the text and in the exhibit title.
+- **Deviations:** an appendix table, not footnotes scattered through the paper.
+- The callout is the most transferable line on the slide, and the design principle behind prompt 2. If you read the paper first, you only find what's in it. Say it twice.
+</textarea></section>
+<section class="divider" data-background="#80001E" data-label="Slide 32" data-title="Section divider" data-timing="28 min" data-start="59" data-flags=""><p class="section-num">07</p><h2>Hands-on: fix it, then publish it</h2><p class="divider-sub">Your code or ours, one report nobody typed</p></section>
+			</div>
+		</div>
+	</div>
+	<aside id="panel" aria-label="Speaker notes">
+		<p class="label" id="p-label"></p>
+		<h3 id="p-title"></h3>
+		<div class="meta" id="p-meta"></div>
+		<div id="p-flags"></div>
+		<div class="notes-body" id="p-notes"></div>
+		<div class="clock" id="p-clock"></div>
+	</aside>
+</div>
+<button id="toggle" type="button">Hide notes</button>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reveal.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/markdown/markdown.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/highlight/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/notes/notes.min.js"></script>
+<script>
+const TOTAL = 87;
+const deck = new Reveal(document.querySelector('.reveal'), {
+	embedded: true, hash: /^(https?|file):$/.test(location.protocol), slideNumber: 'c/t', center: false,
+	width: 1280, height: 720, margin: 0.06, transition: 'none', backgroundTransition: 'none',
+	plugins: [RevealMarkdown, RevealHighlight, RevealNotes]
+});
+
+function fit(section) {
+	// Shrink text on slides whose content overflows the 1280x720 frame.
+	if (!section || section.classList.contains('title-slide')) return;
+	section.style.fontSize = '';
+	let size = 100;
+	while (section.scrollHeight > 720 - 60 && size > 50) {
+		size -= 4;
+		section.style.fontSize = size + '%';
+	}
+}
+
+function renderPanel(section) {
+	const d = section.dataset;
+	document.getElementById('p-label').textContent = d.label || '';
+	document.getElementById('p-title').textContent = d.title || '';
+	document.getElementById('p-meta').textContent = d.timing ? '⏱ ' + d.timing : '';
+	const flags = (d.flags || '').split(' | ').filter(Boolean);
+	document.getElementById('p-flags').innerHTML = flags.map(f => '<span class="flag"></span>').join('');
+	document.querySelectorAll('#p-flags .flag').forEach((el, i) => el.textContent = flags[i]);
+	const aside = section.querySelector('aside.notes');
+	const box = document.getElementById('p-notes');
+	if (aside && aside.innerHTML.trim()) {
+		box.innerHTML = aside.hasAttribute('data-markdown-notes')
+			? deck.getPlugin('markdown').marked.parse(aside.textContent) : aside.innerHTML;
+	} else {
+		box.innerHTML = '<p class="empty">No speaker notes.</p>';
+	}
+	const start = parseFloat(d.start || '0');
+	document.getElementById('p-clock').textContent =
+		'Starts at minute ' + start + ' of ' + TOTAL + ' planned (session is 90).';
+	document.querySelector('.reveal').classList.toggle('hide-chrome',
+		section.classList.contains('title-slide') || section.classList.contains('divider'));
+}
+
+function onSlide(e) { fit(e.currentSlide); renderPanel(e.currentSlide); }
+deck.initialize().then(() => {
+	onSlide({ currentSlide: deck.getCurrentSlide() });
+	deck.on('slidechanged', onSlide);
+});
+
+const panel = document.getElementById('panel');
+const toggle = document.getElementById('toggle');
+toggle.addEventListener('click', () => {
+	panel.classList.toggle('hidden');
+	toggle.textContent = panel.classList.contains('hidden') ? 'Show notes' : 'Hide notes';
+	setTimeout(() => { deck.layout(); fit(deck.getCurrentSlide()); }, 0);
+});
+</script>
+</body>
+</html>

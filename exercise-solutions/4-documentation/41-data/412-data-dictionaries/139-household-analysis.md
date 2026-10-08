@@ -7,10 +7,10 @@
 | **Inputs** | `12-clean/121-household-clean.dta`, `12-clean/122-child-clean.dta`, through the intermediate files `13-construct/131-household-indicators.dta` (all clean household variables plus indicators) and `13-construct/132-child-indicators.dta` (one row per household with a roster) |
 | **Unit of observation** | Household survey submission, consenting households only |
 | **ID** | `key` (SurveyCTO submission ID). The household ID (`hh_id`, in the intermediate files) is **not** unique: 6 values have two submissions each, kept for the HFC session. |
-| **Variables** | 23 analysis variables. Variables used only to build them (`hh_id`, `enumerator`, `stored_yn`, `storage_time`, `n_children_roster`, `n_answered_2d`, `n_answered_7d`, ...) are in the intermediate files, and all of them together (42 variables) are in `13-construct/133-household-constructed.dta`, also saved by `2149-construct-combine.do`. |
+| **Variables** | 23 analysis variables, the treatment assignment (`treatment`) and 1 sample flag (`main_sample`). Variables used only to build them (`hh_id`, `enumerator`, `stored_yn`, `storage_time`, `n_children_roster`, `n_answered_2d`, `n_answered_7d`, ...) are in the intermediate files, and all of them together (42 variables) are in `13-construct/133-household-constructed.dta`, also saved by `2149-construct-combine.do`. |
 | **Observations** | 1,254 |
 | **Questionnaire** | [`4-documentation/Household_Water_Questionnaire.md`](../../Household_Water_Questionnaire.md). Codes in brackets are question numbers. |
-| **Last updated** | 7 October 2026 |
+| **Last updated** | 8 October 2026 |
 
 Missing values: `.` is system missing (not asked, or not applicable), `.d` is "Don't know" and `.r` is "Declined to answer". Values outside the questionnaire's ranges (for example, more than 7 days in E1 or E2) are kept as recorded, for the HFC session.
 
@@ -20,6 +20,7 @@ Missing values: `.` is system missing (not asked, or not applicable), `.d` is "D
 |---|---|---|---|---|
 | `key` | SurveyCTO submission ID. Unique row ID. | string | metadata | none |
 | `village_id` | Village | numeric code | A3 | none |
+| `treatment` | Village assigned to chlorine access. Made up for teaching, NOT a real RCT: the 6 villages with the highest chlorine take-up are treated (`exercises/facilitator/make-treatment-assignment.do`). Merged from `10-raw/102-treatment/1020-village-treatment.dta`. | 0 Control, 1 Treatment | assignment file | none |
 
 ## Respondent and household (Section C)
 
@@ -74,6 +75,14 @@ Shares and any-child indicators are missing for households without children unde
 | `n_diarrhea_7d` | Children under 5 with diarrhoea in the past 7 days | children | G3, G4 | 0 if C6 = 0; missing if no roster and C6 > 0 |
 | `share_diarrhea_7d` | `n_diarrhea_7d` / children with a 7-day answer | share (0–1) | G3, G4 | missing if no child answered |
 | `any_diarrhea_7d` | At least one child under 5 with diarrhoea in the past 7 days | 1 Yes, 0 No | G3, G4 | missing if no child answered |
+
+## Samples
+
+Sample flags are built in `2149-construct-combine.do`. Analysis scripts use them with `keep if` at the top (one sample per script) or as `if` in each regression (several samples per script); they never define a sample themselves.
+
+| Variable | Definition | Type / unit | Source | Missing values |
+|---|---|---|---|---|
+| `main_sample` | Main analysis sample: at least one child under 5 (C6 > 0), and non-missing `treat_chlorine_any`, `diarrhea_week_any` and the controls in `${controls}` (`main.do`). 930 households. Rerun construction when the controls change. | 1 Yes, 0 No | C1, C2, C5, C6, E1, G3, G4 | none |
 
 ## Decisions
 

@@ -6,7 +6,12 @@
 
 	use "${data_box}/household-clean.dta", clear
 
-**## 1.2 Hours since the stored water was collected, in 12-hour groups
+**## 1.2 Village treatment assignment
+
+	merge m:1 village_id using "${data_box}/village-treatment.dta"
+	drop _merge
+
+**## 1.3 Hours since the stored water was collected, in 12-hour groups
 
 	gen 	storage_time_cat = .
 	replace storage_time_cat = 1 if inrange(storage_time,  0, 12)
@@ -26,14 +31,14 @@
 						.r "Declined to answer"
 	lab val storage_time_cat storage_cat
 
-**## 1.3 Chlorine and boiling in the past 7 days
+**## 1.4 Chlorine and boiling in the past 7 days
 
 	gen 	treat_chlorine_any 	= treat_chlorine > 0
 	gen 	treat_boil_any 		= treat_boil 	 > 0
 
 	lab val *_any 	 yesno
 
-**## 1.4 Labels
+**## 1.5 Labels
 
 	lab var storage_time_cat 	"Time since water was collected"
 	lab var treat_chlorine_any 	"Treated water with chlorine on at least 1 of the past 7 days"
@@ -87,7 +92,7 @@
 **# 5 Save analysis data
 **------------------------------------------------------------------------------
 
-	keep key village_id                                                  ///
+	keep key village_id treatment                                        ///
 	     resp_age resp_sex hh_size hh_children                           ///
 	     diarrhea_*                                                      ///
 	     hh_watersource stored_container stored_covered stored_clean     ///

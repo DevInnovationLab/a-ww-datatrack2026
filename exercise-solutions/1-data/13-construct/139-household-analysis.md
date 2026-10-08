@@ -1,12 +1,12 @@
 This report was created by the Stata command iesave (version 7.5). Read more about this command and the purpose of this report on https://dimewiki.worldbank.org/iesave
 
 - **Number of observations:** 1254
-- **Number of variables:** 23
+- **Number of variables:** 25
 - **ID variable(s):** key
 - **.dta version used:** 14
-- **Data signature:** 1254:23(21638):4074315091:20926762
+- **Data signature:** 1254:25(28897):3683855458:1772540141
 - **Last saved by:** User info withheld, see option userinfo in command iesave.
-- **Last saved at:** 16:31:08 7 Oct 2026
+- **Last saved at:** 04:33:54 8 Oct 2026
 
 ## Variable type: String
 
@@ -36,6 +36,7 @@ This report was created by the Stata command iesave (version 7.5). Read more abo
 | diarrhea_2d_any | "At least one child under 5 with diarrhea in the past 2 days" | yesno | 938 | 2 | 0 | No:775 Yes:163 |
 | diarrhea_week_any | "At least one child under 5 with diarrhea in the past 7 days" | yesno | 938 | 2 | 0 | No:602 Yes:336 |
 | hh_watersource | "C7. Main drinking water source" | watersource | 1246 | 5 | 0 | Piped:567 Protected well:328 River or stream:174 Trucked:114 Other:63 |
+| main_sample | "In main analysis sample: children under 5, no missing outcomes/controls" | yesno | 1254 | 2 | 0 | Yes:930 No:324 |
 | resp_sex | "C2. Respondent's sex" | sex | 1252 | 2 | 0 | Male:631 Female:621 |
 | storage_time_cat | "Time since water was collected" | storage_cat | 774 | 6 | 0 | 0-12 hours:384 12-24 hours:126 48-72 hours:73 More than 72 hours:72 36-48 hours:63 |
 | stored_chlorine | "D7. Chlorine added before storing" | yesno | 772 | 2 | 0 | No:536 Yes:236 |
@@ -43,6 +44,7 @@ This report was created by the Stata command iesave (version 7.5). Read more abo
 | stored_container | "D2. Storage container type" | container | 774 | 4 | 0 | Bucket:260 Clay pot:241 Jerry can:232 Other:41 |
 | stored_covered | "D4. Storage container covered" | yesno | 772 | 2 | 0 | Yes:576 No:196 |
 | treat_chlorine_any | "Treated water with chlorine on at least 1 of the past 7 days" | yesno | 1245 | 2 | 0 | Yes:864 No:381 |
+| treatment | "Village assigned to chlorine access" | treatment | 1254 | 2 | 0 | Control:658 Treatment:596 |
 | water_safety | "F1. Perceived safety of drinking water" | safety | 1248 | 3 | 0 | Somewhat safe:521 Not safe:473 Very safe:254 |
 | water_satisfaction | "F2. Satisfaction with water quality" | satisfaction | 1247 | 3 | 0 | Somewhat satisfied:489 Not satisfied:478 Very satisfied:280 |
 
